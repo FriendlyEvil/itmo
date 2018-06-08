@@ -1,0 +1,8 @@
+/home/dim/CLionProjects/Huffman/cmake-build-debug/CMakeFiles/install.dir
+/home/dim/CLionProjects/Huffman/cmake-build-debug/CMakeFiles/list_install_components.dir
+/home/dim/CLionProjects/Huffman/cmake-build-debug/CMakeFiles/install/strip.dir
+/home/dim/CLionProjects/Huffman/cmake-build-debug/CMakeFiles/install/local.dir
+/home/dim/CLionProjects/Huffman/cmake-build-debug/CMakeFiles/huffman_lib.dir
+/home/dim/CLionProjects/Huffman/cmake-build-debug/CMakeFiles/Huffman.dir
+/home/dim/CLionProjects/Huffman/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/home/dim/CLionProjects/Huffman/cmake-build-debug/CMakeFiles/edit_cache.dir

@@ -1,0 +1,1 @@
+/usr/bin/c++   -O2 -Wall -std=c++11 -pedantic -g   CMakeFiles/huffman_cmake.dir/main.cpp.o  -o huffman_cmake libhuffman_lib.a 

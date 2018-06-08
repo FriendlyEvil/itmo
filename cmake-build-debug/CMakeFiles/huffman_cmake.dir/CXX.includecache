@@ -1,0 +1,46 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/dim/CLionProjects/Huffman/bits_seq.h
+cstdint
+-
+vector
+-
+cstddef
+-
+
+/home/dim/CLionProjects/Huffman/freq_tree.h
+vector
+-
+algorithm
+-
+unordered_map
+-
+bits_seq.h
+/home/dim/CLionProjects/Huffman/bits_seq.h
+
+/home/dim/CLionProjects/Huffman/huffman_cod.h
+unordered_map
+-
+vector
+-
+bits_seq.h
+/home/dim/CLionProjects/Huffman/bits_seq.h
+freq_tree.h
+/home/dim/CLionProjects/Huffman/freq_tree.h
+
+/home/dim/CLionProjects/Huffman/main.cpp
+iostream
+-
+fstream
+-
+cstring
+-
+huffman_cod.h
+/home/dim/CLionProjects/Huffman/huffman_cod.h
+
