@@ -4,8 +4,7 @@
 #include "huffman_code.h"
 #include "bits_seq.h"
 
-// заменить на const
-#define BLOCK 1 << 18
+static const int BLOCK = 1 << 18;
 
 void write_seq(const bits_sequence &bs, std::ofstream &out) {
     uint32_t size = bs.size();
@@ -17,38 +16,45 @@ void write_seq(const bits_sequence &bs, std::ofstream &out) {
         out.write((char *) bs.data().data(), bs.size() / bits_sequence::size_of * sizeof(uint64_t));
 }
 
+void help() {
+    std::cout << "Enter 'e input output' for encoding or 'd input output' for decoding\n";
+}
+
 int main(int argc, char *argv[]) {
     try {
-
-        // 1: зачем кидать исключение с текстом, который потом нигде не выводится?
-        // лучше выведи сообщение и сделай return
-        if (argc != 4)
-            throw std::runtime_error("We need 4 arguments");
+        if (argc != 4) {
+            std::cout << "We need 4 arguments\n";
+            help();
+            return 1;
+        }
 
         std::ifstream in(argv[2], std::ios::in | std::ios::binary);
         std::ofstream out(argv[3], std::ios::out | std::ios::binary);
 
-        // ^1
-        if (!in)
-            throw std::runtime_error("Incorrect input files");
-        // ^1
-        if (!out)
-            throw std::runtime_error("Incorrect output files");
+        if (!in) {
+            std::cout << "Incorrect input files";
+            return 1;
+        }
+        if (!out) {
+            std::cout << "Incorrect output files";
+            return 1;
+        }
 
-        // 2: не используй C-шные вызовы strcmp
-        // обычно ожидают параметры вида `-e`, `-d` или `--encode`, `--decode`
-        if (strcmp(argv[1], "e") == 0) {
+        if (std::string(argv[1]) == "e") {
             frequency_counter fc;
             std::vector<uint8_t> block(BLOCK);
 
-            // а если при чтении ошибка а не конец файла?
-            while (in) {
-                // ^2
-                memset(block.data(), 0, block.size());
-                if (in.read((char *) block.data(), block.size()).gcount() == 0) {
-                    return 0; //empty file
-                };
-                fc.add(block.data(), (size_t) in.gcount());
+            try {
+                while (in) {
+                    memset(block.data(), 0, block.size());
+                    if (in.read((char *) block.data(), block.size()).gcount() == 0) {
+                        return 0; //empty file
+                    };
+                    fc.add(block.data(), (size_t) in.gcount());
+                }
+            } catch (std::runtime_error &ex) {
+                in.close();
+                std::cout << "File read error";
             }
 
             in.clear();
@@ -69,19 +75,23 @@ int main(int argc, char *argv[]) {
                 in.read((char *) block.data(), block.size());
                 write_seq(he.encoder(block.data(), (size_t) in.gcount()), out);
             }
-        } else if (strcmp(argv[1], "d") == 0) {
+        } else if (std::string(argv[1]) == "d") {
             uint32_t size_tree = 0, size_alphabet = 0;
 
             if (in.read((char *) &size_alphabet, sizeof(uint32_t)).gcount() == 0)
                 return 0; // empty file
-            if (in.read((char *) &size_tree, sizeof(uint32_t)).gcount() == 0)
-                throw std::runtime_error("Incorrect huffman code");
+            if (in.read((char *) &size_tree, sizeof(uint32_t)).gcount() == 0) {
+                std::cout << "Incorrect huffman code. You encrypt the file with other program\n";
+                return 1;
+            }
 
             uint32_t size_mem = (size_tree - 1) / bits_sequence::size_of + 1;
 
             std::vector<uint8_t> mem_char(size_mem * sizeof(uint64_t) + size_alphabet);
-            if ((size_t) in.read((char *) mem_char.data(), mem_char.size()).gcount() != mem_char.size())
-                throw std::runtime_error("Incorrect huffman code");
+            if ((size_t) in.read((char *) mem_char.data(), mem_char.size()).gcount() != mem_char.size()) {
+                std::cout << "Incorrect huffman code. You encrypt the file with other program\n";
+                return 1;
+            }
 
             huffman_decoder hd(mem_char.data(), size_tree, size_alphabet);
 
@@ -94,8 +104,10 @@ int main(int argc, char *argv[]) {
 
                 std::vector<uint64_t> mem(size_bytes);
                 if ((size_t) in.read((char *) mem.data(), mem.size() * sizeof(uint64_t)).gcount() !=
-                    mem.size() * sizeof(uint64_t))
-                    throw std::runtime_error("Incorrect huffman code");
+                    mem.size() * sizeof(uint64_t)) {
+                    std::cout << "Incorrect huffman code. You encrypt the file with other program\n";
+                    return 1;
+                }
 
                 bits_sequence bs(mem);
                 if (size_bits % bits_sequence::size_of != 0)
@@ -104,10 +116,12 @@ int main(int argc, char *argv[]) {
                 out.write((char *) res.data(), res.size());
             }
         } else {
-            throw std::runtime_error("Incorrect flag. We need 'e' or 'd'");
+            std::cout << "Incorrect flag. We need 'e' or 'd'\n";
+            help();
+            return 1;
         }
     } catch (std::runtime_error &ex) {
-        // кто расскажет мне формат?
-        std::cout << "Incorrect file format or program arguments";
+        std::cout << "Incorrect file format or program arguments\n";
+        help();
     }
 }
