@@ -1,7 +1,9 @@
 #include "huf_tree.h"
 
 freq_tree::freq_tree(const std::vector<uint64_t> &all_freqs) : cur_node(root) {
+    // 6: плохое название для typedef
     typedef std::pair<uint64_t, std::shared_ptr<node>> pair;
+
     uint64_t inf = (1LL << 62);
 
     std::vector<pair> freqs;
@@ -10,41 +12,48 @@ freq_tree::freq_tree(const std::vector<uint64_t> &all_freqs) : cur_node(root) {
             freqs.push_back(pair(all_freqs[i], std::make_shared<node>(node((uint8_t) i))));
         }
     }
-    std::sort(freqs.begin(), freqs.end(), [](const pair &a, const pair &b) { return a.first < b.first; });
+    std::sort(freqs.begin(), freqs.end());
 
 //    if (freqs.size() == 0)
 //        return;
 
-    size_t ind_freq = 0, ind_sum = 0, n = freqs.size();
-    freqs.push_back(pair(inf, nullptr));
-    freqs.push_back(pair(inf, nullptr));
+    size_t ind_freq = 0,
+           ind_sum = 0,
+           n = freqs.size();
+
+    freqs.emplace_back(inf, nullptr);
+    freqs.emplace_back(inf, nullptr);
     std::vector<pair> sum_freqs;
 
     while (ind_freq < n || ind_sum < sum_freqs.size() - 1) {
-        uint64_t fr1 = freqs[ind_freq].first, fr2 = freqs[ind_freq + 1].first,
-                sum1 = inf, sum2 = inf;
+        uint64_t fr1 = freqs[ind_freq].first,
+                fr2 = freqs[ind_freq + 1].first,
+                sum1 = inf,
+                sum2 = inf;
+
         if (ind_sum < sum_freqs.size())
             sum1 = sum_freqs[ind_sum].first;
+
         if (ind_sum + 1 < sum_freqs.size())
             sum2 = sum_freqs[ind_sum + 1].first;
 
         uint64_t res_freq;
         std::shared_ptr<node> new_node;
         if (fr1 + fr2 <= sum1 + sum2 && fr2 <= sum1) {
-            new_node = std::make_shared<node>(node(freqs[ind_freq].second, freqs[ind_freq + 1].second));
+            new_node = std::make_shared<node>(freqs[ind_freq].second, freqs[ind_freq + 1].second);
             res_freq = fr1 + fr2;
             ind_freq += 2;
         } else if (fr1 + sum1 <= fr1 + fr2 && fr1 <= sum2) {
-            new_node = std::make_shared<node>(node(freqs[ind_freq++].second, sum_freqs[ind_sum++].second));
+            new_node = std::make_shared<node>(freqs[ind_freq++].second, sum_freqs[ind_sum++].second);
             res_freq = fr1 + sum1;
         } else {
-            new_node = std::make_shared<node>(node(sum_freqs[ind_sum].second, sum_freqs[ind_sum + 1].second));
+            new_node = std::make_shared<node>(sum_freqs[ind_sum].second, sum_freqs[ind_sum + 1].second);
             res_freq = sum1 + sum2;
             ind_sum += 2;
         }
-        sum_freqs.push_back({res_freq, new_node});
+        sum_freqs.emplace_back(res_freq, new_node);
     }
-    root = sum_freqs[sum_freqs.size() - 1].second;
+    root = sum_freqs.back().second;
 }
 
 freq_tree::freq_tree(uint8_t *tree_bits, size_t size_tree, size_t size_alphabet) {
@@ -86,7 +95,9 @@ void freq_tree::create_code(std::vector<uint8_t> &alphabet, bits_sequence &bits)
 }
 
 
-void freq_tree::create_alphabet_rec(std::unordered_map<uint8_t, bits_sequence> &alphabet, std::shared_ptr<node> cur_node, bits_sequence &cur_seq) {
+void
+freq_tree::create_alphabet_rec(std::unordered_map<uint8_t, bits_sequence> &alphabet, std::shared_ptr<node> cur_node,
+                               bits_sequence &cur_seq) {
     if (cur_node->left != nullptr) {
         cur_seq.add(0);
         create_alphabet_rec(alphabet, cur_node->left, cur_seq);
@@ -106,7 +117,9 @@ std::unordered_map<uint8_t, bits_sequence> freq_tree::create_alphabet() {
     return map;
 }
 
-std::shared_ptr<freq_tree::node> freq_tree::create_tree_rec(const bits_sequence &tree, const std::vector<uint8_t> &alphabet, size_t &ind_tree, size_t &ind_alpha) {
+std::shared_ptr<freq_tree::node>
+freq_tree::create_tree_rec(const bits_sequence &tree, const std::vector<uint8_t> &alphabet, size_t &ind_tree,
+                           size_t &ind_alpha) {
     if (tree.get_bit(ind_tree++)) {
         return std::make_shared<node>(alphabet[ind_alpha++]);
     }
@@ -116,7 +129,9 @@ std::shared_ptr<freq_tree::node> freq_tree::create_tree_rec(const bits_sequence 
     return new_node;
 }
 
-std::shared_ptr<freq_tree::node> freq_tree::get_rec(std::shared_ptr<freq_tree::node> cur_node, size_t &cur_ind, const bits_sequence &seq, uint8_t &res_sym) {
+std::shared_ptr<freq_tree::node>
+freq_tree::get_rec(std::shared_ptr<freq_tree::node> cur_node, size_t &cur_ind, const bits_sequence &seq,
+                   uint8_t &res_sym) {
     if (cur_node->left == nullptr) {
         res_sym = cur_node->symbol;
         return nullptr;
