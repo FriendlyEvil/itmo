@@ -7,6 +7,7 @@
 #include "huf_tree.h"
 
 struct frequency_counter {
+    // 3: это библиотека, должны скрываться детали реализации
     std::vector<uint64_t> file_freqs;
 
     frequency_counter();
@@ -15,10 +16,11 @@ struct frequency_counter {
 };
 
 struct huffman_encoder {
+    // ^3
     std::unordered_map<uint8_t, bits_sequence> symbol_map;
     freq_tree tree;
 
-    huffman_encoder(const frequency_counter &freqs);
+    explicit huffman_encoder(const frequency_counter &freqs);
 
     bits_sequence encoder(const uint8_t *data, size_t size);
 
@@ -26,6 +28,7 @@ struct huffman_encoder {
 };
 
 struct huffman_decoder {
+    //^3
     freq_tree tree;
     std::vector<uint8_t> result;
 

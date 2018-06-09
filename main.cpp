@@ -4,6 +4,7 @@
 #include "huffman_code.h"
 #include "bits_seq.h"
 
+// заменить на const
 #define BLOCK 1 << 18
 
 void write_seq(const bits_sequence &bs, std::ofstream &out) {
@@ -19,22 +20,30 @@ void write_seq(const bits_sequence &bs, std::ofstream &out) {
 int main(int argc, char *argv[]) {
     try {
 
+        // 1: зачем кидать исключение с текстом, который потом нигде не выводится?
+        // лучше выведи сообщение и сделай return
         if (argc != 4)
             throw std::runtime_error("We need 4 arguments");
 
         std::ifstream in(argv[2], std::ios::in | std::ios::binary);
         std::ofstream out(argv[3], std::ios::out | std::ios::binary);
 
+        // ^1
         if (!in)
             throw std::runtime_error("Incorrect input files");
+        // ^1
         if (!out)
             throw std::runtime_error("Incorrect output files");
 
+        // 2: не используй C-шные вызовы strcmp
+        // обычно ожидают параметры вида `-e`, `-d` или `--encode`, `--decode`
         if (strcmp(argv[1], "e") == 0) {
             frequency_counter fc;
             std::vector<uint8_t> block(BLOCK);
 
+            // а если при чтении ошибка а не конец файла?
             while (in) {
+                // ^2
                 memset(block.data(), 0, block.size());
                 if (in.read((char *) block.data(), block.size()).gcount() == 0) {
                     return 0; //empty file
@@ -98,6 +107,7 @@ int main(int argc, char *argv[]) {
             throw std::runtime_error("Incorrect flag. We need 'e' or 'd'");
         }
     } catch (std::runtime_error &ex) {
+        // кто расскажет мне формат?
         std::cout << "Incorrect file format or program arguments";
     }
 }
