@@ -86,7 +86,9 @@ void freq_tree::create_code(std::vector<uint8_t> &alphabet, bits_sequence &bits)
 }
 
 
-void freq_tree::create_alphabet_rec(std::unordered_map<uint8_t, bits_sequence> &alphabet, std::shared_ptr<node> cur_node, bits_sequence &cur_seq) {
+void
+freq_tree::create_alphabet_rec(std::unordered_map<uint8_t, bits_sequence> &alphabet, std::shared_ptr<node> cur_node,
+                               bits_sequence &cur_seq) {
     if (cur_node->left != nullptr) {
         cur_seq.add(0);
         create_alphabet_rec(alphabet, cur_node->left, cur_seq);
@@ -106,7 +108,9 @@ std::unordered_map<uint8_t, bits_sequence> freq_tree::create_alphabet() {
     return map;
 }
 
-std::shared_ptr<freq_tree::node> freq_tree::create_tree_rec(const bits_sequence &tree, const std::vector<uint8_t> &alphabet, size_t &ind_tree, size_t &ind_alpha) {
+std::shared_ptr<freq_tree::node>
+freq_tree::create_tree_rec(const bits_sequence &tree, const std::vector<uint8_t> &alphabet, size_t &ind_tree,
+                           size_t &ind_alpha) {
     if (tree.get_bit(ind_tree++)) {
         return std::make_shared<node>(alphabet[ind_alpha++]);
     }
@@ -116,7 +120,9 @@ std::shared_ptr<freq_tree::node> freq_tree::create_tree_rec(const bits_sequence 
     return new_node;
 }
 
-std::shared_ptr<freq_tree::node> freq_tree::get_rec(std::shared_ptr<freq_tree::node> cur_node, size_t &cur_ind, const bits_sequence &seq, uint8_t &res_sym) {
+std::shared_ptr<freq_tree::node>
+freq_tree::get_rec(std::shared_ptr<freq_tree::node> cur_node, size_t &cur_ind, const bits_sequence &seq,
+                   uint8_t &res_sym) {
     if (cur_node->left == nullptr) {
         res_sym = cur_node->symbol;
         return nullptr;

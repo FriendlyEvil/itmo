@@ -27,7 +27,9 @@ void huffman_encoder::get_encode(bits_sequence &bits, std::vector<uint8_t> &alph
     tree.create_code(alpha, bits);
 }
 
-huffman_decoder::huffman_decoder(uint8_t *tree_expl_bits, size_t size_tree, size_t size_alpha) : tree(tree_expl_bits, size_tree, size_alpha) {}
+huffman_decoder::huffman_decoder(uint8_t *tree_expl_bits, size_t size_tree, size_t size_alpha) : tree(tree_expl_bits,
+                                                                                                      size_tree,
+                                                                                                      size_alpha) {}
 
 std::vector<uint8_t> huffman_decoder::decode(const bits_sequence &seq) {
     std::vector<uint8_t> result;
