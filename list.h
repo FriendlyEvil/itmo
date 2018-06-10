@@ -28,13 +28,13 @@ class list {
     node1 *neutral = &neutral_node;
 public:
     template<typename S>
-    struct iterator {
+    struct iterator1 {
         node1 *temp;
 
-        iterator(node1 *data) : temp(data) {}
+        iterator1(node1 *data) : temp(data) {}
 
         template<typename C>
-        iterator(const iterator<C> &data) {
+        iterator1(const iterator1<C> &data) {
             temp = data.temp;
         }
 
@@ -42,40 +42,40 @@ public:
             return ((node *) temp)->value;
         }
 
-        iterator &operator++() {
+        iterator1 &operator++() {
             temp = temp->next;
             return *this;
         }
 
-        iterator &operator--() {
+        iterator1 &operator--() {
             temp = temp->prev;
             return *this;
         }
 
-        iterator operator++(int) {
+        iterator1 operator++(int) {
             node *cur = temp;
             temp = temp->next;
-            return iterator(cur);
+            return iterator1(cur);
         }
 
-        iterator operator--(int) {
+        iterator1 operator--(int) {
             node *cur = temp;
             temp = temp->prev;
-            return iterator(cur);
+            return iterator1(cur);
         }
 
-        bool operator==(iterator second) const{
+        bool operator==(iterator1 second) const{
             return temp == second.temp;
         }
 
-        bool operator!=(iterator second) const{
+        bool operator!=(iterator1 second) const{
             return temp != second.temp;
         }
     };
 
-    typedef iterator<T> iterator;
-    typedef iterator<const T> const_iterator;
-    typedef std::reverse_iterator<iterator<T>> reverse_iterator;
+    typedef iterator1<T> iterator;
+    typedef iterator1<const T> const_iterator;
+    typedef std::reverse_iterator<iterator1<T>> reverse_iterator;
     typedef std::reverse_iterator<const_iterator> const_reverse_iterator;
 
     list() {
