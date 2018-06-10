@@ -57,13 +57,13 @@ public:
         }
 
         iterator1 operator++(int) {
-            node *cur = temp;
+            node1 *cur = temp;
             temp = temp->next;
             return iterator1(cur);
         }
 
         iterator1 operator--(int) {
-            node *cur = temp;
+            node1 *cur = temp;
             temp = temp->prev;
             return iterator1(cur);
         }
@@ -114,10 +114,6 @@ public:
         return *this;
     }
 
-    void swap(list &other) {
-        std::swap(neutral, other.neutral);
-    }
-
     void clear() {
         while (!empty()) {
             pop_back();
@@ -143,7 +139,7 @@ public:
     }
 
     void push_front(const T &data) {
-        node *new_node_ptr = new node(data, neutral, neutral->next);
+        node1 *new_node_ptr = new node(data, neutral, neutral->next);
 //        node *new_node_ptr = &new_node;
         neutral->next->prev = new_node_ptr;
         neutral->next = new_node_ptr;
@@ -247,8 +243,8 @@ public:
     friend void swap(list<S> &first, list<S> &second);
 };
 
-template<typename S>
-void swap(list<S> &first, list<S> &second) {
+template<typename T>
+void swap(list<T> &first, list<T> &second) {
     std::swap(first.neutral_node, second.neutral_node);
 
     first.neutral->prev->next = &first.neutral_node;

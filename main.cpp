@@ -45,4 +45,8 @@ int main() {
     out(&l);
     out(&r);
     std::cout << "end";
+    r = l;
+    list<int>::iterator i = a.begin();
+    i++;
+    i--;
 }
