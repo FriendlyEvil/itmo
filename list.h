@@ -143,7 +143,7 @@ public:
     }
 
     void push_front(const T &data) {
-        node1 *new_node_ptr = new node(data, neutral, neutral->next);
+        node *new_node_ptr = new node(data, neutral, neutral->next);
 //        node *new_node_ptr = &new_node;
         neutral->next->prev = new_node_ptr;
         neutral->next = new_node_ptr;
