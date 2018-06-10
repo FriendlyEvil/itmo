@@ -227,6 +227,8 @@ public:
     }
 
     void splice(const_iterator pos, list &oth, const_iterator first, const_iterator last) {
+        if (first == last)
+            return;
         node1 *back = last.temp->prev;
         first.temp->prev->next = last.temp;
         last.temp->prev = first.temp->prev;
