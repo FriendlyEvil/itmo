@@ -35,16 +35,11 @@ public:
 
         template<typename C>
         iterator(const iterator<C> &data) {
-            if (std::is_same<S, const C>::value) {
-                temp = data.temp;
-            } else {
-                std::cerr << "Incorrect cast";
-                exit(1);
-            }
+            temp = data.temp;
         }
 
         S &operator*() {
-            return ((node *)temp)->value;
+            return ((node *) temp)->value;
         }
 
         iterator &operator++() {
@@ -90,7 +85,7 @@ public:
     list(const list &other) : list() {
         node1 *oth = other.neutral->next;
         while (oth != other.neutral) {
-            push_back(((node *)oth)->value);
+            push_back(((node *) oth)->value);
             oth = oth->next;
         }
     }
@@ -127,14 +122,14 @@ public:
     }
 
     void pop_back() {
-        node *dlt = ((node *)neutral->prev);
+        node *dlt = ((node *) neutral->prev);
         dlt->prev->next = neutral;
         neutral->prev = dlt->prev;
         delete dlt;
     }
 
     T &back() {
-        return ((node *)neutral->prev)->value;
+        return ((node *) neutral->prev)->value;
     }
 
     void push_front(const T &data) {
@@ -145,14 +140,14 @@ public:
     }
 
     void pop_front() {
-        node *dlt = ((node *)neutral->next);
+        node *dlt = ((node *) neutral->next);
         dlt->next->prev = neutral;
         neutral->next = dlt->next;
         delete dlt;
     }
 
     T &front() {
-        return (node *) ((node *)neutral->next)->value;
+        return (node *) ((node *) neutral->next)->value;
     }
 
     iterator<T> begin() {
@@ -200,7 +195,7 @@ public:
         pos.temp->prev->next = pos.temp->next;
         pos.temp->next->prev = pos.temp->prev;
         //assert(new_iter == ++pos);
-        delete (node *)pos.temp;
+        delete (node *) pos.temp;
         return new_iter;
     }
 
