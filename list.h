@@ -73,6 +73,7 @@ public:
         }
     };
 
+    typedef iterator<T> iterator;
     typedef iterator<const T> const_iterator;
     typedef std::reverse_iterator<iterator<T>> reverse_iterator;
     typedef std::reverse_iterator<const_iterator> const_reverse_iterator;
@@ -150,8 +151,8 @@ public:
         return (node *) ((node *) neutral->next)->value;
     }
 
-    iterator<T> begin() {
-        return iterator<T>(neutral->next);
+    iterator begin() {
+        return iterator(neutral->next);
     }
 
     const_iterator begin() const {
@@ -166,8 +167,8 @@ public:
         const_reverse_iterator(end());
     }
 
-    iterator<T> end() {
-        return iterator<T>(neutral);
+    iterator end() {
+        return iterator(neutral);
     }
 
     const_iterator end() const {
@@ -182,16 +183,16 @@ public:
         const_reverse_iterator(begin());
     }
 
-    iterator<T> insert(const_iterator pos, const T &data) {
+    iterator insert(const_iterator pos, const T &data) {
         node *new_node_ptr = new node(data, pos.temp->prev, pos.temp);
 //        node *new_node_ptr = &new_node;
         pos.temp->prev->next = new_node_ptr;
         pos.temp->prev = new_node_ptr;
-        return iterator<T>(new_node_ptr);
+        return iterator(new_node_ptr);
     }
 
-    iterator<T> erase(const_iterator pos) {
-        iterator<T> new_iter = iterator<T>(pos.temp->next);
+    iterator erase(const_iterator pos) {
+        iterator new_iter = iterator(pos.temp->next);
         pos.temp->prev->next = pos.temp->next;
         pos.temp->next->prev = pos.temp->prev;
         //assert(new_iter == ++pos);
@@ -199,8 +200,8 @@ public:
         return new_iter;
     }
 
-    iterator<T> erase(const_iterator first, const_iterator last) {
-        iterator<T> iter = iterator<T>(first.temp);
+    iterator erase(const_iterator first, const_iterator last) {
+        iterator iter = iterator(first.temp);
         while (last != iter) {
             iter = erase(iter);
         }
