@@ -247,7 +247,19 @@ public:
 
 template<typename T>
 void swap(list<T> &first, list<T> &second) {
+    bool f_empty = first.empty();
+    bool s_empty = second.empty();
     std::swap(first.neutral_node, second.neutral_node);
+
+    if (s_empty) {
+        first.neutral_node.prev = &first.neutral_node;
+        first.neutral_node.next = &first.neutral_node;
+    }
+
+    if (f_empty) {
+        second.neutral_node.prev = &second.neutral_node;
+        second.neutral_node.next = &second.neutral_node;
+    }
 
     first.neutral->prev->next = &first.neutral_node;
     second.neutral->prev->next = &second.neutral_node;
