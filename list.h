@@ -109,7 +109,8 @@ public:
 
     list &operator=(const list &other) {
         list oth(other);
-        swap(oth);
+//        swap(oth);
+        swap(*this, oth);
         return *this;
     }
 
@@ -242,6 +243,19 @@ public:
         first.temp->prev = cur;
     }
 
+    template<typename S>
+    friend void swap(list<S> &first, list<S> &second);
 };
+
+template<typename S>
+void swap(list<S> &first, list<S> &second) {
+    std::swap(first.neutral_node, second.neutral_node);
+
+    first.neutral->prev->next = &first.neutral_node;
+    second.neutral->prev->next = &second.neutral_node;
+    first.neutral->next->prev = &first.neutral_node;
+    second.neutral->next->prev = &second.neutral_node;
+
+}
 
 #endif //EXAM_LIST_H

@@ -22,7 +22,7 @@ int main() {
 //    out(l);
     l.pop_front();
 //    out(l);
-    list<int> r = list<int>(l);
+    list<int> r  = l;
     out(&r);
     l.push_back(7);
     l.push_back(8);
@@ -31,14 +31,18 @@ int main() {
     out(&l);
     l.erase(--l.end());
     out(&l);
-    l.erase(++l.begin(), --l.end());
-//    l.erase(l.begin(), l.end());
+//    l.erase(++l.begin(), --l.end());
+//    l.erase(l.begin(), --l.end());
     out(&l);
-    std::cout << "end";
 
     list<int> const a;
     a.front();
     a.back();
     a.rbegin();
     std::next(a.begin());
+    r.push_back(1);
+    swap(r, l);
+    out(&l);
+    out(&r);
+    std::cout << "end";
 }
