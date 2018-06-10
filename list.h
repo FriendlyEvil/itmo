@@ -7,26 +7,31 @@
 
 template<typename T>
 class list {
-    struct node {
-        node *next, *prev;
-        T value;
+    struct node1 {
+        node1 *next, *prev;
 
-        node() : next(nullptr), prev(nullptr) {}
+        node1() : next(nullptr), prev(nullptr) {}
 
-        node(const T &data) : next(nullptr), prev(nullptr), value(data) {}
-
-        node(const T &data, node *prev, node *next) : next(next), prev(prev), value(data) {}
-
-        ~node() = default;
+        node1(node1 *prev, node1 *next) : next(next), prev(prev) {}
     } neutral_node;
 
-    node *neutral = &neutral_node;
+    struct node : node1 {
+        T value;
+
+        node(const T &data) : node1(), value(data) {}
+
+        node(const T &data, node1 *prev, node1 *next) : node1(prev, next), value(data) {}
+
+        ~node() = default;
+    };
+
+    node1 *neutral = &neutral_node;
 public:
     template<typename S>
     struct iterator {
-        node *temp;
+        node1 *temp;
 
-        iterator(node *data) : temp(data) {}
+        iterator(node1 *data) : temp(data) {}
 
         template<typename C>
         iterator(const iterator<C> &data) {
@@ -39,7 +44,7 @@ public:
         }
 
         S &operator*() {
-            return temp->value;
+            return ((node *)temp)->value;
         }
 
         iterator &operator++() {
@@ -83,9 +88,9 @@ public:
     }
 
     list(const list &other) : list() {
-        node *oth = other.neutral->next;
+        node1 *oth = other.neutral->next;
         while (oth != other.neutral) {
-            push_back(oth->value);
+            push_back(((node *)oth)->value);
             oth = oth->next;
         }
     }
@@ -122,32 +127,32 @@ public:
     }
 
     void pop_back() {
-        node *dlt = neutral->prev;
+        node *dlt = ((node *)neutral->prev);
         dlt->prev->next = neutral;
         neutral->prev = dlt->prev;
         delete dlt;
     }
 
     T &back() {
-        return neutral->prev->value;
+        return ((node *)neutral->prev)->value;
     }
 
     void push_front(const T &data) {
-        node *new_node_ptr = new node(data, neutral, neutral->next);
+        node1 *new_node_ptr = new node(data, neutral, neutral->next);
 //        node *new_node_ptr = &new_node;
         neutral->next->prev = new_node_ptr;
         neutral->next = new_node_ptr;
     }
 
     void pop_front() {
-        node *dlt = neutral->next;
+        node *dlt = ((node *)neutral->next);
         dlt->next->prev = neutral;
         neutral->next = dlt->next;
         delete dlt;
     }
 
     T &front() {
-        return (node *) neutral->next->value;
+        return (node *) ((node *)neutral->next)->value;
     }
 
     iterator<T> begin() {
@@ -195,7 +200,7 @@ public:
         pos.temp->prev->next = pos.temp->next;
         pos.temp->next->prev = pos.temp->prev;
         //assert(new_iter == ++pos);
-        delete pos.temp;
+        delete (node *)pos.temp;
         return new_iter;
     }
 
@@ -209,11 +214,11 @@ public:
     }
 
     void splice(const_iterator pos, list &oth, const_iterator first, const_iterator last) {
-        node *back = last.temp->prev;
+        node1 *back = last.temp->prev;
         first.temp->prev->next = last.temp;
         last.temp->prev = first.temp->prev;
 
-        node *cur = pos.temp->prev;
+        node1 *cur = pos.temp->prev;
         pos.temp->prev = back;
         back->next = pos.temp;
 
