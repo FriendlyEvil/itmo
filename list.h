@@ -64,11 +64,11 @@ public:
             return iterator(cur);
         }
 
-        bool operator==(iterator second) {
+        bool operator==(iterator second) const{
             return temp == second.temp;
         }
 
-        bool operator!=(iterator second) {
+        bool operator!=(iterator second) const{
             return temp != second.temp;
         }
     };

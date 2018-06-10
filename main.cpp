@@ -1,8 +1,8 @@
 #include <iostream>
 #include "list.h"
 
-void out(list<int> l) {
-    for (int i : l) {
+void out(list<int> *l) {
+    for (int i : *l) {
         std::cout << i;
     }
     std::cout << "\n";
@@ -23,16 +23,15 @@ int main() {
     l.pop_front();
 //    out(l);
     list<int> r = list<int>(l);
-    std::cout << "r ";
-    out(r);
+    out(&r);
     l.push_back(7);
     l.push_back(8);
-    out(l);
+    out(&l);
     l.splice(l.begin(), r, r.begin(), r.end());
-    out(l);
+    out(&l);
     l.erase(--l.end());
-    out(l);
+    out(&l);
     l.erase(++l.begin(), --l.end());
-    out(l);
+    out(&l);
     std::cout << "end";
 }
