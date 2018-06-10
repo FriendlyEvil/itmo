@@ -29,10 +29,14 @@ class list {
 public:
     template<typename S>
     struct iterator1 {
+        friend class list;
+
+    private:
         node1 *temp;
 
         iterator1(node1 *data) : temp(data) {}
 
+    public:
         template<typename C>
         iterator1(const iterator1<C> &data) {
             temp = data.temp;
@@ -64,18 +68,26 @@ public:
             return iterator1(cur);
         }
 
-        bool operator==(iterator1 second) const{
+        bool operator==(iterator1 second) const {
             return temp == second.temp;
         }
 
-        bool operator!=(iterator1 second) const{
+        bool operator!=(iterator1 second) const {
             return temp != second.temp;
         }
+
+        typedef std::ptrdiff_t difference_type;
+        typedef S value_type;
+        typedef S *pointer;
+        typedef S &reference;
+        typedef std::bidirectional_iterator_tag iterator_category;
+
     };
+
 
     typedef iterator1<T> iterator;
     typedef iterator1<const T> const_iterator;
-    typedef std::reverse_iterator<iterator1<T>> reverse_iterator;
+    typedef std::reverse_iterator<iterator> reverse_iterator;
     typedef std::reverse_iterator<const_iterator> const_reverse_iterator;
 
     list() {
@@ -129,10 +141,6 @@ public:
         delete dlt;
     }
 
-    T &back() {
-        return ((node *) neutral->prev)->value;
-    }
-
     void push_front(const T &data) {
         node1 *new_node_ptr = new node(data, neutral, neutral->next);
 //        node *new_node_ptr = &new_node;
@@ -147,8 +155,20 @@ public:
         delete dlt;
     }
 
+    T &back() {
+        return ((node *) neutral->prev)->value;
+    }
+
+    T &back() const {
+        return ((node *) neutral->prev)->value;
+    }
+
     T &front() {
-        return (node *) ((node *) neutral->next)->value;
+        return ((node *) neutral->next)->value;
+    }
+
+    T &front() const {
+        return ((node *) neutral->next)->value;
     }
 
     iterator begin() {
@@ -160,11 +180,11 @@ public:
     }
 
     reverse_iterator rbegin() {
-        reverse_iterator(end());
+        return reverse_iterator(end());
     }
 
     const_reverse_iterator rbegin() const {
-        const_reverse_iterator(end());
+        return const_reverse_iterator(end());
     }
 
     iterator end() {
@@ -176,11 +196,11 @@ public:
     }
 
     reverse_iterator rend() {
-        reverse_iterator(begin());
+        return reverse_iterator(begin());
     }
 
     const_reverse_iterator rend() const {
-        const_reverse_iterator(begin());
+        return const_reverse_iterator(begin());
     }
 
     iterator insert(const_iterator pos, const T &data) {

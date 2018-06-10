@@ -32,6 +32,13 @@ int main() {
     l.erase(--l.end());
     out(&l);
     l.erase(++l.begin(), --l.end());
+//    l.erase(l.begin(), l.end());
     out(&l);
     std::cout << "end";
+
+    list<int> const a;
+    a.front();
+    a.back();
+    a.rbegin();
+    std::next(a.begin());
 }
