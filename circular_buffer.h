@@ -145,7 +145,7 @@ public:
                                        data(reinterpret_cast<T *>(new char[sizeof(T) * capacity])) {}
 
 
-    circular_buffer(const circular_buffer &other) : left(other.left), size_(other.size_),
+    circular_buffer(const circular_buffer &other) : left(other.left), size_(0),
                                                     capacity(other.capacity), data(nullptr) {
         if (capacity == 0)
             return;
