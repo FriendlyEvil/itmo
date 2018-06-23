@@ -11,8 +11,7 @@
 
 
 //int main() {
-//    std::cout << "Hello, World!" << std::endl;
-//    return 0;
+//
 //}
 
 template<typename T>
@@ -156,7 +155,7 @@ TEST(correctness, insert) {
     s.push_back(2);
     s.push_back(3);
     s.push_back(4);
-    s.insert(++ ++s.begin(), 5);
+    s.insert(s.begin() + 2, 5);
 //    print(s);
     std::vector<int> v = {1, 2, 5, 3, 4};
     EXPECT_EQ(check(v, s), true);
@@ -168,7 +167,7 @@ TEST(correctness, insert1) {
     s.push_back(2);
     s.push_back(3);
     s.push_back(4);
-    s.insert(++ ++ ++s.begin(), 5);
+    s.insert(s.begin() + 3, 5);
 //    print(s);
     std::vector<int> v = {1, 2, 3, 5, 4};
     EXPECT_EQ(check(v, s), true);
@@ -180,7 +179,7 @@ TEST(correctness, insert_erase) {
     s.push_back(2);
     s.push_back(3);
     s.push_back(4);
-    s.erase(s.insert(++ ++ ++s.begin(), 5));
+    s.erase(s.insert(s.begin() + 3, 5));
 //    print(s);
     std::vector<int> v = {1, 2, 3, 4};
     EXPECT_EQ(check(v, s), true);
@@ -192,7 +191,7 @@ TEST(correctness, insert_erase1) {
     s.push_back(2);
     s.push_back(3);
     s.push_back(4);
-    s.insert(s.erase(s.insert(++ ++ ++s.begin(), 5)), 5);
+    s.insert(s.erase(s.insert(s.begin() + 3, 5)), 5);
 //    print(s);
     std::vector<int> v = {1, 2, 3, 5, 4};
     EXPECT_EQ(check(v, s), true);

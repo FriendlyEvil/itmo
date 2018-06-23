@@ -267,12 +267,14 @@ public:
         iterator cur = iterator(data, temp, left, capacity);
         if (2 * temp <= size_) {
             while (cur != begin()) {
-                *cur = *(--cur);
+                *cur = *(cur - 1);
+                cur--;
             }
             pop_front();
         } else {
             while (cur != --end()) {
-                *cur = *(++cur);
+                *cur = *(cur + 1);
+                cur++;
             }
             pop_back();
         }
@@ -280,26 +282,29 @@ public:
     }
 
     iterator insert(const_iterator pos, const T &dat) {
-        if (2 * pos.ind <= size_) {
+        size_t ind = pos.ind;
+        if (2 * ind <= size_) {
             push_front(dat);
-            iterator temp = iterator(data, pos.ind, left, capacity), cur = begin();
+            iterator temp = iterator(data, ind, left, capacity), cur = begin();
             while (cur != temp) {
-                *(cur) = *(++cur);
+                *(cur) = *(cur + 1);
+                cur++;
             }
             *cur = dat;
         } else {
             push_back(dat);
-            iterator temp = iterator(data, pos.ind, left, capacity), cur = --end();
+            iterator temp = iterator(data, ind, left, capacity), cur = end() - 1;
             while (cur != temp) {
-                *cur = *(--cur);
+                *cur = *(cur - 1);
+                cur--;
             }
             *cur = dat;
         }
-        return iterator(data, pos.ind, left, capacity);
+        return iterator(data, ind, left, capacity);
 
     }
 
-    void swap(circular_buffer<T> &first, circular_buffer<T> &second);
+    static void swap(circular_buffer<T> &first, circular_buffer<T> &second);
 };
 
 template<typename T>
