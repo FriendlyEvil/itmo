@@ -13,7 +13,7 @@ class circular_buffer {
     void ensure_capacity(size_t size) {
         if (size >= capacity) {
             circular_buffer<T> oth(capacity * 2 + 1);
-            for (size_t i = 0, temp = left; i < size_; ++i, temp = (++temp) % capacity) {
+            for (size_t i = 0, temp = left; i < size_; ++i, temp = (temp + 1) % capacity) {
                 oth.push_back(data[temp]);
             }
             swap(*this, oth);
@@ -34,7 +34,7 @@ public:
         if (capacity == 0)
             return;
         data = reinterpret_cast<T *>(new char[sizeof(T) * capacity]);
-        for (size_t i = 0, temp = left; i < size_; ++i, temp = (++temp) % capacity) {
+        for (size_t i = 0, temp = left; i < size_; ++i, temp = (temp + 1) % capacity) {
             push_back(other.data[temp]);
         }
     }
