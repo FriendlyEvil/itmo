@@ -131,8 +131,7 @@ public:
 
     public:
         template<typename C>
-        iterator1(const iterator1<C> &other,
-                  typename std::enable_if<std::is_same<S, const C>::value>::type * = nullptr) {
+        iterator1(const iterator1<C> &other) {
             data = other.data;
             ind = other.ind;
             left = other.left;
