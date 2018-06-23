@@ -263,9 +263,9 @@ public:
     }
 
     iterator erase(const_iterator pos) {
-        size_t temp = pos.ind;
-        iterator cur = iterator(data, temp, left, capacity);
-        if (2 * temp <= size_) {
+        size_t ind = pos.ind;
+        iterator cur = iterator(data, ind, left, capacity);
+        if (2 * ind <= size_) {
             while (cur != begin()) {
                 *cur = *(cur - 1);
                 cur--;
@@ -278,7 +278,7 @@ public:
             }
             pop_back();
         }
-        return iterator(data, temp, left, capacity);
+        return iterator(data, ind, left, capacity);
     }
 
     iterator insert(const_iterator pos, const T &dat) {
