@@ -131,7 +131,8 @@ public:
 
     public:
         template<typename C>
-        iterator1(const iterator1<C> &other) {
+        iterator1(const iterator1<C> &other,
+                  typename std::enable_if<std::is_same<S, const C>::value>::type * = nullptr) {
             data = other.data;
             ind = other.ind;
             left = other.left;
@@ -205,6 +206,22 @@ public:
 
         bool operator!=(iterator1 second) const {
             return !(*this == second);
+        }
+
+        bool operator<(iterator1 second) const {
+            return ind < second.ind;
+        }
+
+        bool operator<=(iterator1 second) const {
+            return *this < second || *this == second;
+        }
+
+        bool operator>(iterator1 second) const {
+            return !(*this <= second);
+        }
+
+        bool operator>=(iterator1 second) const {
+            return !(*this < second);
         }
     };
 
