@@ -193,8 +193,9 @@ public:
 
     void push_front(const T &dat) {
         ensure_capacity(size_ + 1);
-        left = (left - 1 + capacity) % capacity;
-        new(&data[left]) T(dat);
+        size_t buf = (left - 1 + capacity) % capacity;
+        new(&data[buf]) T(dat);
+        left = buf;
         ++size_;
     }
 
