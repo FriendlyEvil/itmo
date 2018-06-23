@@ -150,7 +150,7 @@ public:
         if (capacity == 0)
             return;
         data = reinterpret_cast<T *>(new char[sizeof(T) * capacity]);
-        for (size_t i = 0, temp = left; i < size_; ++i, temp = (temp + 1) % capacity) {
+        for (size_t i = 0, temp = left; i < other.size_; ++i, temp = (temp + 1) % capacity) {
             push_back(other.data[temp]);
         }
     }
