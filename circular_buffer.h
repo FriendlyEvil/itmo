@@ -7,10 +7,12 @@ class circular_buffer;
 template<typename S>
 class iterator1 {
     template<typename T>
-    friend class circular_buffer;
+    friend
+    class circular_buffer;
 
     template<typename C>
-    friend class iterator1;
+    friend
+    class iterator1;
 
 public:
     typedef std::ptrdiff_t difference_type;
@@ -119,7 +121,6 @@ public:
 };
 
 
-
 template<typename T>
 class circular_buffer {
     size_t left, size_, capacity;
@@ -156,7 +157,7 @@ public:
 
     ~circular_buffer() {
         clear();
-        delete[] data;
+        delete[] reinterpret_cast<char *>(data);
     }
 
     circular_buffer &operator=(const circular_buffer &other) {
