@@ -1,9 +1,124 @@
-#ifndef CIRCULAR_BUFFER_CIRCULAR_BUFFER_H
-#define CIRCULAR_BUFFER_CIRCULAR_BUFFER_H
-
-
 #include <algorithm>
 #include <iterator>
+
+template<typename S>
+class circular_buffer;
+
+template<typename S>
+class iterator1 {
+    template<typename T>
+    friend class circular_buffer;
+
+    template<typename C>
+    friend class iterator1;
+
+public:
+    typedef std::ptrdiff_t difference_type;
+    typedef S value_type;
+    typedef S *pointer;
+    typedef S &reference;
+    typedef std::bidirectional_iterator_tag iterator_category;
+
+private:
+    S *data;
+    size_t ind, left, capacity;
+
+    iterator1(S *data, size_t ind, size_t left, size_t capacity) : data(data), ind(ind),
+                                                                   left(left), capacity(capacity) {}
+
+public:
+    template<typename = std::enable_if_t<std::is_const<S>::value>>
+    iterator1(const iterator1<std::decay_t<S>> &other) {
+        data = other.data;
+        ind = other.ind;
+        left = other.left;
+        capacity = other.capacity;
+    }
+
+    reference operator*() const {
+        return *(data + ((left + ind) % capacity));
+    }
+
+    pointer operator->() const {
+        return (data + ((left + ind) % capacity));
+    }
+
+    iterator1 &operator++() {
+        ++ind;
+        return *this;
+    }
+
+    iterator1 &operator--() {
+        --ind;
+        return *this;
+    }
+
+    iterator1 operator++(int) {
+        iterator1 cur = *this;
+        ++ind;
+        return cur;
+    }
+
+    iterator1 operator--(int) {
+        iterator1 cur = *this;
+        --ind;
+        return cur;
+    }
+
+    friend iterator1 operator+(iterator1 const &oth, difference_type add) {
+        return iterator1(oth.data, oth.ind + add, oth.left, oth.capacity);
+    }
+
+    friend iterator1 operator+(difference_type add, iterator1 const &oth) {
+        return iterator1(oth.data, oth.ind + add, oth.left, oth.capacity);
+    }
+
+    friend iterator1 operator-(iterator1 const &oth, difference_type add) {
+        return iterator1(oth.data, oth.ind - add, oth.left, oth.capacity);
+    }
+
+    friend iterator1 operator-(difference_type add, iterator1 const &oth) {
+        return iterator1(oth.data, oth.ind - add, oth.left, oth.capacity);
+    }
+
+    friend iterator1 operator+=(iterator1 &oth, difference_type add) {
+        oth = oth + add;
+        return oth;
+    }
+
+    friend iterator1 operator-=(iterator1 &oth, difference_type add) {
+        oth = oth - add;
+        return oth;
+    }
+
+    friend difference_type operator-(iterator1 const &first, iterator1 const &second) {
+        return first.ind - second.ind;
+    }
+
+    template<typename U, typename I>
+    friend bool operator==(iterator1<U> first, iterator1<I> second);
+
+    template<typename U, typename I>
+    friend bool operator!=(iterator1<U> first, iterator1<I> second);
+
+    bool operator<(iterator1 second) const {
+        return ind < second.ind;
+    }
+
+    bool operator<=(iterator1 second) const {
+        return *this < second || *this == second;
+    }
+
+    bool operator>(iterator1 second) const {
+        return !(*this <= second);
+    }
+
+    bool operator>=(iterator1 second) const {
+        return !(*this < second);
+    }
+};
+
+
 
 template<typename T>
 class circular_buffer {
@@ -113,118 +228,6 @@ public:
         return data[(left + i) % capacity];
     }
 
-    template<typename S>
-    class iterator1 {
-        friend class circular_buffer;
-
-        typedef std::ptrdiff_t difference_type;
-        typedef S value_type;
-        typedef S *pointer;
-        typedef S &reference;
-        typedef std::bidirectional_iterator_tag iterator_category;
-
-        T *data;
-        size_t ind, left, capacity;
-
-        iterator1(T *data, size_t ind, size_t left, size_t capacity) : data(data), ind(ind),
-                                                                       left(left), capacity(capacity) {}
-
-    public:
-        template<typename C>
-        iterator1(const iterator1<C> &other) {
-            data = other.data;
-            ind = other.ind;
-            left = other.left;
-            capacity = other.capacity;
-        }
-
-        reference operator*() const {
-            return *(data + ((left + ind) % capacity));
-        }
-
-        pointer operator->() const {
-            return (data + ((left + ind) % capacity));
-        }
-
-        iterator1 &operator++() {
-            ++ind;
-            return *this;
-        }
-
-        iterator1 &operator--() {
-            --ind;
-            return *this;
-        }
-
-        iterator1 operator++(int) {
-            iterator1 cur = *this;
-            ++ind;
-            return cur;
-        }
-
-        iterator1 operator--(int) {
-            iterator1 cur = *this;
-            --ind;
-            return cur;
-        }
-
-        friend iterator1 operator+(iterator1 const &oth, difference_type add) {
-            return iterator1(oth.data, oth.ind + add, oth.left, oth.capacity);
-        }
-
-        friend iterator1 operator+(difference_type add, iterator1 const &oth) {
-            return iterator1(oth.data, oth.ind + add, oth.left, oth.capacity);
-        }
-
-        friend iterator1 operator-(iterator1 const &oth, difference_type add) {
-            return iterator1(oth.data, oth.ind - add, oth.left, oth.capacity);
-        }
-
-        friend iterator1 operator-(difference_type add, iterator1 const &oth) {
-            return iterator1(oth.data, oth.ind - add, oth.left, oth.capacity);
-        }
-
-        friend iterator1 operator+=(iterator1 &oth, difference_type add) {
-            oth = oth + add;
-            return oth;
-        }
-
-        friend iterator1 operator-=(iterator1 &oth, difference_type add) {
-            oth = oth - add;
-            return oth;
-        }
-
-        friend difference_type operator-(iterator1 const &first, iterator1 const &second) {
-            return first.ind - second.ind;
-        }
-
-        bool operator==(iterator1 second) const {
-            return data == second.data && ind == second.ind
-                   && left == second.left && capacity == second.capacity;
-        }
-
-        bool operator!=(iterator1 second) const {
-            return !(*this == second);
-        }
-
-        bool operator<(iterator1 second) const {
-            return ind < second.ind;
-        }
-
-        bool operator<=(iterator1 second) const {
-            return *this < second || *this == second;
-        }
-
-        bool operator>(iterator1 second) const {
-            return !(*this <= second);
-        }
-
-        bool operator>=(iterator1 second) const {
-            return !(*this < second);
-        }
-    };
-
-
     typedef iterator1<T> iterator;
     typedef iterator1<const T> const_iterator;
     typedef std::reverse_iterator<iterator> reverse_iterator;
@@ -304,16 +307,25 @@ public:
 
     }
 
-    static void swap(circular_buffer<T> &first, circular_buffer<T> &second);
+    template<typename T1>
+    friend void swap(circular_buffer<T1> &first, circular_buffer<T1> &second);
 };
 
 template<typename T>
-void circular_buffer<T>::swap(circular_buffer<T> &first, circular_buffer<T> &second) {
+void swap(circular_buffer<T> &first, circular_buffer<T> &second) {
     std::swap(first.left, second.left);
     std::swap(first.size_, second.size_);
     std::swap(first.capacity, second.capacity);
     std::swap(first.data, second.data);
 }
 
+template<typename U, typename I>
+bool operator==(iterator1<U> first, iterator1<I> second) {
+    return first.data == second.data && first.ind == second.ind
+           && first.left == second.left && first.capacity == second.capacity;
+}
 
-#endif //CIRCULAR_BUFFER_CIRCULAR_BUFFER_H
+template<typename U, typename I>
+bool operator!=(iterator1<U> first, iterator1<I> second) {
+    return !(first == second);
+}
