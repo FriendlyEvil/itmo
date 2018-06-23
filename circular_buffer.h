@@ -3,6 +3,7 @@
 
 
 #include <algorithm>
+#include <iterator>
 
 template<typename T>
 class circular_buffer {
@@ -165,6 +166,36 @@ public:
             iterator1 cur = *this;
             --ind;
             return cur;
+        }
+
+        friend iterator1 operator+(iterator1 const &oth, difference_type add) {
+            return iterator1(oth.data, oth.ind + add, oth.left, oth.capacity);
+        }
+
+        friend iterator1 operator+(difference_type add, iterator1 const &oth) {
+            return iterator1(oth.data, oth.ind + add, oth.left, oth.capacity);
+        }
+
+        friend iterator1 operator-(iterator1 const &oth, difference_type add) {
+            return iterator1(oth.data, oth.ind - add, oth.left, oth.capacity);
+        }
+
+        friend iterator1 operator-(difference_type add, iterator1 const &oth) {
+            return iterator1(oth.data, oth.ind - add, oth.left, oth.capacity);
+        }
+
+        friend iterator1 operator+=(iterator1 &oth, difference_type add) {
+            oth = oth + add;
+            return oth;
+        }
+
+        friend iterator1 operator-=(iterator1 &oth, difference_type add) {
+            oth = oth - add;
+            return oth;
+        }
+
+        friend difference_type operator-(iterator1 const &first, iterator1 const &second) {
+            return first.ind - second.ind;
         }
 
         bool operator==(iterator1 second) const {
