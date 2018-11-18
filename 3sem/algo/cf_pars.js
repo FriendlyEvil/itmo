@@ -17,23 +17,30 @@ var f = function(s) {
 		'<p align=\"center\"><i>' + hc[1].innerText + '<br>\n' + hc[2].innerText + '<br>\n' 
 		+ hc[3].innerText + '<br>\n' + hc[4].innerText + '</i></p>\n\n';
 
+		var v1 = '<h1 align=\"center\">' + hc[0].innerText + '</h1>\n' +
+		'<p align=\"center\"><i>' + hc[1].innerText + '<br>\n' + hc[2].innerText + '<br>\n' 
+		+ $(hc[3]).children()[0].innerText + ': ' + hc[3].innerText.substr($(hc[3]).children()[0].innerText.length) + '<br>\n' 
+		+ $(hc[4]).children()[0].innerText + ': ' + hc[4].innerText.substr($(hc[3]).children()[0].innerText.length) + '</i></p>\n\n';
+
 		var v2 = '__Условие:__  \n' + problem.children()[1].innerText + '\n\n';
 		var v3 = '__Входные данные:__  \n' + problem.children()[2].children[1].innerText + '\n\n';
 		var v4 = '__Выходные данные:__  \n' + problem.children()[3].children[1].innerText + '\n\n';
+		var v5 = '';
 
-		var test = problem.children()[4].children[1];
-		var v5 = '__Пример__  \n';
-		$(test.children).each(function(el) {
-			var c = $(test.children[el].children[1]).html();
-			if (el%2==0) {
-				v5 += '>__Входные данные__  \n' + c.replace(new RegExp("<br>",'g'), "<br>\n");
-			} else {
-				v5 += '__Выходные данные__  \n' + c.replace(new RegExp("<br>",'g'), "<br>\n") + '\n';
-			}
-		})
+		if (problem.children().length > 4) {
+			var test = problem.children()[4].children[1];
+			var v5 = '__Пример__  \n';
+			$(test.children).each(function(el) {
+				var c = $(test.children[el].children[1]).html();
+				if (el%2==0) {
+					v5 += '>__Входные данные__  \n' + c.replace(new RegExp("<br>",'g'), "<br>\n");
+				} else {
+					v5 += '__Выходные данные__  \n' + c.replace(new RegExp("<br>",'g'), "<br>\n") + '\n';
+				}
+			})
+		}
 		var v = '<a name="' + s.split('/')[s.split('/').length - 1] + '"></a>\n';
 		var i = v + v1 + v2 + v3 + v4 + v5 + '\n***\n\n';
-		// console.log(i);
 		return i;
 	})
 }
@@ -61,9 +68,9 @@ var g = function(s) {
 			var c = $($(problem.children()[i]).find("a")).attr("href");
 			if (c != undefined) {
 				try {
-				v += f(c);
+				v += f('https://codeforces.com'+c);
 				} catch(e) {
-					console.log("error");
+					console.log("error ");
 				}
 			}
 		})
@@ -71,4 +78,4 @@ var g = function(s) {
 		alert(v);
 	})
 }
-g("https://codeforces.com/group/CYMPFXi8zA/contest/231975")
+g("https://codeforces.com/group/M9Yj6K7UrC/contest/229221")
