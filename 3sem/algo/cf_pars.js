@@ -17,10 +17,10 @@ var f = function(s) {
 		'<p align=\"center\"><i>' + hc[1].innerText + '<br>\n' + hc[2].innerText + '<br>\n' 
 		+ hc[3].innerText + '<br>\n' + hc[4].innerText + '</i></p>\n\n';
 
-		var v1 = '<h1 align=\"center\">' + hc[0].innerText + '</h1>\n' +
-		'<p align=\"center\"><i>' + hc[1].innerText + '<br>\n' + hc[2].innerText + '<br>\n' 
-		+ $(hc[3]).children()[0].innerText + ': ' + hc[3].innerText.substr($(hc[3]).children()[0].innerText.length) + '<br>\n' 
-		+ $(hc[4]).children()[0].innerText + ': ' + hc[4].innerText.substr($(hc[3]).children()[0].innerText.length) + '</i></p>\n\n';
+		var v1 = '<h1 align=\"center\">' + hc[0].innerText + '</h1>\n' +'<p align=\"center\"><i>'
+		for (var i = 1; i < 5; i++) 
+			v1 +=  '<br>\n' + $(hc[i]).children()[0].innerText + ': ' + hc[i].innerText.substr($(hc[i]).children()[0].innerText.length);
+		v1 += '</i></p>\n\n';
 
 		var v2 = '__Условие:__  \n' + problem.children()[1].innerText + '\n\n';
 		var v3 = '__Входные данные:__  \n' + problem.children()[2].children[1].innerText + '\n\n';
