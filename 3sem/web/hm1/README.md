@@ -1,7 +1,4 @@
 # HTTP (cURL usage, HTTP-requests, simple HTTP server)
-Задания на <a href="http://codeforces.com/group/M9Yj6K7UrC/contest/228380/problems">codeforces</a>
-
-***
 
 + A [Servlet API: горячая перезагрузка статики](#A)
 + B [Servlet API: множественная отдача файлов](#B)
