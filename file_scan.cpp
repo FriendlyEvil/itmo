@@ -29,7 +29,7 @@ QList<QTreeWidgetItem*> file_scan::find() {
 
     for (auto &dir : find_list) {
         emit update_status("find files in directory:\n" + dir);
-        QDirIterator it(dir,QDir::NoDotAndDotDot|QDir::Hidden|QDir::Files , QDirIterator::Subdirectories);
+        QDirIterator it(dir,QDir::NoDotAndDotDot|QDir::Hidden|QDir::Files|QDir::NoSymLinks , QDirIterator::Subdirectories);
         while(it.hasNext()) {
             QString file_name = it.next();
             qint64 size = QFileInfo(file_name).size();
