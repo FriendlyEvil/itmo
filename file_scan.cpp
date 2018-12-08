@@ -87,7 +87,7 @@ QList<QTreeWidgetItem*> file_scan::find() {
                     for (QString i : files) {
                         QTreeWidgetItem* item = new QTreeWidgetItem();
                         item->setText(0, i);
-                        item->setFlags(item->flags() | Qt::ItemIsUserCheckable | Qt::ItemIsSelectable);
+                        item->setFlags(item->flags() | Qt::ItemIsUserCheckable);
                         item->setCheckState(0, Qt::Unchecked);
 
                         parent->insertChild(0, item);
