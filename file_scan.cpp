@@ -32,6 +32,8 @@ QList<QTreeWidgetItem*> file_scan::find() {
         QDirIterator it(dir,QDir::NoDotAndDotDot|QDir::Hidden|QDir::Files|QDir::NoSymLinks , QDirIterator::Subdirectories);
         while(it.hasNext()) {
             QString file_name = it.next();
+            if (QFileInfo(file_name).isSymLink())
+                continue;
             qint64 size = QFileInfo(file_name).size();
             auto iter = map.find(size);
             if (iter != map.end()) {
