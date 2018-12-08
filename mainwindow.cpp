@@ -207,7 +207,7 @@ void main_window::remove_subfolder(QFileInfo path) {
     QString file_path = path.absolutePath();
     for (int i = 0; i < ui->tableWidget->rowCount(); i++) {
         QString file = ui->tableWidget->item(i, 0)->text();
-        if (file_path.startsWith(path.absoluteFilePath())) {
+        if (file.startsWith(file_path)) {
             ui->tableWidget->removeRow(i--);
             change_path();
         }
