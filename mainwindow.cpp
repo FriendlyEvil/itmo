@@ -73,31 +73,26 @@ void main_window::find_string() {
     bool bOk;
     QString str = QInputDialog::getText(this, "Input", "Srting:", QLineEdit::Normal, "hello",&bOk);
     if (bOk) {
-//        ui->treeWidget->clear();
-//        finder find(map, str);
-//        connect(&find, &finder::update_result, this, &main_window::show_results);
-//        find.find();
-
         QThread *thread = new QThread();
         finder *find = new finder(map, str);
-        dialog *dial = new dialog(thread, this);
+//        dialog *dial = new dialog(thread, this);
 
         find->moveToThread(thread);
         connect(thread, &QThread::started, find, &finder::find);
-        connect(find, &finder::update_status_bar, dial, &dialog::update_status_bar);
-        connect(find, &finder::update_status_bar_range, dial, &dialog::update_status_bar_range);
-        connect(find, &finder::update_message, dial, &dialog::update_message);
+//        connect(find, &finder::update_status_bar, dial, &dialog::update_status_bar);
+//        connect(find, &finder::update_status_bar_range, dial, &dialog::update_status_bar_range);
+//        connect(find, &finder::update_message, dial, &dialog::update_message);
         connect(find, &finder::update_result, this, &main_window::show_results);
         connect(find, &finder::end_search, thread, &QThread::quit);
-        connect(find, &finder::end_search, dial, &dialog::done);
+//        connect(find, &finder::end_search, dial, &dialog::done);
         connect(find, &finder::end_search, find, &finder::deleteLater);
         connect(thread, &QThread::finished, thread, &QThread::deleteLater);
 
         thread->start();
-        if (dial->exec() == QDialog::Rejected) {
-            dial->stop();
-        }
-        delete dial;
+//        if (dial->exec() == QDialog::Rejected) {
+//            dial->stop();
+//        }
+//        delete dial;
     }
 }
 

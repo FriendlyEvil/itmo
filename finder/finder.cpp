@@ -22,10 +22,10 @@ void finder::find() {
     QList<QString> list;
     QSet<int64_t> tri;
     trigram_finder::find_trigrams(&tri, find_string);
-    emit update_status_bar_range(100);
-    int count_dir = 0;
+//    emit update_status_bar_range(100);
+//    int count_dir = 0;
     for (auto i : *trigrams) {
-        int count_set = 0;
+//        int count_set = 0;
         for (auto set = i.begin(); set != i.end(); ++set) {
             bool flag = true;
             for (int64_t el : tri) {
@@ -39,14 +39,14 @@ void finder::find() {
                     list.push_back(set.key());
                 }
             }
-            if (check_interruption_request()) {
-                emit update_result(list);
-                emit end_search(QDialog::Accepted);
-                return;
-            }
-            emit update_status_bar(100*count_dir/(trigrams->size())/(++count_set));
+//            if (check_interruption_request()) {
+//                emit update_result(list);
+//                emit end_search(QDialog::Accepted);
+//                return;
+//            }
+//            emit update_status_bar(100*count_dir/(trigrams->size())/(++count_set));
         }
-        emit update_status_bar(100*(++count_dir)/(trigrams->size()));
+//        emit update_status_bar(100*(++count_dir)/(trigrams->size()));
     }
     emit update_result(list);
     emit end_search(QDialog::Accepted);
