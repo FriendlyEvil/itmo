@@ -143,6 +143,7 @@ void main_window::show_results(QList<QString> list) {
             ui->treeWidget->addTopLevelItem(p);
         }
     }
+    ui->label->setText(QString::number(list.size()) + " file found");
 }
 
 void main_window::delete_directory_from_list() {
