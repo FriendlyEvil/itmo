@@ -182,7 +182,7 @@ void main_window::delete_directory_from_list() {
 
 void main_window::add_directory() {
     ui->add_button->setEnabled(false);
-    remove_subfolder(QFileInfo(ui->path->text()));
+    remove_subfolder(QFileInfo(ui->path->text() + "/"));
 
     int row = ui->tableWidget_2->rowCount();
     ui->tableWidget_2->insertRow(row);
