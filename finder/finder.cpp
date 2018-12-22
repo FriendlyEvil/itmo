@@ -12,12 +12,6 @@
 finder::finder(QHash<QString, QHash<QString, QSet<int64_t>>> *trigrams, QString const &find_string):
     trigrams(trigrams), find_string(find_string) {}
 
-bool finder::check_interruption_request() {
-    if (QThread::currentThread()->isInterruptionRequested())
-        return true;
-    return false;
-}
-
 void finder::find() {
     QList<QString> list;
     QSet<int64_t> tri;
