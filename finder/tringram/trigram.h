@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QTreeWidget>
 #include "trigram_finder.h"
+#include <thread>
 
 
 
@@ -19,7 +20,8 @@ public slots:
 //    void find_duplicates();
     void calculate_trigrams();
     void update_progess();
-    void update_result(QHash<QString, QHash<QString, QSet<int64_t>>> *res);
+    void update_result(QHash<QString, QHash<QString, QSet<int64_t>>> res);
+    void end_find();
 
 signals:
     void end_search(int);
@@ -32,13 +34,13 @@ private:
     void find_items();
     bool find_trigrams(QSet<int64_t>* set, QString str);
     void create_tread(QList<std::pair<QString, QString>> const &list, int n);
-//    QList<QTreeWidgetItem*> find_string(QString const& str);
-//    QTreeWidgetItem* cmp(QString const& file_name, QString const& find);
+
 
 
     QList<QString> find_list;
     QHash<QString, QHash<QString, QSet<int64_t>>> *map;
     int thread_count;
-    const int thread_max = 4;
+    const int thread_max = std::thread::hardware_concurrency();
+//    const int thread_max = 4;
 };
 #endif // TRIGRAM_H

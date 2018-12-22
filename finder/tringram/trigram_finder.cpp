@@ -31,7 +31,8 @@ void trigram_finder::process() {
             break;
         emit update_progress();
     }
-    emit update_result(&map);
+    emit update_result(map);
+    emit end_search();
 }
 
 void trigram_finder::calculate_trigram(std::pair<QString, QString> const &file_info) {

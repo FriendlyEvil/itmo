@@ -19,7 +19,8 @@ public slots:
 
 signals:
     void update_progress();
-    void update_result(QHash<QString, QHash<QString, QSet<int64_t>>> *map);
+    void end_search();
+    void update_result(QHash<QString, QHash<QString, QSet<int64_t>>> map);
 
 private:
    void calculate_trigram(std::pair<QString, QString> const &file);

@@ -35,9 +35,13 @@ void trigram::find_items() {
             QString file_name = it.next();
             list.push_back({dir, file_name});
             if (QThread::currentThread()->isInterruptionRequested()) {
-                search_result();
-                end_search(QDialog::Accepted);
+                emit search_result();
+                emit end_search(QDialog::Accepted);
             }
+        }
+        if (QThread::currentThread()->isInterruptionRequested()) {
+            emit search_result();
+            emit end_search(QDialog::Accepted);
         }
     }
 
@@ -58,11 +62,13 @@ void trigram::create_tread(QList<std::pair<QString, QString>> const &list, int n
     trigram_finder* finder = new trigram_finder(QThread::currentThread(), find);
     QThread* thread = new QThread();
 
+    finder->moveToThread(thread);
     connect(thread, &QThread::started, finder, &trigram_finder::process);
     connect(finder, &trigram_finder::update_result, this, &trigram::update_result);
     connect(finder, &trigram_finder::update_progress, this, &trigram::update_progess);
-    connect(finder, &trigram_finder::update_result, thread, &QThread::quit);
-    connect(finder, &trigram_finder::update_result, finder, &trigram_finder::deleteLater);
+    connect(finder, &trigram_finder::end_search, this, &trigram::end_find);
+    connect(finder, &trigram_finder::end_search, thread, &QThread::quit);
+    connect(finder, &trigram_finder::end_search, finder, &trigram_finder::deleteLater);
     connect(thread, &QThread::finished, thread, &QThread::deleteLater);
 
     thread->start();
@@ -72,14 +78,17 @@ void trigram::update_progess() {
     emit update_status_bar(0);
 }
 
-void trigram::update_result(QHash<QString, QHash<QString, QSet<int64_t>>> *res) {
+void trigram::end_find() {
+    if (--thread_count == 0) {
+        emit search_result();
+        emit end_search(QDialog::Accepted);
+    }
+}
+
+void trigram::update_result(QHash<QString, QHash<QString, QSet<int64_t>>> res) {
     for (QString i : find_list) {
-        for (auto it = (*res)[i].begin(); it != (*res)[i].end(); ++it) {
+        for (auto it = res[i].begin(); it != res[i].end(); ++it) {
             (*map)[i].insert(it.key(), it.value());
         }
-    }
-    if (--thread_count == 0) {
-        search_result();
-        end_search(QDialog::Accepted);
     }
 }

@@ -43,6 +43,7 @@ private:
     QHash<QString, QHash<QString, QSet<int64_t>>> *map;
 
     const QColor good_scan_background = QColor(0, 255, 0);
+    const QString not_found = "Not found element";
 };
 
 #endif // MAINWINDOW_H

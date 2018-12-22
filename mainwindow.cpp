@@ -31,7 +31,7 @@ main_window::main_window(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    setGeometry(QStyle::alignedRect(Qt::LeftToRight, Qt::AlignCenter, size(), qApp->desktop()->availableGeometry()));
+//    setGeometry(QStyle::alignedRect(Qt::LeftToRight, Qt::AlignCenter, size(), qApp->desktop()->availableGeometry()));
 
     connect(ui->scan_button, &QAbstractButton::clicked, this, &main_window::scan_directory_list);
     connect(ui->add_button, &QAbstractButton::clicked, this, &main_window::add_directory);
@@ -43,7 +43,7 @@ main_window::main_window(QWidget *parent)
     connect(ui->find_button, &QAbstractButton::clicked, this, &main_window::find_string);
 
     connect(ui->treeWidget, SIGNAL(itemDoubleClicked(QTreeWidgetItem * , int)), this, SLOT(open_file(QTreeWidgetItem *)));
-
+    qRegisterMetaType<QHash<QString,QHash<QString,QSet<int64_t>>>>("QHash<QString,QHash<QString,QSet<int64_t>>>");
     ui->delete_button->setEnabled(false);
     ui->scan_button->setEnabled(false);
     ui->find_button->setEnabled(false);
@@ -52,7 +52,8 @@ main_window::main_window(QWidget *parent)
 }
 
 void main_window::open_file(QTreeWidgetItem* item) {
-    QDesktopServices::openUrl(QUrl(item->text(0)));
+    if (item->text(0) != not_found)
+        QDesktopServices::openUrl(QUrl(item->text(0)));
 }
 
 main_window::~main_window()
@@ -132,7 +133,7 @@ void main_window::check_delete_button() {
 void main_window::show_results(QList<QString> list) {
     if (list.size() == 0) {
         QTreeWidgetItem* item = new QTreeWidgetItem();
-        item->setText(0, "Not found element");
+        item->setText(0, not_found);
 
         ui->treeWidget->insertTopLevelItem(0, item);
     } else {
