@@ -28,17 +28,17 @@ public:
     template<typename F>
     function(F f)
     {
-        if (sizeof(f) < MAX) {
+        if constexpr (sizeof(f) < MAX) {
 //            std::cout << "Small\n";
-            callable = std::make_unique<function_holder_small<F>>(f);
+            callable = std::make_unique<function_holder_small<F>>(std::move(f));
         } else {
 //            std::cout << "Big\n";
-            callable = std::make_unique<function_holder_big<F>>(f);
+            callable = std::make_unique<function_holder_big<F>>(std::move(f));
         }
     };
 
     template<typename F, typename ClassF>
-    function(F ClassF::* func) : callable(new class_holder<F, ClassF>(func)) {};
+    function(F ClassF::* func) : callable(new class_holder<F, ClassF>(std::move(func))) {};
 
     function &operator=(const function &other) {
         function func(other);
@@ -84,14 +84,14 @@ private:
     template<typename F>
     class function_holder_small : public function_base {
     public:
-        function_holder_small(F func) : function_base(), func(func) {}
+        function_holder_small(F func) : function_base(), func(std::move(func)) {}
 
         R call(Args... args) {
             return func(args...);
         }
 
         std::unique_ptr<function_base> clone() {
-            return std::unique_ptr<function_base>(new function_holder_small(func));
+            return std::make_unique<function_holder_small>(func);
         }
 
     private:
@@ -102,14 +102,15 @@ private:
     class function_holder_big : public function_base {
     public:
 
-        function_holder_big(F func) : function_base(), func(new F(func)) {}
+        function_holder_big(F func) : function_base(), func(new F(std::move(func))) {}
 
         R call(Args... args) {
             return (*func)(args...);
         }
 
         std::unique_ptr<function_base> clone() {
-            return std::unique_ptr<function_base>(new function_holder_big(*func));
+            return std::make_unique<function_holder_big>(*func);
+            //make_unique
         }
 
     private:
@@ -119,14 +120,14 @@ private:
     template<typename F, typename ClassF, typename ... ArgsF>
     class class_holder : public function_base {
     public:
-        class_holder(F ClassF::* func) : function_base(), func(func) {}
+        class_holder(F ClassF::* func) : function_base(), func(std::move(func)) {}
 
         R call(ClassF object, ArgsF ... args) {
             return (object.*func)(args...);
         }
 
         std::unique_ptr<function_base> clone() {
-            return std::unique_ptr<function_base>(new class_holder(func));
+            return std::make_unique<class_holder>(func);
         }
 
     private:
@@ -134,9 +135,8 @@ private:
     };
 
 private:
-    typedef std::unique_ptr<function_base> callable_t;
-    callable_t callable;
-    static const int MAX = 10;
+    std::unique_ptr<function_base> callable;
+    static const int MAX = 1;
 };
 
 
