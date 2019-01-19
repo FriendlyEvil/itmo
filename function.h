@@ -60,7 +60,7 @@ public:
     }
 
     R operator()(Args... args) {
-        return callable->call(args...);
+        return callable->call(std::forward<Args>(args)...);
     }
 
 
@@ -87,7 +87,7 @@ private:
         function_holder_small(F func) : function_base(), func(std::move(func)) {}
 
         R call(Args... args) {
-            return func(args...);
+            return func(std::forward<Args>(args)...);
         }
 
         std::unique_ptr<function_base> clone() {
@@ -105,12 +105,11 @@ private:
         function_holder_big(F func) : function_base(), func(new F(std::move(func))) {}
 
         R call(Args... args) {
-            return (*func)(args...);
+            return (*func)(std::forward<Args>(args)...);
         }
 
         std::unique_ptr<function_base> clone() {
             return std::make_unique<function_holder_big>(*func);
-            //make_unique
         }
 
     private:
@@ -123,7 +122,7 @@ private:
         class_holder(F ClassF::* func) : function_base(), func(std::move(func)) {}
 
         R call(ClassF object, ArgsF ... args) {
-            return (object.*func)(args...);
+            return (object.*func)(std::forward<ArgsF>(args)...);
         }
 
         std::unique_ptr<function_base> clone() {
