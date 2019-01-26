@@ -70,14 +70,13 @@ public:
         return true;
     }
 
-    R operator()(Args... args) {
+    R operator()(Args... args)  const {
         if (is_small) {
-            function_base *m = reinterpret_cast<function_base*>(buf);
+            auto m = reinterpret_cast<const function_base*>(buf);
             return m->call(std::forward<Args>(args)...);
         }
         return callable->call(std::forward<Args>(args)...);
     }
-
     ~function() {
         if (is_small) {
             reinterpret_cast<function_base*>(buf)->~function_base();
@@ -98,7 +97,7 @@ private:
 
         virtual ~function_base() {};
 
-        virtual R call(Args... args) = 0;
+        virtual R call(Args... args) const = 0;
 
         virtual void do_small_copy(void *buf) const = 0;
 
@@ -111,7 +110,7 @@ private:
     public:
         function_holder(F func) : function_base(), func(std::move(func)) {}
 
-        R call(Args... args) {
+        R call(Args... args) const {
             return func(std::forward<Args>(args)...);
         }
 

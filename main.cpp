@@ -73,4 +73,6 @@ int main() {
     test_bool();
     test_copy();
     test_bind();
+    const function<void()> f1 = [](){};
+    f1();
 }
