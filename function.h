@@ -15,52 +15,75 @@ template<typename R, typename... Args>
 class function<R(Args...)> {
 
 public:
-    function() noexcept: callable() {};
+    function() noexcept: callable(nullptr), is_small(false) {};
 
-    function(std::nullptr_t) noexcept : callable(nullptr) {};
+    function(std::nullptr_t) noexcept : callable(nullptr), is_small(false) {};
 
-    function(const function &other) : callable(other.callable->clone()) {};
+    function(const function &other) {
+        auto *tmp = reinterpret_cast<const function_base *>(other.buf);
+        is_small = other.is_small;
+        if (is_small) {
+            tmp->do_small_copy(buf);
+        } else {
+            tmp->do_big_copy(buf);
+        }
+    };
 
     function(function &&other) noexcept {
+        is_small = false;
+        new(buf) std::unique_ptr<function_base>(nullptr);
         swap(other);
     };
 
     template<typename F>
-    function(F f)
-    {
+    function(F f) {
         if constexpr (sizeof(f) < MAX) {
-//            std::cout << "Small\n";
-            callable = std::make_unique<function_holder_small<F>>(std::move(f));
+            is_small = true;
+            new(buf) function_holder<F>(std::move(f));
         } else {
-//            std::cout << "Big\n";
-            callable = std::make_unique<function_holder_big<F>>(std::move(f));
+            is_small = false;
+            new(buf) std::unique_ptr<function_holder<F>>(new function_holder<F>(std::move(f)));
         }
     };
 
-    template<typename F, typename ClassF>
-    function(F ClassF::* func) : callable(new class_holder<F, ClassF>(std::move(func))) {};
-
     function &operator=(const function &other) {
-        function func(other);
-        swap(func);
+        function tmp(other);
+        swap(tmp);
         return *this;
     }
 
     function &operator=(function &&other) noexcept {
-        swap(other);
+        function tmp(std::move(other));
+        swap(tmp);
         return *this;
     }
 
     void swap(function &other) noexcept {
-        std::swap(callable, other.callable);
+        function tmp(std::move(other));
+        other = std::move(*this);
+        *this = std::move(tmp);
     }
 
     explicit operator bool() const noexcept {
-        return static_cast<bool>(callable);
+        if (!is_small)
+            return static_cast<bool>(callable);
+        return true;
     }
 
     R operator()(Args... args) {
+        if (is_small) {
+            function_base *m = reinterpret_cast<function_base*>(buf);
+            return m->call(std::forward<Args>(args)...);
+        }
         return callable->call(std::forward<Args>(args)...);
+    }
+
+    ~function() {
+        if (is_small) {
+            reinterpret_cast<function_base*>(buf)->~function_base();
+        } else {
+            callable.reset();
+        }
     }
 
 
@@ -77,65 +100,43 @@ private:
 
         virtual R call(Args... args) = 0;
 
-        virtual std::unique_ptr<function_base> clone() = 0;
+        virtual void do_small_copy(void *buf) const = 0;
+
+        virtual void do_big_copy(void *buf) const = 0;
     };
 
 
     template<typename F>
-    class function_holder_small : public function_base {
+    class function_holder : public function_base {
     public:
-        function_holder_small(F func) : function_base(), func(std::move(func)) {}
+        function_holder(F func) : function_base(), func(std::move(func)) {}
 
         R call(Args... args) {
             return func(std::forward<Args>(args)...);
         }
 
-        std::unique_ptr<function_base> clone() {
-            return std::make_unique<function_holder_small>(func);
+        void do_small_copy(void *buf) const {
+            new(buf) function_holder<F>(func);
         }
+
+        void do_big_copy(void *buf) const {
+            new(buf) std::unique_ptr<function_holder<F>>(new function_holder<F>(func));
+        }
+
+        ~function_holder() = default;
 
     private:
         F func;
     };
 
-    template<typename F>
-    class function_holder_big : public function_base {
-    public:
-
-        function_holder_big(F func) : function_base(), func(new F(std::move(func))) {}
-
-        R call(Args... args) {
-            return (*func)(std::forward<Args>(args)...);
-        }
-
-        std::unique_ptr<function_base> clone() {
-            return std::make_unique<function_holder_big>(*func);
-        }
-
-    private:
-        std::unique_ptr<F> func;
-    };
-
-    template<typename F, typename ClassF, typename ... ArgsF>
-    class class_holder : public function_base {
-    public:
-        class_holder(F ClassF::* func) : function_base(), func(std::move(func)) {}
-
-        R call(ClassF object, ArgsF ... args) {
-            return (object.*func)(std::forward<ArgsF>(args)...);
-        }
-
-        std::unique_ptr<function_base> clone() {
-            return std::make_unique<class_holder>(func);
-        }
-
-    private:
-        F ClassF::* func;
-    };
-
 private:
-    std::unique_ptr<function_base> callable;
-    static const int MAX = 1;
+    static const int MAX = 64;
+    union {
+        std::unique_ptr<function_base> callable;
+        char buf[MAX];
+    };
+
+    bool is_small;
 };
 
 

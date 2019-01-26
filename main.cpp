@@ -22,22 +22,6 @@ void test_sum(int a, int b) {
     std::cout << a << " + " << b << " = " << v(a, b) << "\n";
 }
 
-struct A {
-    A(int a) : a(a) {}
-
-    void f() {
-        std::cout << "test class member\n";
-    }
-
-private:
-    int a;
-};
-
-void test_class_member() {
-    function<void(A)> v(&A::f);
-    v(A(7));
-}
-
 void test_lymbda() {
     function<void(int)> v ([](int a) { std::cout << "Lymbda : " << a << "\n"; });
     v(5);
@@ -81,45 +65,9 @@ void test_bind() {
     std::cout << "\n";
 }
 
-struct PrintNum {
-    PrintNum() = default;
-
-    PrintNum(PrintNum const &a) {
-        std::cout << "const &" << std::endl;
-    }
-
-    PrintNum &operator=(const PrintNum &other) {
-        std::cout << "const operator = " << std::endl;
-        return *this;
-    }
-
-    PrintNum &operator=(PrintNum &other) {
-        std::cout << "operator = " << std::endl;
-        return *this;
-    }
-
-    PrintNum(PrintNum &&other) {
-        std::cout << "&& constructor" << std::endl;
-    }
-
-    ~PrintNum() {
-//        std::cout << "destr" << std::endl;
-    }
-
-    void operator()(int i) const {
-        std::cout << i << " " << "one" << '\n';
-    }
-};
-
 int main() {
-    PrintNum m;
-    function<void(int)> fun1;
-    fun1 = (std::move(m));
-
-    return 0;
     test_empty_function();
     test_sum(5, 7);
-    test_class_member();
     test_lymbda();
     test_move();
     test_bool();
