@@ -39,7 +39,7 @@ public class RecursiveWalk extends Walk {
     }
 
     public static void main(String[] args) {
-        if (!validateArgs(args) || createDirectories(args[1])) {
+        if (!validateArgs(args) || !createDirectories(args[1])) {
             return;
         }
         RecursiveWalk walk = new RecursiveWalk(args[0], args[1]);

@@ -82,6 +82,7 @@ public class Walk {
             dirPath = p.getParent();
         } catch (InvalidPathException e) {
             System.out.println("Wrong path to output file");
+            return false;
         }
 
         if (dirPath != null) {
@@ -117,7 +118,7 @@ public class Walk {
     }
 
     public static void main(String[] args) {
-        if (!validateArgs(args) || createDirectories(args[1])) {
+        if (!validateArgs(args) || !createDirectories(args[1])) {
             return;
         }
         Walk walk = new Walk(args[0], args[1]);
