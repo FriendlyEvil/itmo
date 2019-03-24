@@ -401,7 +401,28 @@ $\int_{O'}f(y) \cdot d \lambda(y) = \int_O f(\Phi(x)) \cdot |\det \Phi'(x)| \cdo
 
 \section{Сферические координаты в $ R^m $}
 
-$:($
+$x_1 = r \cdot \cos \phi_1$
+\hfill
+$1 \leq i \leq m-2: \phi_i \in [0,\pi]$
+
+$x_2 = r \cdot \sin \phi_1 \cdot \cos \phi_2$
+\hfill
+$i=m-1: \phi_i \in [0,2\pi]$
+
+$x_3 = r \cdot \sin \phi_1 \cdot \sin \phi_2 \cdot \cos \phi_3$
+\hfill
+$r \geq 0$
+
+$\vdots$\\
+$x_{m-2} = r \cdot \sin \phi_1 \cdot \sin \phi_2 \cdots \sin \phi_{m-3} \cdot \cos \phi_{m-2}$
+
+$x_{m-1} = r \cdot \sin \phi_1 \cdot \sin \phi_2 \cdots \sin \phi_{m-2} \cdot \cos \phi_{m-1}$
+
+$x_{m} = r \cdot \sin \phi_1 \cdot \sin \phi_2 \cdots \sin \phi_{m-2} \cdot \sin \phi_{m-1}$\\
+
+$\mathcal{J} = r^{m-1} \cdot (\sin \phi_1)^{m-2} \cdot (\sin \phi_2)^{m-3} \cdots (\sin \phi_{m-2})^{1} \cdot (\sin \phi_{m-1})^{0}$
+
+Что тут происходит идейно. Сначала мы проецируем наш $m$-мерный вектор на нормаль к $(m-1)$-мерной гиперплоскости. Потом рассматриваем проекцию на эту гиперплоскость и в ней рекурсивно повторяем процедуру, пока не дойдём до нашего любимого $\mathds{R}^2$. Уже в нём рассматривем обычные полярные координаты (отсюда и другие ограничения на размер угла).
 
 \section{Совпадение определенного интеграла и интеграла Лебега}
 
@@ -429,6 +450,12 @@ $\lambda_m(B(0, R)) = \int\limits_{B(0, R)}1d\lambda_m = \int \mathcal{J} = \\
 \int\limits_{0}^{\pi}(\sin\phi_k)^{m-2-(k+1)} = B({\frac{m-k}{2}}; \frac{1}{2}) = \frac{\Gamma(\frac{m-k}{2})\Gamma(\frac{1}{2})}{\Gamma(\frac{m-k}{2}+\frac{1}{2})} \\
 \rightarrow= \frac{R^m}{m} \frac{\Gamma(\frac{m-1}{2}) \Gamma(\frac{1}{2})}{\Gamma(\frac{m}{2})} \frac{\Gamma(\frac{m-2}{2})\Gamma(\frac{1}{2})}{\Gamma(\frac{m-1}{2})} \cdots \frac{\Gamma(1) \Gamma(\frac{1}{2})}{\Gamma(\frac{3}{2})} 2\pi =\\
 = \frac{\pi R^m}{\frac{m}{2}} \frac{\Gamma(\frac{1}{2})^{m-2}}{\Gamma(\frac{m}{2})} = \frac{\pi^{\frac{m}{2}}}{\Gamma(\frac{m}{2}+1)}R^m$
+
+Или просто: 
+
+$B(0, r) \subset \mathbb{R}^m$
+
+$\lambda_m(B(0, r)) = \frac{\pi^{\frac{m}{2}}}{\Gamma(\frac{m}{2}+1)}r^m$
 
 \section{Теорема Фубини}
 $(X, \alpha, \mu)$ и $(Y, \beta, \nu)$ - пространства с мерами, причем $\mu , \nu$ --- $\sigma$-конечны\\
