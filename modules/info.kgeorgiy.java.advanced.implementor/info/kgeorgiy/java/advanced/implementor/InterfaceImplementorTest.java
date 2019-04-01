@@ -1,10 +1,13 @@
 package info.kgeorgiy.java.advanced.implementor;
 
+import info.kgeorgiy.java.advanced.implementor.basic.classes.standard.Logger;
 import info.kgeorgiy.java.advanced.implementor.basic.interfaces.InterfaceWithDefaultMethod;
 import info.kgeorgiy.java.advanced.implementor.basic.interfaces.InterfaceWithStaticMethod;
 import info.kgeorgiy.java.advanced.implementor.basic.interfaces.standard.Accessible;
 import info.kgeorgiy.java.advanced.implementor.basic.interfaces.standard.Descriptor;
 import info.kgeorgiy.java.advanced.implementor.basic.interfaces.standard.RandomAccess;
+import info.kgeorgiy.java.advanced.implementor.full.interfaces.InterfaceWithoutMethods;
+import info.kgeorgiy.java.advanced.implementor.full.interfaces.standard.*;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TestWatcher;
@@ -31,22 +34,22 @@ public class InterfaceImplementorTest extends BaseImplementorTest {
 
     @Test
     public void test02_methodlessInterfaces() throws IOException {
-        test(false, RandomAccess.class);
+        test(false, RandomAccess.class, InterfaceWithoutMethods.class);
     }
 
     @Test
     public void test03_standardInterfaces() throws IOException {
-        test(false, Accessible.class);
+        test(false, Accessible.class, AccessibleAction.class, SDeprecated.class);
     }
 
     @Test
     public void test04_extendedInterfaces() throws IOException {
-        test(false, Descriptor.class);
+        test(false, Descriptor.class, CachedRowSet.class, DataInput.class, DataOutput.class, Logger.class);
     }
 
     @Test
     public void test05_standardNonInterfaces() throws IOException {
-        test(true, void.class, String.class);
+        test(true, void.class, String[].class, int[].class, String.class, boolean.class);
     }
 
     @Test
