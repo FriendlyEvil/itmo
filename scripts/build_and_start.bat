@@ -28,6 +28,9 @@ goto start
 :hm8
 call :setargs mapper list concurrent ParallelMapperImpl
 goto start
+:hm9
+call :setargs crawler hard crawler WebCrawler
+goto start
 
 :setargs
 SET kgpac=%1
