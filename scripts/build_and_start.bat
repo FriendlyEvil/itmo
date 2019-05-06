@@ -1,3 +1,4 @@
+@echo off
 SET pth=C:\Users\mi\IdeaProjects\java_4sem\java-advanced-2019\
 SET test=%pth%artifacts
 SET lib=%pth%lib
@@ -30,6 +31,10 @@ call :setargs mapper list concurrent ParallelMapperImpl
 goto start
 :hm9
 call :setargs crawler hard crawler WebCrawler
+goto start
+:hm10
+call :setargs hello server-i18n hello HelloUDPServer
+call :setargs hello client-i18n hello HelloUDPClient
 goto start
 
 :setargs
@@ -79,7 +84,7 @@ if %1 EQU 8 (
 if %1 EQU 7 (
 java -Dfile.encoding=UTF-8 -cp %clp%;%test%\info.kgeorgiy.java.advanced.mapper.jar;%test%\info.kgeorgiy.java.advanced.concurrent.jar -p %clp% -m info.kgeorgiy.java.advanced.%kgpac% %startname% ru.ifmo.rain.krivopaltsev.%mypac%.IterativeParallelism
 ) else (
-java -Dfile.encoding=UTF-8 -cp %clp% -p %clp% -m info.kgeorgiy.java.advanced.%kgpac% %startname% ru.ifmo.rain.krivopaltsev.%mypac%.%programname%
+java -Dfile.encoding=UTF-8 -cp %clp% -p %clp% -m info.kgeorgiy.java.advanced.%kgpac% %startname% ru.ifmo.rain.krivopaltsev.%mypac%.%programname% wA
 ))
 exit /b 0
 
