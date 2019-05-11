@@ -1,0 +1,253 @@
+\documentclass[paper=a4, fontsize=14pt]{report}
+
+\usepackage[russian]{babel}
+\usepackage{scrextend}
+\usepackage[utf8x]{inputenc}
+\usepackage[T1,T2A]{fontenc}
+\usepackage[left=1.5cm,right=1.5cm,top=1.5cm,bottom=1.5cm,bindingoffset=0cm]{geometry}
+\usepackage[pdftex]{graphicx}
+\usepackage{amsmath}
+\usepackage{mathtools}
+\usepackage{ulem}
+\usepackage{mathrsfs}
+\usepackage{amsfonts}
+\usepackage{dsfont}
+\usepackage{amssymb}
+\usepackage{cmap}
+\usepackage{hyperref}
+\usepackage{tikz}
+
+\DeclareMathOperator*{\esssup}{ess\, sup}
+
+\parindent=0cm
+\linespread{1.2}
+\author{}
+
+\title{Второй коллоквиум, семестр 4}
+
+\begin{document}
+\maketitle
+\tableofcontents
+\newpage
+
+\chapter{Определения}
+    \section{Равномерная сходимость несобственного интеграла}
+    Ты проиграл
+
+    \section{Нормальное топологическое пространство}
+    Ты проиграл
+
+    \section{Финитная функция}
+    $\varphi : \mathbb{R}^m \rightarrow \mathbb{R}$. $\exists$ шар $B: \varphi \equiv 0 $ вне $B$. Тогда $\phi$~--- финитная.
+
+    Множество непрерывных финитных функций обозначаем как $C_0(\mathbb{R}^m)$.
+
+	\section{Гильбертово пространство}
+	$\mathds{H}$~--- линейное пространство над $\mathds{R}$ или $\mathds{C}$, в котором задано скалярное произведение, и полное относительно соответствуйющей нормы, называется Гильбертовым.
+
+	\section{Ортогональный ряд}
+	$x_k \in \mathds{H}, \sum x_k$ называется ортогональным рядом, если $\forall k, l: k \neq l: x_k \bot x_l$.
+
+	\section{Сходящийся ряд в Гильбертовом пространстве}
+	$x_n \in \mathds{H}$.
+
+	$\sum x_n$ сходится к $x$, если
+
+	$S_n := \sum\limits_{k = 1}^n x_k$, $S_n \rightarrow x$ (то есть, $|S_n - x| \rightarrow 0$~--- сходимость по норме).
+
+    \section{Ортогональная система (семейство) векторов}
+	$\{e_k\} \in \mathds{H}$ - ортогональное семейство векторов, если $\forall k \neq l ~ e_k \bot e_l$, $\forall k\ e_k \neq 0$.
+
+	\section{Ортонормированная система}
+	$\{e_k\} \in \mathds{H}$ - ортонормированное семейство векторов, если ${e_k}$~--- ортогональное семейство векторов, и $\forall k ~ |e_k| = 1$.
+
+	\section{Коффициенты Фурье}
+	$\{e_k\}$ - ортогональное семейство векторов в $\mathds{H}, x \in \mathds{H}$.
+
+	$c_k(x) = \dfrac{\langle x, e_k \rangle}{|e_k|^2}$ называются коэффициентами Фурье вектора $x$ по ортогональной системе $\{e_k\}$.
+
+	\section{Ряд Фурье в Гильбертовом пространстве}
+
+	$\sum c_k(x) \cdot e_k$ называется рядом Фурье вектора $x$ по ортогональной системе $\{e_k\}$.
+
+	\section{Базис, полная, замкнутая ОС}
+
+	$\{e_k\}$~--- ортогональная система в $\mathds{H}$.
+
+	\begin{enumerate}
+
+		\item $\{e_k\}$~--- \textbf{базис}, если $\forall x \in \mathds{H}\ \exists c_k$, что $x = \sum\limits_{k=1}^{+\infty} c_k \cdot e_k$
+
+		\item $\{e_k\}$~--- \textbf{полная} О.С., если $(\forall k ~ z \bot e_k) \Rightarrow z = 0$.
+
+		\item $\{e_k\}$~--- \textbf{замкнутая} О.С., если $\forall x \in \mathds{H} ~ \sum\limits_{k=1}^{+\infty} |c_k(x)|^2 \cdot ||e_k||^2 = ||x||^2$.
+
+	\end{enumerate}
+
+	\section{Измеримое множество на элементарной двумерной поверхности в $\mathds{R}^3$}
+	
+	$ M \subset R^3 $ -- простое 2-мерное многообразие, $ C^1 $ гладкости.
+
+	$ \phi : \underset{\text{откр. обл.}}{O} \subset R^2 \rightarrow R^3$, $ \phi \in C^1 $ -- гомеофорфизм, $ \phi(O) = M $
+
+	$ E \subset M $ -- изм. по Лебегу, если $ \phi^{-1}(E) $ -- изм. по Лебегу в $ R^2 $
+	
+	\section{Мера Лебега на простой двумерной поверхности в $\mathds{R}^3$}
+
+	$ S(E) := \iint\limits_{\phi^{-1}(E)} | \phi_u' \times \phi_v'| dudv $ -- взвеш. образ меры Лебега отн. $ \phi $. Значит это мера на $ \mathbb{A}_{M} $
+
+	\section{Поверхностный интеграл первого рода}
+        
+        $ M $ -- простое, гл, 2-мерное в $ R^3 $, $ \phi $ -- параметризация
+
+	$ f $ -- изм. отн. $S$ (см. выше), $ f > 0 $ (или $ f $ -- суммируем. по $ S $)
+
+        \emph{Тогда}: $ \int_M f dS$ -- называет инт. первого рода функ. $ f $ по поверхности $M$
+
+	\section{Кусочно-гладкая поверхность в $\mathds{R}^3$}
+	
+        $M \subset \mathbb R^3$ называется кусочно-гладкой, если $M$ представляет собой объединение:
+
+    \begin{itemize}
+	    \item конечного числа простых гладких поверхностей
+	    \item конечного числа простых гладких дуг
+	    \item конечного числа точек
+    \end{itemize}
+
+	\section{Тригонометрический ряд}
+
+	\begin{itemize}
+		\item $$ \frac{a_0}{2}  + \sum_{k = 1}^{\infty} a_k\cos kx + b_k\sin kx $$
+		(где $ a_i, b_i $ -- коэффициенты ряда).
+
+		\item Другая форма:	$$ \sum_{k = \mathbb{Z}} c_k e^{ikx} $$
+
+		Тогда $ S_n := \sum_{k = -N}^{N} c_k e^{ikx} $.
+	\end{itemize}
+
+	\section{Коэффициенты Фурье функции}
+
+	\begin{itemize}
+		\item $$ a_k(f) = \frac{1}{\pi} \int_{-\pi}^{\pi} f(x) \cos kx ~ dx $$
+
+		\item $$ b_k(f) = \frac{1}{\pi} \int_{-\pi}^{\pi} f(x) \sin kx ~ dx $$
+
+		\item $$ c_k(f) = \frac{1}{2\pi} \int_{-\pi}^{\pi} f(x) e^{-ikx} ~ dx $$
+
+	\end{itemize}
+
+    \section{Класс Липшица с константой M и показателем альфа}
+    Ты проиграл
+
+	\section{Сторона поверхности}
+
+	Сторона (простой) гладкой двумерной поверхности {{---}} непрерывное поле единичных нормалей. Поверхность, для которой существует сторона, называется двусторонней. Если же стороны не существует, она называется односторонней.
+
+
+	\section{Задание стороны поверхности с помощью касательных реперов}
+
+	$F_1, F_2$ -- два касательных векторных поля к поверхности $M$.\\
+	$\forall p \in M \quad F_1(p), F_2(p)$ -- Л.Н.З. касательные векторы.\\
+	Тогда поле нормалей стороны определяется, как $n := F_1 \times F_2$\\
+
+	Реп\'{е}р - пара векторов из $F_1 \times F_2$.
+
+	\section{Интеграл II рода}
+
+	$M$~--- простая гладкая двусторонняя двумерная поверхность в $\mathds{R}^3$.\\
+	$n_0$~--- фиксированная сторона (одна из двух).\\
+	$F : M \rightarrow \mathbb{R}^3$ -- векторное поле.\\
+
+	\emph{Тогда} интегралом II рода назовем $\int\limits_{M} \langle F, n_0 \rangle ds$
+
+	\emph{Замечания}
+	\begin{enumerate}
+		\item Смена стороны эквивалентна смене знака.
+		\item Не зависит от параметризации.
+		\item
+		$F=(P, Q, R)$.
+
+		Тогда интеграл имеет вид $\iint P dydz + Q dzdx + R dxdy$.
+
+		\emph{NB:} $Q dxdz = -Q dzdx$.
+	\end{enumerate}
+
+	\section{Ориентация контура, согласованная со стороной поверхности}
+
+	Ориентация контура согласована со стороной поверхности, если она задает эту сторону.\\
+
+	\emph{Пояснение}:
+	Рассмотрим некоторый контур (замкнутую петлю) и точку на нем. Построим два касательных вектора к контуру в этой точке: первый~--- снаружи от контура (задает направление <<движения>> по петле), второй~--- внутри контура. Тогда будем называть такую ориентацию согласованной со стороной, если направление векторного произведения первого и второго векторов в точке совпадает с направлением нормали к поверхности.
+
+	\begin{center}
+		\begin{tikzpicture}
+
+			\draw (2,2) ellipse (3cm and 2cm);
+			\draw[thick,->] (5,2) -- (5,3) node[anchor=south] {1};
+			\draw[thick,->] (5,2) -- (2.4,2) node[anchor=south] {2};
+
+		\end{tikzpicture}
+	\end{center}
+
+	\section{Ядро Дирихле, ядро Фейера}
+
+	\subsection{Ядро Дирихле}
+
+	$$ D_n(t) = \frac{1}{\pi}( \frac{1}{2} + \sum_{k = 1}^{n} \cos kt) $$
+
+	\subsection{Ядро Фейера}
+
+	$$ \Phi_n(t) = \frac{1}{n+1} \sum_{k = 0}^{n} D_k(t) $$
+
+	\section{Свертка}
+
+	$ f, K \in L_1[-\pi, \pi]$  -- пеорид.
+
+	$$ (f \ast K)(x) = \int_{-\pi}^{\pi} f(x-t)K(t) dt$$
+
+    \section{Аппроксимативная единица. (а. е.)}
+        
+        Пояснения: нужна 1-ца по свертке, но это не совсем функция, поэтому зададим её как предел последовательности.
+        
+        $ D \subset R, h_0 $ -- предельная точка $ D $ в $ \overline{R} $, 
+        тогда $ \{K_h\}_{h \in D}$ -- а. е. если:
+        \begin{itemize}
+            \item[AE1: ] $ \forall h \in D ~~ K_h \in L_1[-\pi, \pi] ~ \int\limits_{-\pi}^{\pi} K_h = 1 $
+            \item[AE2: ] $ \exists M ~ \forall h ~ \int\limits_{-\pi}^{\pi} |K_h| \leq M $
+            \item[AE3: ] $ \forall \delta \in (0, \pi) ~  \int\limits_{E_\delta} | K_h | 
+            \underset{h \rightarrow h_0}{\rightarrow} 0  $, где $E_{\delta} = [-\pi,\pi] \setminus [h_0 - \delta, h_0 + \delta]$
+        \end{itemize}
+        
+    \section{Усиленная аппроксимативная единица.}
+        
+        Изменяем свойство AE3, на AE3': 
+        
+        $ \forall h ~ K_h \in L_\infty[-\pi, \pi]; ~ \forall \delta \in (0, \pi) ~ ~ \esssup\limits_{t \in E_\delta} |K_h(t)| \underset{h \rightarrow h_0}{\rightarrow} 0 $
+        
+    \section{Метод суммирования средними арифметическими}
+        $\sum a_n = \lim\limits_{n \to \infty} \dfrac{1}{n+1} \cdot \sum\limits_{k=0}^n S_k$
+    \section{Суммы Фейера.}
+        $ \sigma_n = \frac{1}{n + 1} \sum\limits_{k=0}^{n} S_k(f(x)) = \int\limits_{-\pi}^{\pi} f(x - t) \Phi_n(t) dt$
+
+	\section{Ротор, дивергенция векторного поля}
+    $F = (P, Q, R)$~--- векторное поле в $\mathds{R}^3$.
+
+	$ rot\ F = (R'_y - Q'_z, P'_z - R'_x, Q'_x - P'_y) $ -- ротор, вихрь
+
+	$div\ F = P'_x + Q'_y + R'_z$. Многомерный случай определяется аналогично.
+
+	\section{Соленоидальное векторное поле}
+	Векторное поле $A$~--- соленоидальное, если $\exists$ векторное поле $B: rot\ B = A$. Тогда $B$ называется векторным потенциалом поля $A$.
+
+	\section{Бескоординатное определение ротора и дивергенции}
+	$rot\ F$~--- это такое векторное поле, что $\forall a \ \forall n_0 (rot F(a))_{n_0} = \lim\limits_{r\to 0} \frac{1}{\pi r^2} \int\limits_{\partial B_r} F_ldl$
+		
+	где $ B_r $ -- круговой контур, $ n_0 $ -- нормаль контура, $ F_l $ -- проекция на касательное направление контура. 
+
+	Пояснение: $ \frac{1}{\pi r^2} \int\limits_{\partial B_r} F_ldl =  \frac{1}{\pi r^2} \iint\limits_{B_r} \langle rot\ F, n_0 \rangle dS \underset{r \approx 0}{\approx} rot F(a)$
+	
+
+
+	$div F(a) = \lim\limits_{r\to 0} \frac{1}{\lambda_3(B(a,r))} \iiint\limits_{B(a,r)} div F \,dx\,dy\,dz = \lim\limits_{r\to 0} \frac{1}{\lambda_3(B(a,r))} \iint\limits_{\partial B(a,r)} \langle F, n_0 \rangle dS$
+
+\end{document}
