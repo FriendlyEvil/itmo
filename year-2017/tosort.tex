@@ -1,37 +1,3 @@
-\documentclass[paper=a4, fontsize=14pt]{report}
-
-\usepackage[russian]{babel}
-\usepackage{scrextend}
-\usepackage[utf8x]{inputenc}
-\usepackage[T1,T2A]{fontenc}
-\usepackage[left=1.5cm,right=1.5cm,top=1.5cm,bottom=1.5cm,bindingoffset=0cm]{geometry}
-\usepackage[pdftex]{graphicx}
-\usepackage{amsmath}
-\usepackage{mathtools}
-\usepackage{ulem}
-\usepackage{mathrsfs}
-\usepackage{amsfonts}
-\usepackage{dsfont}
-\usepackage{amssymb}
-\usepackage{cmap}
-\usepackage{hyperref}
-\usepackage{tikz}
-
-\DeclareMathOperator*{\esssup}{ess\, sup}
-\DeclareMathAlphabet{\pazocal}{OMS}{zplm}{m}{n}
-
-\parindent=0cm
-\linespread{1.2}
-\author{}
-
-\title{Второй коллоквиум, семестр 4}
-
-\begin{document}
-\maketitle
-\tableofcontents
-\newpage
-
-\chapter{Определения}
     \section{Равномерная сходимость несобственного интеграла}
     $I(y)$- р.с. на мн-ве $Y$, $\int_A^B f(x,y) dx \underset{B \to b_0}{\rightrightarrows}  Y(y)$ т.е \newline $\Leftrightarrow \sup_{Y \in y} |\int_A^B f(x,y) dx| \underset{B \rightarrow b \to 0}{\rightarrow} 0$
 
@@ -252,7 +218,6 @@
 
 	$div F(a) = \lim\limits_{r\to 0} \frac{1}{\lambda_3(B(a,r))} \iiint\limits_{B(a,r)} div F \,dx\,dy\,dz = \lim\limits_{r\to 0} \frac{1}{\lambda_3(B(a,r))} \iint\limits_{\partial B(a,r)} \langle F, n_0 \rangle dS$
 
-\chapter{Теоремы}
     \section{Перестановка двух предельных переходов. Предельный переход в несобственном интеграле.}
     Ты проиграл
 
@@ -523,4 +488,3 @@
     $A$ - соленоидально $ \Leftrightarrow div(A) = 0 $
 
     $A \in C^1, O $ --- хорошая область.
-\end{document}
