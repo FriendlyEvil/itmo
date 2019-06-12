@@ -1,5 +1,6 @@
 #include "server.h"
 #include "utils.h"
+#include "server_exit_exception.h"
 #include <sys/socket.h>
 #include <cstdio>
 #include <unistd.h>
@@ -8,6 +9,7 @@
 #include <cstring>
 #include <sys/stat.h>
 #include <fcntl.h>
+#include <csignal>
 
 server::server(std::string &path) : path(path), sock(-1) {}
 
@@ -16,7 +18,12 @@ server::~server() {
     unlink(path.c_str());
 }
 
+void exit_signal(int a) {
+    throw server_exit_exception();
+}
+
 void server::start() {
+    signal(SIGINT, exit_signal);
     sock = socket(AF_UNIX, SOCK_STREAM, 0);
     if (sock == -1) {
         throw std::runtime_error("Error creating socket");
