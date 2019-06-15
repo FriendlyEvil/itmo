@@ -1234,13 +1234,19 @@ $B(0, r) \subset \mathbb{R}^m$
 $\lambda_m(B(0, r)) = \frac{\pi^{\frac{m}{2}}}{\Gamma(\frac{m}{2}+1)}r^m$
 
 \section{Теорема Фубини}
-$(X, \alpha, \mu)$ и $(Y, \beta, \nu)$ - пространства с мерами, причем $\mu , \nu$ --- $\sigma$-конечны\\
-на $X \times Y$ есть $\alpha \otimes \beta$, причем $m(A \times B) = \mu A \cdot \nu B$ --- произведение мер --- $\sigma$-конечная мера на $\alpha \times \beta$\\
-$(X \times Y), \alpha \otimes \beta, m$ --- произведение пр-в с мерой\\
-Обозначение : $C \subset X \times Y, x \in X$ тогда 
-
-$C_x = {y : (x, y) \in C}$ --- Сечение I рода\\
-$C_y = {x : (x, y) \in C}$ --- Сечение II рода\\
+$<\mathds{X}, \alpha, \mu>$, $<\mathds{Y}, \beta, \nu>$ - пространства с мерой\\
+$\mu$, $\nu$ - $\sigma$-конечны, полные \\
+$m = \mu \times \nu$ \\
+$f: \mathds{X} \times \mathds{Y} \rightarrow \overline{R}$, $f \geq 0$, f - суммируема относительно m \\
+\emph{Тогда:}
+\begin{enumerate}
+	\item при \textit{почти всех} $x \in X$ $f_x$ - суммируема на $\mathds{Y}$, \\
+	 где $f_x : \mathds{Y} \rightarrow \overline{R}$, $f_x(y) = f(x, y)$ \\
+	 (симметричное утверждение верно для y)
+	 \item Функция $x \mapsto \phi(x) = \int\limits_{\mathds{Y}}f_x d\nu = \int\limits_{\mathds{Y}}f(x, y) d\nu(y) $ - $\text{суммируема}^{\text{*}}$ на $\mathds{X}$ \\
+	 (симметричное утверждение верно для y)
+	 \item $\int\limits_{\mathds{X} \times \mathds{Y}}f(x, y)dm = \int\limits_{\mathds{X}}\phi(x)d\mu = \int\limits_{\mathds{X}}(\int\limits_{\mathds{Y}} f(x, y)d\nu(y))d\mu(x) = \int\limits_{\mathds{Y}}(\int\limits_{\mathds{X}}f(x,y)d\mu(x))d\nu(y)$
+\end{enumerate}
 
 \section{Формула для Бета-функции}
 $B(s, t) = \int\limits_{0}^{1}x^{s-1}(1-x)^{t-1}$, где s и t > 0 - Бета-функция \\
@@ -1381,20 +1387,46 @@ $ f_y' $ удовлетворяет усл. $ L_{loc} $ в точке $ a \in \m
 
 
     \section{Перестановка двух предельных переходов. Предельный переход в несобственном интеграле.}
-    Ты проиграл
+    $f: Y \subset \widetilde{Y}, \ X * Y \rightarrow \overline R, \ y_0 - $ предельная точка для $ Y, \ y_0 \in \widetilde{Y} $ 
+    \begin{enumerate}
+    	\item при п.в. $ x \ \exists f_0(x) = \underset{y \rightarrow y_0}{\lim} f(x,y) $
+    	\item $ f_0 - $ сумм на всех пр-ах вида $ <0, t>, \ t < b $ и верно : $ \int\limits_a^t f(x, y) \underset{y \rightarrow y_0}{\rightarrow} \int\limits_a^t f_0(x)dx $
+    	\item несобств инт $ I(y) = \int\limits_a^{\rightarrow b} f(x,y)dx - $ равномерное сходится при $ y \in Y$ \\
+    \end{enumerate}
+    
+    \emph{Тогда}
+    	Несобственный интеграл $ \int\limits_a^{\rightarrow b} f_0(x)dx - $ существует и $ I(y) \underset{y \rightarrow y_0}{\rightarrow} \int\limits_a^{\rightarrow b} f_0(x)dx $
 
     \section{Вычисление интеграла Дирихле}
     Ты проиграл
 
     \section{Теорема об интегрировании несобственного интеграла по параметру}
-    Ты проиграл
+    $ f : (a,b) * Y \rightarrow \overline{R}, \ f - $ сумм по мере $ \lambda_1 * \mu $ на мн-вах $ (a,t)*Y, \ a < t < b \\
+    J(y) = \int\limits_a^{\rightarrow b} f(x,y)d\lambda_1(x) - $ равн сх на $ Y $ \\
+    $ I(x) = \int\limits_Y f(x,y)\mu(y)$ \\
+    \emph{Тогда} 
+    $ J - $ сумм на $ Y $ и $ \int\limits_a^{\rightarrow b} I(x)d\lambda_1(x) - $ сх \\
+    $\int\limits_Y J(y)d\mu = \int\limits_a^{\rightarrow b} I(x)d\lambda_!(x)$
 
     \section{Правило Лейбница для несобственных интегралов}
-    Ты проиграл
+    $ f: [a,b] * <c, d> \rightarrow R - $ непр $ \ \forall y \in <c,d> : \\
+    J(y) = \int\limits_a^{\rightarrow b} f(x,y)dx - $ известно, что сх-ся \\
+    $ \forall x, \ \forall y \ \exists f_y'(x,y) - $ непр на $ [a.b] * <c,d> \\
+    I(y) = \int\limits_a^{\rightarrow b} f_y'(x,y)dx - $ равн сх-ся по $ y \in <c,d> $ \\
+    \emph{Тогда}
+    $ J \in C^1<c,d> $ и $ J'(y) = I(y) $ т.е. \\
+    $ (\int\limits_a^{\rightarrow b} f(x,y)dx)_y' = \int\limits_a^{\rightarrow b} f_y'(x,y)dx $
 
     \section{Теорема о вычислении интеграла по мере Бореля---Стилтьеса (с леммой)}
-    Ты проиграл
-
+    \subsection{Лемма}
+    $ h : X \rightarrow \overline{R} - $ изм, п.в. конечна, $ H(t) - $ функция распределения \\
+    \emph{Тогда}
+    $\mu_H - $ мера Бореля-Стилтьеса на $ (R, B) $ совпадает с мерой $ h(\mu) \ \ (\nu(A) = \mu(h^{-1}(A))$
+	\subsection{Теорема}
+	$ f: R \rightarrow R, \ f \geq 0, $ изм по Борелю \\
+	$ h : x \rightarrow \overset{R}, $ изм п.в., кон $ H(t) - $ ф-я распределения, $ \mu_H - $ мера Бореля-Ститьеса \\
+	\emph{Тогда}
+	$ \int\limits_X f(h(x))d\mu(x) = \int\limits_R f(t)d\mu_H(t) $ 
 
 \section{Теорема о вложении пространств $L^p$}
 
@@ -1521,7 +1553,7 @@ $$(\forall \epsilon > 0 ~ \exists N ~ \forall n, k ~ ||f_n - f_k||_p < \epsilon)
 \textbf{\emph{Замечание:}} $ L_{\infty} $ -- полное (упражнение)
 
     \section{Плотность в $L^p$ множества ступенчатых функций}
-    Ты проиграл
+    Множество ступ функкций плотно в $ L_p(X, \mu)\ \ (\phi - $ ступ ф-я, $ \phi \in L_p \Rightarrow \mu X (\phi \neq 0) < + \infty)$
 
     \section{Лемма Урысона}
     $X$~--- нормальное топологическое пространство, то есть:
@@ -1807,7 +1839,22 @@ $|\int\limits_{\mathds{R}}f(t)e(kt)| \leq\frac{1}{2}\int\limits_{\mathds{R}}|f(t
 	    
     
     \section{Три следствия об оценке коэффициентов Фурье}
-    Ты проиграл
+    \subsection{Следствие 1}
+    $|a_k(f)|, \ |b_k(f)|, \ 2|c_k(f)| \leq w(f, \frac{\pi}{k})$
+    \subsection{Следствие 2}
+    $f \in \widetilde{C^r}[-\pi, \pi] $ \\
+    \emph{Тогда}
+    $|a_k(f)|, \ |b_k(f)|, \ 2|c_k(f)| \leq \frac{const}{|k|^r} \ \ (k \neq 0) $
+    \subsection{Следствие 3}
+    \begin{enumerate}
+	\item     $ 0 < \alpha \leq 1, \ f \in Lip_{\mu} \alpha $ \\
+    \emph{Тогда}
+    $|a_k(f)|, \ |b_k(f)|, \ 2|c_k(f)| \leq \frac{\mu \pi^{\alpha}}{|k|^r} $
+    
+    \item     $ 0 < \alpha \leq 1, f \in C^r, \ f^r \in Lip_{\mu} \alpha $ \\
+    \emph{Тогда}
+    $|a_k(f)|, \ |b_k(f)|, \ 2|c_k(f)| \leq \frac{const}{|k|^{r + \alpha}} $    
+    \end{enumerate}
 
     \section{Принцип локализации Римана}
 
@@ -2130,7 +2177,7 @@ $y \in [\phi_1(x);\phi_2(x)]$, где $\phi_2(x) > \phi_1(x)$ \\
 \end{enumerate}
     
     \section{Следствие о синус-коэффициентах интегрируемой функции}
-    Ты проиграл
+    $ f \in L^1[-\pi, \pi] \Rightarrow \sum\limits_{n = 1}^{+ \infty} \frac{b_n(f)}{n} - $ сх-ся
     
     \section{Лемма о слабой сходимости сумм Фурье}
     \textcolor{red}{Вроде оно, но это не точно}
@@ -2162,7 +2209,13 @@ $$\int\limits_{-\pi}^\pi S_n(f, x) u(x) dx \rightarrow \int\limits_{-\pi}^\pi f(
 
     
     \section{Леммы о равномерной ограниченности сумм Фурье и об обобщенном равенстве Парсеваля}
-    Ты проиграл
+    \begin{enumerate}
+    \item $ f \in \widetilde{C^1}[-\pi, \pi] \Rightarrow $ ее суммы Фурье равн огр, т.е \\
+    $ \exists C : \forall n, \ \forall x \ |S_n(f, x)| < C $
+    \item $ f \in \widetilde{C^1}[-\pi, \pi], \ g - $ изм, гл, пер, огр с равномерно огр суммами Фурье, $ \exists C : \forall n, \ \forall x \ |S_n(f, x)| < C $ \\
+    \emph{Тогда}
+    $\int\limits_{-\pi}^{\pi} f \overline{g} dx = 2\pi\sum c_n(f) * \overline{c_n(g)} - $ обобщ рав-во Пасеваля
+    \end{enumerate}
     
     \section{Формула Стокса}
     $\Omega$ -- эллиптическая, гладкая, двусторонняя поверхность, $C^2-$гладкое; $n_0$ -- сторона\\
