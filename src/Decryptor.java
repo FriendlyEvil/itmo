@@ -1,5 +1,4 @@
 import org.junit.Assert;
-import org.junit.Test;
 
 import java.io.*;
 import java.util.*;
@@ -37,9 +36,9 @@ public class Decryptor {
         for (int i = 0; i < m.length(); i++) {
             letters.get(i % alphabets).merge(Character.toLowerCase(m.charAt(i)), 1, Integer::sum);
         }
-        for (Map.Entry<Character, Integer> e:letters.get(0).entrySet()){
-            System.out.println(e.getKey() + " ---------------------" + e.getValue());
-        }
+//        for (Map.Entry<Character, Integer> e:letters.get(0).entrySet()){
+//            System.out.println(e.getKey() + " ---------------------" + e.getValue());
+//        }
         Integer[] shifts = new Integer[alphabets];
         for (int i = 0; i < alphabets; i++) {
 //            System.out.println(letters.get(i).entrySet().stream().max(Comparator.comparing(Map.Entry::getValue)).get().getKey());
@@ -50,7 +49,7 @@ public class Decryptor {
                     maxFreq - freq.get(0).ch :
                     26 + maxFreq - freq.get(0).ch;
         }
-        Arrays.asList(shifts).forEach(r -> System.out.println("shift - " + r));
+//        Arrays.asList(shifts).forEach(r -> System.out.println("shift - " + r));
 //        System.out.println(shifts.length);
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < m.length(); i++) {

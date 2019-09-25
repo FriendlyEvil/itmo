@@ -1,10 +1,9 @@
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.io.*;
-import java.util.Map;
-
-import static org.junit.Assert.*;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
 
 public class DecryptorTest {
     static String war_and_peace;
@@ -52,7 +51,7 @@ public class DecryptorTest {
                 int countAlphabet = new Main().findCountAlphabet(crypt);
                 Assert.assertEquals(0, countAlphabet % i);
                 Assert.assertEquals(decryptor.decrypt(crypt, countAlphabet), war_and_peace);
-                System.out.println("Test " + i + "OK");
+                System.out.println("Test " + i + " - " + j + " OK");
 
             }
         }
