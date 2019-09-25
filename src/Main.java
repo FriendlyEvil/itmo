@@ -4,27 +4,27 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 public class Main {
-    private static int basis = 31;
-    private static int basisSquare = basis * basis;
-    private Map<Integer, Integer> map = new HashMap<>();
-
-    private Map<Integer, Integer> indexHash = new HashMap<>();
+    private static final int basis = 31;
+    private static final int basisSquare = basis * basis;
 
     private static int minCountTrigram = 253;
-    private static int countTrigrams = 10;
-    private static int countVariant = 10;
-    private static int lengthMax = 50;
+    private static final int countTrigrams = 10;
+    private static final int countVariant = 10;
+    private static final int lengthMax = 50;
+
+    private Map<Integer, Integer> trigramCounter = new HashMap<>();
+    private Map<Integer, Integer> indexHash = new HashMap<>();
+
 
     void addTrigramInMap(int hash, int ind) {
-        Integer el = map.get(hash);
+        Integer el = trigramCounter.get(hash);
         int count = (el == null) ? 1 : 1 + el;
         if (count == 1) {
             indexHash.put(hash, ind);
         }
-        map.put(hash, count);
+        trigramCounter.put(hash, count);
     }
 
     void findTrigram(String str) {
@@ -39,17 +39,16 @@ public class Main {
         }
     }
 
-    List<Integer> getIndexBestTrigrams(String str) {
+    private List<Integer> getIndexBestTrigrams(String str) {
         findTrigram(str);
-        List<Integer> allTrigramList = map.entrySet().stream().
+        List<Integer> allTrigramList = trigramCounter.entrySet().stream().
                 filter(entry -> entry.getValue() > minCountTrigram).
                 sorted(Comparator.comparingInt(Map.Entry::getValue)).
                 map(hash -> indexHash.get(hash.getKey())).collect(Collectors.toList());
-        return IntStream.range(0, Math.min(countTrigrams, allTrigramList.size())).
-                mapToObj(allTrigramList::get).collect(Collectors.toList());
+        return allTrigramList.stream().limit(countTrigrams).collect(Collectors.toList());
     }
 
-    Pair find(List<Integer> indexes, int step) {
+    private Pair find(List<Integer> indexes, int step) {
         int count = 0;
         for (int shift = 0; shift < step; shift++) {
             for (int i : indexes) {
@@ -61,10 +60,10 @@ public class Main {
         return new Pair(count, step);
     }
 
-    List<Integer> findTrigramInfo(String str, int ind) {
+    private List<Integer> findTrigramInfo(String str, int ind) {
         String trigram = str.substring(ind, ind + 3);
         int lastInd = ind;
-        int g = 1;
+//        int g = 1;
         Set<Integer> set = new HashSet<>();
         List<Integer> indexes = new ArrayList<>();
         for (int i = ind + 1; i < str.length() - 3; i++) {
@@ -75,7 +74,7 @@ public class Main {
             if (flag) {
                 if (i - lastInd < lengthMax) {
                     set.add(i - lastInd);
-                    g = i - lastInd;
+//                    g = i - lastInd;
                 }
                 indexes.add(ind);
                 lastInd = i;
@@ -84,9 +83,7 @@ public class Main {
         }
 
         List<Pair> ls = set.stream().map(n -> find(indexes, n)).sorted().collect(Collectors.toList());
-        List<Integer> list = IntStream.range(0, Math.min(countVariant, ls.size())).
-                mapToObj(n -> ls.get(n).second).collect(Collectors.toList());
-        return list;
+        return ls.stream().limit(countVariant).map(l -> l.second).collect(Collectors.toList());
 
 //        for (int i : set) {
 //            g = gcd(g, i);
@@ -97,11 +94,11 @@ public class Main {
 //        return l;
     }
 
-    int gcd(int a, int b) {
-        return a == 0 ? b : gcd(b % a, a);
-    }
+//    private int gcd(int a, int b) {
+//        return a == 0 ? b : gcd(b % a, a);
+//    }
 
-    public int democracy(List<List<Integer>> list) {
+    private int democracy(List<List<Integer>> list) {
         Map<Integer, Integer> map = new HashMap<>();
         for (List<Integer> ls : list) {
             for (int i = 0; i < ls.size(); i++) {
@@ -123,6 +120,7 @@ public class Main {
 //        int step = democracy(list.stream().filter(n -> n.get(0) > 1).collect(Collectors.toList()));
 //        int step = list.stream().max(Comparator.comparingInt(o -> o.get(0))).get().get(0);
         if (step == -1) {
+            System.err.println("Error: period not found");
             System.exit(42);
         }
         return step;
@@ -132,8 +130,7 @@ public class Main {
         String filename = "war_and_peace2";
         try(Scanner scanner = new Scanner(new BufferedInputStream(new FileInputStream(new File(filename))))) {
             String str = scanner.nextLine();
-//            System.out.println(str.length()); //2 532 201
-            minCountTrigram = str.length() / 10000;
+//            minCountTrigram = str.length() / 10000;
 
             int n = new Main().findCountAlphabet(str);
             System.out.println(n);
@@ -144,8 +141,8 @@ public class Main {
 
 
 
-    class Pair implements Comparable<Pair>{
-        public Pair(int first, int second) {
+    private class Pair implements Comparable<Pair>{
+        Pair(int first, int second) {
             this.first = first;
             this.second = second;
         }

@@ -9,7 +9,7 @@ public class Decryptor {
 
     public Decryptor() throws IOException {
         Map<Character, Integer> frequency = new HashMap<>();
-        InputStreamReader reader = new InputStreamReader(new FileInputStream("war_and_peace"));
+        InputStreamReader reader = new InputStreamReader(new FileInputStream("crypt_kasiski_test/war_and_peace"));
         int c = 0;
         while ((c = reader.read()) >= 0) {
             if (Character.isAlphabetic(c))
@@ -60,7 +60,7 @@ public class Decryptor {
     }
 
     void crypt() throws IOException {
-        InputStreamReader reader = new InputStreamReader(new FileInputStream("war_and_peace"));
+        InputStreamReader reader = new InputStreamReader(new FileInputStream("crypt_kasiski_test/war_and_peace"));
         Writer writer = new OutputStreamWriter(new FileOutputStream("war_and_peace1"));
         int[] shifts = {25, 3, 24};
 //        int[] shifts = {0, 1, 2, 3, 4, 5};
@@ -128,7 +128,7 @@ public class Decryptor {
     public static String crypt(int length) throws IOException {
         if (war_and_peace == null) {
             try {
-                InputStreamReader reader = new InputStreamReader(new FileInputStream("war_and_peace"));
+                InputStreamReader reader = new InputStreamReader(new FileInputStream("crypt_kasiski_test/war_and_peace"));
                 StringBuilder sb = new StringBuilder();
                 int c;
                 while ((c = reader.read()) >= 0) {
