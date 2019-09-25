@@ -46,14 +46,14 @@ public class DecryptorTest {
         Decryptor decryptor = new Decryptor();
 
         for (int i = 1; i < 20; i++) {
-//            for (int j = 0; j < 10; j++) {
+            for (int j = 0; j < 10; j++) {
                 String crypt = crypt(i);
                 int countAlphabet = new Main().findCountAlphabet(crypt);
                 Assert.assertEquals(0, countAlphabet % i);
                 Assert.assertEquals(decryptor.decrypt(crypt, countAlphabet), war_and_peace);
-                System.out.println("Test " + i + " - "+ " OK");
+                System.out.println("Test " + i + " - " + j + " OK");
 
-//            }
+            }
         }
     }
 }
