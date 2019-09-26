@@ -9,16 +9,16 @@ public class Main {
     private static final int basis = 31;
     private static final int basisSquare = basis * basis;
 
-    private static int minCountTrigram = 253;
-    private static final int countTrigrams = 10;
-    private static final int countVariant = 10;
-    private static final int lengthMax = 50;
+    private static int lowerBoundTrigramCount;
+    private static final int trigramsCount = 10;
+    private static final int mostPopularDistance = 10;
+    private static final int maxWordLength = 50;
 
     private Map<Integer, Integer> trigramCounter = new HashMap<>();
     private Map<Integer, Integer> indexHash = new HashMap<>();
 
 
-    void addTrigramInMap(int hash, int ind) {
+    void addTrigramToMap(int hash, int ind) {
         Integer el = trigramCounter.get(hash);
         int count = (el == null) ? 1 : 1 + el;
         if (count == 1) {
@@ -27,28 +27,28 @@ public class Main {
         trigramCounter.put(hash, count);
     }
 
-    void findTrigram(String str) {
+    void findAllTrigram(String str) {
         if (str.length() < 3) {
             return;
         }
         int hash = str.charAt(0) * basisSquare + str.charAt(1) * basis + str.charAt(2);
-        addTrigramInMap(hash, 0);
+        addTrigramToMap(hash, 0);
         for (int i = 3; i < str.length(); i++) {
             hash = (hash - str.charAt(i - 3) * basisSquare) * basis + str.charAt(i);
-            addTrigramInMap(hash, i - 2);
+            addTrigramToMap(hash, i - 2);
         }
     }
 
     private List<Integer> getIndexBestTrigrams(String str) {
-        findTrigram(str);
+        findAllTrigram(str);
         List<Integer> allTrigramList = trigramCounter.entrySet().stream().
-                filter(entry -> entry.getValue() > minCountTrigram).
+                filter(entry -> entry.getValue() > lowerBoundTrigramCount).
                 sorted(Comparator.comparingInt(Map.Entry::getValue)).
                 map(hash -> indexHash.get(hash.getKey())).collect(Collectors.toList());
-        return allTrigramList.stream().limit(countTrigrams).collect(Collectors.toList());
+        return allTrigramList.stream().limit(trigramsCount).collect(Collectors.toList());
     }
 
-    private Pair find(List<Integer> indexes, int step) {
+    private Pair findBestTrigramOfShift(List<Integer> indexes, int step) {
         int count = 0;
         for (int shift = 0; shift < step; shift++) {
             for (int i : indexes) {
@@ -61,8 +61,9 @@ public class Main {
     }
 
     private List<Integer> findTrigramInfoNotGcd(Set<Integer> set, List<Integer> indexes) {
-        List<Pair> ls = set.stream().map(n -> find(indexes, n)).sorted().collect(Collectors.toList());
-        return ls.stream().limit(countVariant).map(l -> l.second).collect(Collectors.toList());
+        List<Pair> ls = set.stream().map(n -> findBestTrigramOfShift(indexes, n)).sorted().collect(Collectors.toList());
+//        return ls.stream().limit(mostPopularDistance).map(l -> l.second).collect(Collectors.toList());
+        return ls.stream().limit(mostPopularDistance).map(l -> l.second).collect(Collectors.toList());
     }
 
     private List<Integer> findTrigramInfoGcd(Set<Integer> set, List<Integer> indexes, int g) {
@@ -87,7 +88,7 @@ public class Main {
                 flag = flag && (trigram.charAt(j) == str.charAt(i + j));
             }
             if (flag) {
-                if (i - lastInd < lengthMax) {
+                if (i - lastInd < maxWordLength) {
                     set.add(i - lastInd);
                     g = i - lastInd;
                 }
@@ -109,11 +110,15 @@ public class Main {
 
     private int democracy(List<List<Integer>> list) {
         Map<Integer, Integer> map = new HashMap<>();
-        for (List<Integer> ls : list) {
+        List<Integer> coef = List.of(5, 5, 4, 4, 3, 3, 2, 2, 1, 1);
+
+        for (int j = 0; j < list.size(); j++) {
+            List<Integer> ls = list.get(j);
+            int c = coef.get(j);
             for (int i = 0; i < ls.size(); i++) {
                 int step = ls.get(i);
                 map.putIfAbsent(step, 0);
-                map.put(step, map.get(step) + countVariant - i);
+                map.put(step, map.get(step) + c * (mostPopularDistance - i));
             }
         }
         return map.entrySet().stream().max(Comparator.comparingInt(Map.Entry::getValue)).map(Map.Entry::getKey).
@@ -121,6 +126,8 @@ public class Main {
     }
 
     public int findCountAlphabet(String str, boolean gcd) {
+        lowerBoundTrigramCount = str.length() / 10000;
+
         List<Integer> trigramList = getIndexBestTrigrams(str);
         List<List<Integer>> list = trigramList.stream().
                 map(n -> findTrigramInfo(str, n, gcd)).
@@ -142,7 +149,7 @@ public class Main {
         String filename = "war_and_peace2";
         try (Scanner scanner = new Scanner(new BufferedInputStream(new FileInputStream(new File(filename))))) {
             String str = scanner.nextLine();
-//            minCountTrigram = str.length() / 10000;
+//            lowerBoundTrigramCount = str.length() / 10000;
 
             int n = new Main().findCountAlphabet(str, false);
             System.out.println(n);
