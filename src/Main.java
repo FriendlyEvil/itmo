@@ -60,10 +60,25 @@ public class Main {
         return new Pair(count, step);
     }
 
-    private List<Integer> findTrigramInfo(String str, int ind) {
+    private List<Integer> findTrigramInfoNotGcd(Set<Integer> set, List<Integer> indexes) {
+        List<Pair> ls = set.stream().map(n -> find(indexes, n)).sorted().collect(Collectors.toList());
+        return ls.stream().limit(countVariant).map(l -> l.second).collect(Collectors.toList());
+    }
+
+    private List<Integer> findTrigramInfoGcd(Set<Integer> set, List<Integer> indexes, int g) {
+        for (int i : set) {
+            g = gcd(g, i);
+        }
+
+        List<Integer> l = new ArrayList<>();
+        l.add(g);
+        return l;
+    }
+
+    private List<Integer> findTrigramInfo(String str, int ind, boolean gcd) {
         String trigram = str.substring(ind, ind + 3);
         int lastInd = ind;
-//        int g = 1;
+        int g = 1;
         Set<Integer> set = new HashSet<>();
         List<Integer> indexes = new ArrayList<>();
         for (int i = ind + 1; i < str.length() - 3; i++) {
@@ -74,29 +89,23 @@ public class Main {
             if (flag) {
                 if (i - lastInd < lengthMax) {
                     set.add(i - lastInd);
-//                    g = i - lastInd;
+                    g = i - lastInd;
                 }
                 indexes.add(ind);
                 lastInd = i;
 
             }
         }
-
-        List<Pair> ls = set.stream().map(n -> find(indexes, n)).sorted().collect(Collectors.toList());
-        return ls.stream().limit(countVariant).map(l -> l.second).collect(Collectors.toList());
-
-//        for (int i : set) {
-//            g = gcd(g, i);
-//        }
-//
-//        List<Integer> l = new ArrayList<>();
-//        l.add(g);
-//        return l;
+        if (!gcd) {
+            return findTrigramInfoNotGcd(set, indexes);
+        } else {
+            return findTrigramInfoGcd(set, indexes, g);
+        }
     }
 
-//    private int gcd(int a, int b) {
-//        return a == 0 ? b : gcd(b % a, a);
-//    }
+    private int gcd(int a, int b) {
+        return a == 0 ? b : gcd(b % a, a);
+    }
 
     private int democracy(List<List<Integer>> list) {
         Map<Integer, Integer> map = new HashMap<>();
@@ -111,28 +120,31 @@ public class Main {
                 orElse(-1);
     }
 
-    public int findCountAlphabet(String str) {
+    public int findCountAlphabet(String str, boolean gcd) {
         List<Integer> trigramList = getIndexBestTrigrams(str);
         List<List<Integer>> list = trigramList.stream().
-                map(n -> findTrigramInfo(str, n)).
+                map(n -> findTrigramInfo(str, n, gcd)).
                 collect(Collectors.toList());
-        int step = democracy(list);
-//        int step = democracy(list.stream().filter(n -> n.get(0) > 1).collect(Collectors.toList()));
-//        int step = list.stream().max(Comparator.comparingInt(o -> o.get(0))).get().get(0);
+        int step;
+        if (!gcd) {
+            step = democracy(list);
+        } else {
+            step = democracy(list.stream().filter(n -> n.get(0) > 1).collect(Collectors.toList()));
+        }
         if (step == -1) {
             System.err.println("Error: period not found");
-            System.exit(42);
+            return 1;
         }
         return step;
     }
 
     public static void main(String[] args) {
         String filename = "war_and_peace2";
-        try(Scanner scanner = new Scanner(new BufferedInputStream(new FileInputStream(new File(filename))))) {
+        try (Scanner scanner = new Scanner(new BufferedInputStream(new FileInputStream(new File(filename))))) {
             String str = scanner.nextLine();
 //            minCountTrigram = str.length() / 10000;
 
-            int n = new Main().findCountAlphabet(str);
+            int n = new Main().findCountAlphabet(str, false);
             System.out.println(n);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -140,8 +152,7 @@ public class Main {
     }
 
 
-
-    private class Pair implements Comparable<Pair>{
+    private class Pair implements Comparable<Pair> {
         Pair(int first, int second) {
             this.first = first;
             this.second = second;

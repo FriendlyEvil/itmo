@@ -17,7 +17,7 @@ public class DecryptorTest {
                 while ((c = reader.read()) >= 0) {
                     if (Character.isAlphabetic(c) && c <= 'z' && c >= 'a') {
                         c = Character.toLowerCase(c);
-                        sb.append((char)c);
+                        sb.append((char) c);
                     }
                 }
                 war_and_peace = sb.toString();
@@ -35,7 +35,7 @@ public class DecryptorTest {
         int c;
         StringBuilder sb = new StringBuilder();
         for (int j = 0; j < war_and_peace.length(); j++) {
-            sb.append((char)('a' + (war_and_peace.charAt(j) - 'a' + shifts[j % length]) % 26));
+            sb.append((char) ('a' + (war_and_peace.charAt(j) - 'a' + shifts[j % length]) % 26));
         }
         return sb.toString();
     }
@@ -44,16 +44,26 @@ public class DecryptorTest {
     @Test
     public void decrypt() throws IOException {
         Decryptor decryptor = new Decryptor();
-
+        int count = 0;
+        int good = 0;
         for (int i = 1; i < 20; i++) {
-            for (int j = 0; j < 10; j++) {
+//            for (int j = 0; j < 30; j++) {
                 String crypt = crypt(i);
-                int countAlphabet = new Main().findCountAlphabet(crypt);
-                Assert.assertEquals(0, countAlphabet % i);
-                Assert.assertEquals(decryptor.decrypt(crypt, countAlphabet), war_and_peace);
-                System.out.println("Test " + i + " - " + j + " OK");
+                int countAlphabet = new Main().findCountAlphabet(crypt, true);
 
-            }
+//                Assert.assertEquals(0, countAlphabet % i);
+//                Assert.assertEquals(decryptor.decrypt(crypt, countAlphabet), war_and_peace);
+                count++;
+                if (countAlphabet % i == 0) {
+                    System.out.println(countAlphabet / i);
+                    good++;
+                } else {
+                    System.out.println("Incorrect : " + countAlphabet + " actual : " + i);
+                }
+//                System.out.println("Test " + i + " - " + " OK");
+
+//            }
         }
+        System.out.println("Good " + good + " from " + count);
     }
 }

@@ -97,7 +97,7 @@ public class Decryptor {
 //        writer.close();
         for (int i = 1; i < 20; i++) {
             String crypt = crypt(i);
-            Assert.assertEquals(new Decryptor().decrypt(crypt, new Main().findCountAlphabet(crypt)), war_and_peace);
+            Assert.assertEquals(new Decryptor().decrypt(crypt, new Main().findCountAlphabet(crypt, false)), war_and_peace);
         }
 //        System.out.println(d.decrypt(Decryptor.test1.m, test1.alps));
     }
