@@ -33,10 +33,19 @@ public class DESEncryptor {
 
     }
 
+    long extensionFunction(long R) {
+        long res = 0;
+        for (int i = 0; i < 48; i++) {
+            res ^= (getBit(R, extentionPermutation[i]) << i);
+        }
+        return res;
+    }
 
-    int feistelFunction(int R, long k) {
+    int feistelFunction(long R, long k) {
+        R = extensionFunction(R);
+        R ^= k;
 
-        return R; //TODO
+        return (int) R; //TODO
     }
 
 
