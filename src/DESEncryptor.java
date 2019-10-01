@@ -1,3 +1,5 @@
+import java.util.Random;
+
 public class DESEncryptor {
     byte[] encrypt(String text, long key) {
         byte[] tmp = text.getBytes();
@@ -6,7 +8,7 @@ public class DESEncryptor {
         bytes[0] = appendix;
         System.arraycopy(tmp, 0, bytes, 1, tmp.length);
         initialPermutation(bytes);
-
+        cypherCycle(bytes, 0);
 
         return bytes;
     }
@@ -44,8 +46,27 @@ public class DESEncryptor {
     int feistelFunction(long R, long k) {
         R = extensionFunction(R);
         R ^= k;
+        return sBoxFunction(R); //TODO
+    }
 
-        return (int) R; //TODO
+    int get6Bit(long num, int pos) {
+        return (int) ((num >> (pos)) & 63);
+    }
+
+    int sBoxFunction(long R) {
+        long res = 0;
+        for (int i = 0; i < 8; i++) {
+            int ind = get6Bit(R, i);
+            int a = (ind & 32) * 2 + (ind & 1);
+            int b = (ind >> 1) & 15;
+            res += (sBox[i][a][b] << (4 * i));
+        }
+        int ans = 0;
+        //permutation
+        for (int i = 0; i < 64; i++) {
+            ans ^= (getBit(res, p[i]) << i);
+        }
+        return ans;
     }
 
 
@@ -133,5 +154,41 @@ public class DESEncryptor {
 
     private static int[] ipReverse = {40, 8, 48, 16, 56, 24, 64, 32, 39, 7, 47, 15, 55, 23, 63, 31, 38, 6, 46, 14, 54, 22, 62, 30, 37, 5, 45, 13, 53, 21, 61, 29,
             36, 4, 44, 12, 52, 20, 60, 28, 35, 3, 43, 11, 51, 19, 59, 27, 34, 2, 42, 10, 50, 18, 58, 26, 33, 1, 41, 9, 49, 17, 57, 25};
+
+    static int count1(long k) { //rename
+        int res = 0;
+        for (int i = 0; i< 64; i++) {
+            res += ((k >>> i) & 1);
+        }
+        return res;
+    }
+
+    static long key(long k) {
+        long bigKey = 0;
+        for (int i = 0; i < 8; i++) {
+            long s = ((k >>> (7 * i)) & 127);
+            s |= (count1(s) << 8);
+            bigKey |= (s << (8 * i));
+        }
+
+        long res = 0;
+        for (int i = 0; i < 56; i++) {
+            res ^= ((bigKey >> key[i]) << i);
+        }
+
+        long c = res;
+        long d = res >>> 32;
+        long cd = (c << 32) | d;
+        long key = 0;
+
+        for (int i = 0; i < 7; i++) {
+            for (int j = 0; j < 48; j++) {
+                key |= ((cd >> h[i]) & 1) << j;
+            }
+            c = (c << shifts[i]) | ((c >> (32 - shifts[i])) & 3);
+        }
+
+        return key; //TODO
+    }
 
 }
