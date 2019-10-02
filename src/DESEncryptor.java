@@ -66,7 +66,8 @@ public class DESEncryptor {
         long bigKey = 0;
         for (int i = 0; i < 8; i++) {
             long s = ((k >>> (7 * i)) & 127);
-            s |= (count1(s)  << 8);
+            s <<= 1;
+            s |= count1(s);
             bigKey |= (s << (8 * i));
         }
 
