@@ -71,14 +71,11 @@ public class DESEncryptor {
             bigKey |= (s << (8 * i));
         }
 
-        long res = 0;
-        for (int i = 0; i < 56; i++) {
-            res ^= ((bigKey >> key[i]) << i);
-        }
+        long res = permutation(bigKey, key);
 
-        long c = res;
-        long d = res >>> 32;
-        long cd = (c << 32) | d;
+        long c = res >>> 28;
+        long d = res;
+        long cd = (c << 28) | d;
         long key = 0;
 
         for (int i = 0; i < 7; i++) {
