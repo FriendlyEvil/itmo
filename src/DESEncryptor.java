@@ -1,5 +1,3 @@
-import java.util.Random;
-
 public class DESEncryptor {
     long encrypt(long value, long key) {
         value = initialPermutation(value);
@@ -24,19 +22,21 @@ public class DESEncryptor {
 
     }
 
-    long extensionFunction(long R) {
-        long res = 0;
-        for (int i = 0; i < 48; i++) {
-            res ^= (getBit(R, extentionPermutation[i]) << i);
-        }
-        return res;
-    }
-
     long feistelFunction(long R, long k) {
         R = extensionFunction(R);
         R ^= k;
         return sBoxFunction(R);
     }
+
+    long extensionFunction(long R) {
+//        long res = 0;
+//        for (int i = 0; i < 48; i++) {
+//
+//            res ^= (getBit(R, extentionPermutation[i]) << i);
+//        }
+        return permutation(R, extentionPermutation);
+    }
+
 
     long get6Bit(long num, long pos) {
         return (int) ((num >> (pos)) & 63);
