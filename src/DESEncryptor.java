@@ -56,7 +56,7 @@ public class DESEncryptor {
         return 1L & (value >> (ind - 1));
     }
 
-    static long key(long k) {
+    static long key(long k, int it) {
         long bigKey = 0;
         for (int i = 0; i < 8; i++) {
             long s = ((k >>> (7 * i)) & 127);
@@ -67,21 +67,18 @@ public class DESEncryptor {
         long res = permutation(bigKey, key);
         System.out.printf("%x\n", res);
 
-        long c = (res >>> 28) & 268435455;
-        long d = res & 268435455;
-        long cd = (c << 28) | d;
+        long D = (res >>> 28) & 268435455;
+        long C = res & 268435455;
         long key = 0;
 
-        for (int i = 0; i < 7; i++) {
-            key = 0;
-            for (int j = 0; j < 48; j++) {
-                key |= ((cd >> h[i]) & 1) << j;
-            }
-            System.out.printf("%x\n", key);
-            c = (c << shifts[i]) | ((c >> (32 - shifts[i])) & 3);
-            d = (d << shifts[i]) | ((d >> (32 - shifts[i])) & 3);
-        }
 
+        for (int i = 0; i < it; i++) {
+            C = cycleShift(C, (int) shifts[i]);
+            D = cycleShift(D, (int) shifts[i]);
+        }
+        long cd = (D << 28) | C;
+        key = permutation(cd, h);
+        System.out.printf("%x\n", key);
         return key; //TODO
     }
 
@@ -101,6 +98,9 @@ public class DESEncryptor {
         return res;
     }
 
+    public static long cycleShift(long value, int shift) {
+        return ((value << shifts[shift]) | ((value >> (32 - shifts[shift])) & 3));
+    }
 
     private static long[] initialPermutation = {58, 50, 42, 34, 26, 18, 10, 2, 60, 52, 44, 36, 28, 20, 12, 4, 62, 54, 46, 38, 30, 22, 14, 6, 64, 56, 48, 40, 32, 24, 16, 8,
             57, 49, 41, 33, 25, 17, 9, 1, 59, 51, 43, 35, 27, 19, 11, 3, 61, 53, 45, 37, 29, 21, 13, 5, 63, 55, 47, 39, 31, 23, 15, 7};
@@ -177,6 +177,6 @@ public class DESEncryptor {
     public static void main(String[] args) {
         long l = Long.valueOf("-6144307267275141923");
         System.out.printf("%x\n", l);
-        key(l);
+        key(l, 16);
     }
 }

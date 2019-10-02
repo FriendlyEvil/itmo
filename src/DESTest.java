@@ -21,7 +21,7 @@ public class DESTest {
 
     @Test
     public void keyExpansion() {
-        for (long k = 0; k < 100; k++) {
+        for (long k = 0; k < 10000; k++) {
             long bigKey = 0;
             for (int i = 0; i < 8; i++) {
                 long s = ((k >>> (7 * i)) & 127);
