@@ -22,10 +22,15 @@ public class DESEncryptor {
 
     }
 
-    long feistelFunction(long R, long k) {
-        R = extensionFunction(R);
-        R ^= k;
-        return sBoxFunction(R);
+    static long count1(long k) { //rename
+        int res = 0;
+        for (int i = 0; i < 64; i++) {
+            res += ((k >>> i) & 1);
+        }
+        if (res % 2 == 0) {
+            return 1;
+        }
+        return 0;
     }
 
     long extensionFunction(long R) {
@@ -51,23 +56,11 @@ public class DESEncryptor {
         return 1L & (value >> (ind - 1));
     }
 
-    static long count1(long k) { //rename
-        int res = 0;
-        for (int i = 0; i< 64; i++) {
-            res += ((k >>> i) & 1);
-        }
-        if (res % 2 == 0) {
-            return 1;
-        }
-        return 0;
-    }
-
     static long key(long k) {
         long bigKey = 0;
         for (int i = 0; i < 8; i++) {
             long s = ((k >>> (7 * i)) & 127);
-            s <<= 1;
-            s |= count1(s);
+            s |= (count1(s) << 7);
             bigKey |= (s << (8 * i));
         }
 
@@ -86,6 +79,14 @@ public class DESEncryptor {
         }
 
         return key; //TODO
+    }
+
+    long feistelFunction(long R, long k) {
+        R = extensionFunction(R);
+        R ^= k;
+
+
+        return sBoxFunction(R);
     }
 
     public static long permutation(long value, long[] per) {

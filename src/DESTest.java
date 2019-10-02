@@ -18,4 +18,18 @@ public class DESTest {
             }
         }
     }
+
+    @Test
+    public void keyExpansion() {
+        for (long k = 0; k < 100; k++) {
+            long bigKey = 0;
+            for (int i = 0; i < 8; i++) {
+                long s = ((k >>> (7 * i)) & 127);
+//                s <<= 1;
+                s |= (DESEncryptor.count1(s) << 7);
+                bigKey |= (s << (8 * i));
+            }
+            System.out.println(Long.toBinaryString(k) + " " + Long.toBinaryString(bigKey));
+        }
+    }
 }
