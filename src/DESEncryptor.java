@@ -32,7 +32,6 @@ public class DESEncryptor {
         return permutation(R, extentionPermutation);
     }
 
-
     long get6Bit(long num, long pos) {
         return (int) ((num >> (pos)) & 63);
     }
@@ -57,14 +56,17 @@ public class DESEncryptor {
         for (int i = 0; i< 64; i++) {
             res += ((k >>> i) & 1);
         }
-        return res;
+        if (res % 2 == 0) {
+            return 1;
+        }
+        return 0;
     }
 
     static long key(long k) {
         long bigKey = 0;
         for (int i = 0; i < 8; i++) {
             long s = ((k >>> (7 * i)) & 127);
-            s |= (count1(s) << 8);
+            s |= (count1(s)  << 8);
             bigKey |= (s << (8 * i));
         }
 
