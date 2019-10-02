@@ -63,8 +63,8 @@ public class DESEncryptor {
             s |= (count1(s) << 7);
             bigKey |= (s << (8 * i));
         }
-
         long res = permutation(bigKey, key);
+
 //        System.out.printf("%x\n", res);
 
         long D = (res >>> 28) & 268435455;
@@ -85,9 +85,9 @@ public class DESEncryptor {
     long feistelFunction(long R, long k) {
         R = extensionFunction(R);
         R ^= k;
-
-
-        return sBoxFunction(R);
+        R = sBoxFunction(R); // TODO: does it works?
+        R = permutation(R, p);
+        return R;
     }
 
     public static long permutation(long value, long[] per) {
