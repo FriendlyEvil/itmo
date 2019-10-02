@@ -73,11 +73,13 @@ public class DESEncryptor {
         long key = 0;
 
         for (int i = 0; i < 7; i++) {
+            key = 0;
             for (int j = 0; j < 48; j++) {
                 key |= ((cd >> h[i]) & 1) << j;
             }
             System.out.printf("%x\n", key);
             c = (c << shifts[i]) | ((c >> (32 - shifts[i])) & 3);
+            d = (d << shifts[i]) | ((d >> (32 - shifts[i])) & 3);
         }
 
         return key; //TODO
