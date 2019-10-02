@@ -29,11 +29,6 @@ public class DESEncryptor {
     }
 
     long extensionFunction(long R) {
-//        long res = 0;
-//        for (int i = 0; i < 48; i++) {
-//
-//            res ^= (getBit(R, extentionPermutation[i]) << i);
-//        }
         return permutation(R, extentionPermutation);
     }
 
@@ -50,12 +45,7 @@ public class DESEncryptor {
             long b = (ind >> 1) & 15;
             res += (sBox[i][(int) a][(int) b] << (4 * i));
         }
-        long ans = 0;
-        //permutation
-        for (int i = 0; i < 64; i++) {
-            ans ^= (getBit(res, p[i]) << i);
-        }
-        return ans;
+        return permutation(res, p);
     }
 
     static long getBit(long value, long ind) {
