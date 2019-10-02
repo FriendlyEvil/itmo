@@ -1,7 +1,7 @@
 public class DESEncryptor {
     long encrypt(long value, long key) {
         value = initialPermutation(value);
-        cypherCycle(value);
+        cypherCycle(value, key);
 
         return value;
     }
@@ -10,11 +10,11 @@ public class DESEncryptor {
         return permutation(value, initialPermutation);
     }
 
-    void cypherCycle(long value) {
+    void cypherCycle(long value, long k) {
         long L = (value << 32) >>> 32;
         long R = value >>> 32;
-        long key = 0;//TODO
-        for (int i = 0; i < 8; i++) {
+        for (int i = 0; i < 16; i++) {
+            long key = getKey(k, i);
             long tmp = R;
             R = L ^ feistelFunction(R, key);
             L = tmp;
@@ -56,7 +56,7 @@ public class DESEncryptor {
         return 1L & (value >> (ind - 1));
     }
 
-    static long key(long k, int it) {
+    static long getKey(long k, int it) {
         long bigKey = 0;
         for (int i = 0; i < 8; i++) {
             long s = ((k >>> (7 * i)) & 127);
@@ -65,7 +65,7 @@ public class DESEncryptor {
         }
 
         long res = permutation(bigKey, key);
-        System.out.printf("%x\n", res);
+//        System.out.printf("%x\n", res);
 
         long D = (res >>> 28) & 268435455;
         long C = res & 268435455;
@@ -177,6 +177,8 @@ public class DESEncryptor {
     public static void main(String[] args) {
         long l = Long.valueOf("-6144307267275141923");
         System.out.printf("%x\n", l);
-        key(l, 16);
+        for (int i = 0; i < 16; i++) {
+            getKey(l, i);
+        }
     }
 }
