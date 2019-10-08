@@ -64,7 +64,7 @@ public class DESEncryptor {
         long res = 0;
         for (int i = 0; i < 8; i++) {
             long ind = get6Bit(R, i);
-            long a = (ind & 32) * 2 + (ind & 1);
+            long a = ((ind & 32) >> 5) * 2 + (ind & 1);
             long b = (ind >> 1) & 15;
             res += (sBox[i][(int) a][(int) b] << (4 * i));
         }
