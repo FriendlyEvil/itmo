@@ -63,8 +63,7 @@ public class DESTest {
         return ind >= ar.length ? 0 : ar[ind];
     }
 
-    private long[] getLongs(String str) {
-        byte[] bytes = str.getBytes();
+    private long[] getLongs(byte[] bytes) {
         long[] longs = new long[(bytes.length + 7) / 8];
         for (int i = 0; i < (bytes.length + 7) / 8; i += 8) {
             long value = 0;
@@ -91,8 +90,15 @@ public class DESTest {
     @Test
     public void realText() {
         try {
+            long key = generateKey();
             byte[] encoded = getFile("simple_test.txt");
-            String str = new String(encoded);
+            long[] ll = getLongs(encoded);
+            for (int i = 0; i < ll.length; i++) {
+                ll[i] = DESEncryptor.encrypt(ll[i], key);
+            }
+            byte[] d = toBytes(ll);
+            String str = new String(d);
+            System.out.println(str);
         } catch (IOException e) {
             e.printStackTrace();
         }
