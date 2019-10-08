@@ -3,6 +3,10 @@ import org.junit.Test;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -50,9 +54,18 @@ public class DESTest {
         }
     }
 
+    public byte[] getFile(String name) throws IOException {
+        return Files.readAllBytes(Paths.get(name));
+    }
+
 
     @Test
-    public void realText() throws FileNotFoundException {
-        Scanner scanner = new Scanner(new File("war_and_peace.txt"));
+    public void realText() {
+        try {
+            byte[] encoded = getFile("simple_test.txt");
+            String str = new String(encoded);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
