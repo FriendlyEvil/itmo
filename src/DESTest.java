@@ -33,11 +33,17 @@ public class DESTest {
         }
     }
 
+    public long generateKey() {
+        long key = random.nextLong();
+        return key & ((1L << 56) - 1);
+    }
+
     @Test
     public void test() {
-        long key = 0x0e2468d92324L;
-        for (long i = 0; i < 1000; i++) {
-            Assert.assertEquals(DESEncryptor.decrypt(DESEncryptor.encrypt(i, key), key), i);
+        long key = generateKey();
+        for (long i = 0; i < 1_000_000; i++) {
+            long message = random.nextLong();
+            Assert.assertEquals(DESEncryptor.decrypt(DESEncryptor.encrypt(message, key), key), message);
         }
     }
 }
