@@ -1,14 +1,10 @@
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Random;
-import java.util.Scanner;
 
 public class DESTest {
     Random random = new Random();
@@ -65,14 +61,15 @@ public class DESTest {
 
     private long[] getLongs(byte[] bytes) {
         long[] longs = new long[(bytes.length + 7) / 8];
-        for (int i = 0; i < (bytes.length + 7) / 8; i += 8) {
+        for (int i = 0; i < bytes.length; i += 8) {
             long value = 0;
             for (int j = 0; j < 8; j++) {
                 value <<= 8;
-                value += getByte(bytes, i + j);
+                value ^= (0xFF & getByte(bytes, i + j));
             }
-            longs[i] = value;
+            longs[i / 8] = value;
         }
+        byte[] bytes1 = toBytes(longs);
         return longs;
     }
 
@@ -81,7 +78,7 @@ public class DESTest {
         byte[] bytes = new byte[longs.length * 8];
         for (int i = 0; i < longs.length; i++) {
             for (int j = 0; j < 8; j++) {
-                bytes[i * 8 + j] = (byte) ((longs[i] >> (8 * j)) & 0xFF);
+                bytes[i * 8 + 7 - j] = (byte) ((longs[i] >> (8 * j)) & 0xFF);
             }
         }
         return bytes;
