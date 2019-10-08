@@ -1,35 +1,27 @@
-public class DESEncryptor {
-    static long encrypt(long value, long key) {
+public class DESAlgorithm {
+    public static long encrypt(long value, long key) {
         value = initialPermutation(value);
         cypherCycle(value, key);
-        value = permutation(value, ipReverse);
+        value = finalPermutation(value);
         return value;
     }
 
-    static long decrypt(long value, long key) {
+    public static long decrypt(long value, long key) {
         value = initialPermutation(value);
         cypherCycleDecrypt(value, key);
-        value = permutation(value, ipReverse);
+        value = finalPermutation(value);
         return value;
     }
 
-    static void cypherCycleDecrypt(long value, long k) {
-        long L = (value << 32) >>> 32;
-        long R = value >>> 32;
-        for (int i = 15; i >= 0; i--) {
-            long key = getKey(k, i);
-            long tmp = R;
-            R = L ^ feistelFunction(R, key);
-            L = tmp;
-        }
-
+    private static long initialPermutation(long value) {
+        return Helper.permutation(value, initialPermutation);
     }
 
-    static long initialPermutation(long value) {
-        return permutation(value, initialPermutation);
+    private static long finalPermutation(long value) {
+        return Helper.permutation(value, ipReverse);
     }
 
-    static void cypherCycle(long value, long k) {
+    private static void cypherCycle(long value, long k) {
         long L = (value << 32) >>> 32;
         long R = value >>> 32;
         for (int i = 0; i < 16; i++) {
@@ -38,83 +30,63 @@ public class DESEncryptor {
             R = L ^ feistelFunction(R, key);
             L = tmp;
         }
-
     }
 
-    static long count1(long k) { //rename
-        int res = 0;
-        for (int i = 0; i < 64; i++) {
-            res += ((k >>> i) & 1);
+    private static void cypherCycleDecrypt(long value, long k) {
+        long L = (value << 32) >>> 32;
+        long R = value >>> 32;
+        for (int i = 15; i >= 0; i--) {
+            long key = getKey(k, i);
+            long tmp = R;
+            R = L ^ feistelFunction(R, key);
+            L = tmp;
         }
-        if (res % 2 == 0) {
-            return 1;
-        }
-        return 0;
     }
 
-    static long extensionFunction(long R) {
-        return permutation(R, extentionPermutation);
-    }
-
-    static long get6Bit(long num, long pos) {
-        return (int) ((num >> (pos)) & 63);
-    }
-
-    static long sBoxFunction(long R) {
-        long res = 0;
-        for (int i = 0; i < 8; i++) {
-            long ind = get6Bit(R, i);
-            long a = ((ind & 32) >> 5) * 2 + (ind & 1);
-            long b = (ind >> 1) & 15;
-            res += (sBox[i][(int) a][(int) b] << (4 * i));
-        }
-        return permutation(res, p);
-    }
-
-    static long getBit(long value, long ind) {
-        return 1L & (value >> (ind - 1));
-    }
-
-    static long getKey(long k, int it) {
+    private static long getKey(long k, int it) {
         long bigKey = 0;
         for (int i = 0; i < 8; i++) {
             long s = ((k >>> (7 * i)) & 127);
-            s |= (count1(s) << 7);
+            s |= (Helper.countOfNonZeroBits(s) << 7);
             bigKey |= (s << (8 * i));
         }
-        long res = permutation(bigKey, key);
+        long res = Helper.permutation(bigKey, key);
 
         long D = (res >>> 28) & 268435455;
         long C = res & 268435455;
-        long key = 0;
-
 
         for (int i = 0; i < it; i++) {
             C = cycleShift(C, (int) shifts[i]);
             D = cycleShift(D, (int) shifts[i]);
         }
         long cd = (D << 28) | C;
-        key = permutation(cd, h);
-        return key; //TODO
+        return Helper.permutation(cd, h);
     }
 
-    static long feistelFunction(long R, long k) {
+    private static long feistelFunction(long R, long k) {
         R = extensionFunction(R);
         R ^= k;
-        R = sBoxFunction(R); // TODO: does it works?
-        R = permutation(R, p);
+        R = sBoxFunction(R);
+        R = Helper.permutation(R, p);
         return R;
     }
 
-    public static long permutation(long value, long[] per) {
-        long res = 0;
-        for (int i = 0; i < per.length; i++) {
-            res |= (getBit(value, per[i]) << i);
-        }
-        return res;
+    private static long extensionFunction(long R) {
+        return Helper.permutation(R, extentionPermutation);
     }
 
-    public static long cycleShift(long value, int shift) {
+    private static long sBoxFunction(long R) {
+        long res = 0;
+        for (int i = 0; i < 8; i++) {
+            long ind = Helper.getSixBitFromPosition(R, i);
+            long a = ((ind & 32) >> 5) * 2 + (ind & 1);
+            long b = (ind >> 1) & 15;
+            res += (sBox[i][(int) a][(int) b] << (4 * i));
+        }
+        return Helper.permutation(res, p);
+    }
+
+    private static long cycleShift(long value, int shift) {
         return ((value << shifts[shift]) | ((value >> (32 - shifts[shift])) & 3));
     }
 
@@ -123,6 +95,20 @@ public class DESEncryptor {
 
     private static long[] extentionPermutation = {32, 1, 2, 3, 4, 5, 4, 5, 6, 7, 8, 9, 8, 9, 10, 11, 12, 13, 12, 13, 14, 15, 16, 17, 16, 17, 18, 19, 20, 21, 20, 21, 22, 23, 24, 25, 24,
             25, 26, 27, 28, 29, 29, 29, 30, 31, 32, 1};
+
+    private static long[] p = {16, 7, 20, 21, 29, 12, 28, 17, 1, 15, 23, 26, 5, 18, 31, 10, 2, 8, 24, 14, 22, 27, 3, 9, 19, 13, 30, 6, 22, 11, 4, 25};
+
+    private static long[] key = {57, 49, 41, 33, 25, 17, 9, 1, 58, 50, 42, 34, 26, 18, 10, 2, 59, 51, 43, 35, 27, 19, 11, 3, 60, 52, 44, 36, 63, 55, 47, 39, 31, 23, 15,
+            7, 62, 54, 46, 38, 30, 22, 14, 6, 61, 53, 45, 37, 29, 21, 13, 5, 28, 20, 12, 4};
+
+    private static long[] shifts = {1, 1, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 1};
+
+    private static long[] h = {14, 17, 11, 24, 1, 5, 3, 28, 15, 6, 21, 10, 23, 19, 12, 4, 26, 8, 16, 7, 27, 20, 13, 2, 41, 52, 31, 37, 47, 55, 30, 40, 51, 45, 33, 48,
+            44, 49, 39, 56, 34, 53, 46, 42, 50, 36, 29, 32};
+
+    private static long[] ipReverse = {40, 8, 48, 16, 56, 24, 64, 32, 39, 7, 47, 15, 55, 23, 63, 31, 38, 6, 46, 14, 54, 22, 62, 30, 37, 5, 45, 13, 53, 21, 61, 29,
+            36, 4, 44, 12, 52, 20, 60, 28, 35, 3, 43, 11, 51, 19, 59, 27, 34, 2, 42, 10, 50, 18, 58, 26, 33, 1, 41, 9, 49, 17, 57, 25};
+
 
     private static long[][][] sBox =
             {
@@ -175,18 +161,4 @@ public class DESEncryptor {
                             {2, 1, 14, 7, 4, 10, 8, 13, 15, 12, 9, 0, 3, 5, 6, 11}
                     }
             };
-
-    private static long[] p = {16, 7, 20, 21, 29, 12, 28, 17, 1, 15, 23, 26, 5, 18, 31, 10, 2, 8, 24, 14, 22, 27, 3, 9, 19, 13, 30, 6, 22, 11, 4, 25};
-
-    private static long[] key = {57, 49, 41, 33, 25, 17, 9, 1, 58, 50, 42, 34, 26, 18, 10, 2, 59, 51, 43, 35, 27, 19, 11, 3, 60, 52, 44, 36, 63, 55, 47, 39, 31, 23, 15,
-            7, 62, 54, 46, 38, 30, 22, 14, 6, 61, 53, 45, 37, 29, 21, 13, 5, 28, 20, 12, 4};
-
-    private static long[] shifts = {1, 1, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 1};
-
-    private static long[] h = {14, 17, 11, 24, 1, 5, 3, 28, 15, 6, 21, 10, 23, 19, 12, 4, 26, 8, 16, 7, 27, 20, 13, 2, 41, 52, 31, 37, 47, 55, 30, 40, 51, 45, 33, 48,
-            44, 49, 39, 56, 34, 53, 46, 42, 50, 36, 29, 32};
-
-    private static long[] ipReverse = {40, 8, 48, 16, 56, 24, 64, 32, 39, 7, 47, 15, 55, 23, 63, 31, 38, 6, 46, 14, 54, 22, 62, 30, 37, 5, 45, 13, 53, 21, 61, 29,
-            36, 4, 44, 12, 52, 20, 60, 28, 35, 3, 43, 11, 51, 19, 59, 27, 34, 2, 42, 10, 50, 18, 58, 26, 33, 1, 41, 9, 49, 17, 57, 25};
-
 }

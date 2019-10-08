@@ -7,97 +7,80 @@ import java.nio.file.Paths;
 import java.util.Random;
 
 public class DESTest {
-    Random random = new Random();
+    private Random random = new Random();
 
-    @Test
-    public void testPermutation() {
-        long[] per = {64, 63, 62, 61, 60, 59, 58, 57, 56, 55, 54, 53, 52, 51, 50, 49, 48, 47, 46, 45, 44, 43, 42, 41, 40, 39, 38, 37, 36, 35, 34, 33, 32, 31, 30, 29, 28, 27, 26, 25, 24, 23, 22, 21, 20, 19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1};
-        for (int j = 0; j < 100; j++) {
-
-            long l = random.nextLong();
-            long r = DESEncryptor.permutation(l, per);
-            for (int i = 0; i < 64; i++) {
-                Assert.assertEquals(DESEncryptor.getBit(l, i + 1), DESEncryptor.getBit(r, 64 - i));
-            }
-        }
-    }
-
-    @Test
-    public void keyExpansion() {
-        for (long k = 0; k < 10000; k++) {
-            long bigKey = 0;
-            for (int i = 0; i < 8; i++) {
-                long s = ((k >>> (7 * i)) & 127);
-//                s <<= 1;
-                s |= (DESEncryptor.count1(s) << 7);
-                bigKey |= (s << (8 * i));
-            }
-            System.out.println(Long.toBinaryString(k) + " " + Long.toBinaryString(bigKey));
-        }
-    }
-
-    public long generateKey() {
+    private long generateRandomKey() {
         long key = random.nextLong();
         return key & ((1L << 56) - 1);
     }
 
-    @Test
-    public void test() {
-        long key = generateKey();
-        for (long i = 0; i < 1_000_000; i++) {
-            long message = random.nextLong();
-            Assert.assertEquals(DESEncryptor.decrypt(DESEncryptor.encrypt(message, key), key), message);
-        }
-    }
-
-    public byte[] getFile(String name) throws IOException {
+    private byte[] getFile(String name) throws IOException {
         return Files.readAllBytes(Paths.get(name));
     }
 
-
-    byte getByte(byte[] ar, int ind) {
-        return ind >= ar.length ? 0 : ar[ind];
-    }
-
-    private long[] getLongs(byte[] bytes) {
-        long[] longs = new long[(bytes.length + 7) / 8];
-        for (int i = 0; i < bytes.length; i += 8) {
-            long value = 0;
-            for (int j = 0; j < 8; j++) {
-                value <<= 8;
-                value ^= (0xFF & getByte(bytes, i + j));
-            }
-            longs[i / 8] = value;
+    private void testFile(String filename) {
+        try {
+            long key = generateRandomKey();
+            byte[] text = getFile(filename);
+            byte[] encodedText = DES.encryptBytes(text, key);
+            byte[] decodedText = DES.decryptBytes(encodedText, key);
+            Assert.assertArrayEquals(text, decodedText);
+        } catch (IOException e) {
+            throw new AssertionError("File \"" + filename + "\" not found");
         }
-        byte[] bytes1 = toBytes(longs);
-        return longs;
-    }
-
-
-    private byte[] toBytes(long[] longs) {
-        byte[] bytes = new byte[longs.length * 8];
-        for (int i = 0; i < longs.length; i++) {
-            for (int j = 0; j < 8; j++) {
-                bytes[i * 8 + 7 - j] = (byte) ((longs[i] >> (8 * j)) & 0xFF);
-            }
-        }
-        return bytes;
     }
 
     @Test
-    public void realText() {
-        try {
-            long key = generateKey();
-            byte[] encoded = getFile("simple_test.txt");
-            long[] ll = getLongs(encoded);
-            for (int i = 0; i < ll.length; i++) {
-                ll[i] = DESEncryptor.encrypt(ll[i], key);
-            }
-            byte[] d = toBytes(ll);
-            String str = new String(d);
-            System.out.println(str);
-        } catch (IOException e) {
-            e.printStackTrace();
+    public void testDESAlgorithmOnRandomData() {
+        long key = generateRandomKey();
+        for (long i = 0; i < 100_000; i++) {
+            long message = random.nextLong();
+            Assert.assertEquals(DESAlgorithm.decrypt(DESAlgorithm.encrypt(message, key), key), message);
         }
+    }
+
+    @Test
+    public void smallEnglishText() {
+        testFile("text/SmallEnglishText.txt");
+    }
+
+    @Test
+    public void middleEnglishText() {
+        testFile("text/MiddleEnglishText.txt");
+    }
+
+    @Test
+    public void bigEnglishText() {
+        testFile("text/BigEnglishText.txt");
+    }
+
+    @Test
+    public void smallRussianText() {
+        testFile("text/SmallRussianText.txt");
+    }
+
+    @Test
+    public void middleRussianText() {
+        testFile("text/MiddleRussianText.txt");
+    }
+
+    @Test
+    public void bigRussianText() {
+        testFile("text/BigRussianText.txt");
+    }
+
+    @Test
+    public void chineseText() {
+        testFile("text/ChineseText.txt");
+    }
+
+    @Test
+    public void testPdfFormat() {
+        testFile("text/crypto_1_lecture.pdf");
+    }
+
+    @Test
+    public void testJavaCode() {
+        testFile("src/DESAlgorithm.java");
     }
 }
