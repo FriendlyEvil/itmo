@@ -32,4 +32,12 @@ public class DESTest {
             System.out.println(Long.toBinaryString(k) + " " + Long.toBinaryString(bigKey));
         }
     }
+
+    @Test
+    public void test() {
+        long key = 0x0e2468d92324L;
+        for (long i = 0; i < 1000; i++) {
+            Assert.assertEquals(DESEncryptor.decrypt(DESEncryptor.encrypt(i, key), key), i);
+        }
+    }
 }

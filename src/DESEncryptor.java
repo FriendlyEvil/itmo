@@ -1,16 +1,35 @@
 public class DESEncryptor {
-    long encrypt(long value, long key) {
+    static long encrypt(long value, long key) {
         value = initialPermutation(value);
         cypherCycle(value, key);
-
+        value = permutation(value, ipReverse);
         return value;
     }
 
-    long initialPermutation(long value) {
+    static long decrypt(long value, long key) {
+        value = initialPermutation(value);
+        cypherCycleDecrypt(value, key);
+        value = permutation(value, ipReverse);
+        return value;
+    }
+
+    static void cypherCycleDecrypt(long value, long k) {
+        long L = (value << 32) >>> 32;
+        long R = value >>> 32;
+        for (int i = 15; i >= 0; i--) {
+            long key = getKey(k, i);
+            long tmp = R;
+            R = L ^ feistelFunction(R, key);
+            L = tmp;
+        }
+
+    }
+
+    static long initialPermutation(long value) {
         return permutation(value, initialPermutation);
     }
 
-    void cypherCycle(long value, long k) {
+    static void cypherCycle(long value, long k) {
         long L = (value << 32) >>> 32;
         long R = value >>> 32;
         for (int i = 0; i < 16; i++) {
@@ -33,15 +52,15 @@ public class DESEncryptor {
         return 0;
     }
 
-    long extensionFunction(long R) {
+    static long extensionFunction(long R) {
         return permutation(R, extentionPermutation);
     }
 
-    long get6Bit(long num, long pos) {
+    static long get6Bit(long num, long pos) {
         return (int) ((num >> (pos)) & 63);
     }
 
-    long sBoxFunction(long R) {
+    static long sBoxFunction(long R) {
         long res = 0;
         for (int i = 0; i < 8; i++) {
             long ind = get6Bit(R, i);
@@ -82,7 +101,7 @@ public class DESEncryptor {
         return key; //TODO
     }
 
-    long feistelFunction(long R, long k) {
+    static long feistelFunction(long R, long k) {
         R = extensionFunction(R);
         R ^= k;
         R = sBoxFunction(R); // TODO: does it works?
