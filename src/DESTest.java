@@ -1,7 +1,10 @@
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.Random;
+import java.util.Scanner;
 
 public class DESTest {
     Random random = new Random();
@@ -45,5 +48,11 @@ public class DESTest {
             long message = random.nextLong();
             Assert.assertEquals(DESEncryptor.decrypt(DESEncryptor.encrypt(message, key), key), message);
         }
+    }
+
+
+    @Test
+    public void realText() throws FileNotFoundException {
+        Scanner scanner = new Scanner(new File("war_and_peace.txt"));
     }
 }
