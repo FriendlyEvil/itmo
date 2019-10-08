@@ -59,6 +59,35 @@ public class DESTest {
     }
 
 
+    byte getByte(byte[] ar, int ind) {
+        return ind >= ar.length ? 0 : ar[ind];
+    }
+
+    private long[] getLongs(String str) {
+        byte[] bytes = str.getBytes();
+        long[] longs = new long[(bytes.length + 7) / 8];
+        for (int i = 0; i < (bytes.length + 7) / 8; i += 8) {
+            long value = 0;
+            for (int j = 0; j < 8; j++) {
+                value <<= 8;
+                value += getByte(bytes, i + j);
+            }
+            longs[i] = value;
+        }
+        return longs;
+    }
+
+
+    private byte[] toBytes(long[] longs) {
+        byte[] bytes = new byte[longs.length * 8];
+        for (int i = 0; i < longs.length; i++) {
+            for (int j = 0; j < 8; j++) {
+                bytes[i * 8 + j] = (byte) ((longs[i] >> (8 * j)) & 0xFF);
+            }
+        }
+        return bytes;
+    }
+
     @Test
     public void realText() {
         try {
