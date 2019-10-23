@@ -1,5 +1,155 @@
 public class MARSEncrypter {
 
+    //TODO check key operation
+    //TODO нихуя не понял зачем все обращаются только к 3-м значениям хотя их 4, но да хуй с ним
+    //TODO там всего два вида поворота, можно просто сделать 2 мелода с 1 аргументом
+    private static void directMixing(int[] data, int[] key) {
+        for (int i = 0; i < 4; i++) {
+            data[i] += key[i];
+        }
+        for (int i = 0; i < 8; i++) {
+            data[1] ^= S1[Helper.getByte(data[0], 0)];
+            data[1] += S2[Helper.getByte(data[1], 1)];
+            data[2] += S1[Helper.getByte(data[2], 2)];
+            data[3] ^= S2[Helper.getByte(data[3], 3)];
+
+            data[0] = Helper.rightCyclicShift(data[0], 24);
+
+            if (i == 0 || i == 4) {
+                data[0] += data[3];
+            } else if (i == 1 || i == 5) {
+                data[0] += data[1];
+            }
+            data = Helper.rotateArray(data, new int[]{0, 3, 2, 1});
+        }
+    }
+
+    private static void decodeDirectMixing(int[] data, int[] key) {
+        for (int i = 0; i < 4; i++) {
+            data[i] += key[36 + i];
+        }
+        for (int i = 7; i >= 0; i--) {
+            data = Helper.rotateArray(data, new int[]{2, 1, 0, 3});
+            data[0] = Helper.rightCyclicShift(data[0], 24);
+
+            data[3] ^= S1[Helper.getByte(data[3], 2)];
+            data[2] += S2[Helper.getByte(data[2], 3)];
+            data[1] += S1[Helper.getByte(data[1], 4)];
+            data[1] ^= S2[Helper.getByte(data[0], 0)];
+
+            if (i == 2 || i == 6) {
+                data[0] += data[3];
+            } else if (i == 3 || i == 7) {
+                data[0] += data[1];
+            }
+        }
+    }
+
+    private static void cryptographicCore(int[] data, int[] key) {
+        for (int i = 0; i < 16; i++) {
+            int[] a = EFunction(data[0], key[2 * i + 4], key[2 * i + 5]);
+            int out1 = a[0];
+            int out2 = a[1];
+            int out3 = a[2];
+            data[0] = Helper.leftCyclicShift(data[0], 13);
+
+            data[2] += out2;
+            if (i < 8) {
+                data[1] += out1;
+                data[3] ^= out3;
+            } else {
+                data[3] += out3;
+                data[1] ^= out1;
+            }
+            data = Helper.rotateArray(data, new int[]{0, 3, 2, 1});
+        }
+    }
+
+    private static void decodecryptographicCore(int[] data, int[] key) {
+        for (int i = 15; i >= 0; i--) {
+            data = Helper.rotateArray(data, new int[]{2, 1, 0, 3});
+            data[0] = Helper.rightCyclicShift(data[0], 13);
+
+            int[] a = EFunction(data[0], key[2 * i + 4], key[2 * i + 5]);
+            int out1 = a[0];
+            int out3 = a[2]; // переставлено чтобы идея не подчеркивала копипасту
+            int out2 = a[1];
+
+            data[2] -= out2;
+            if (i < 8) {
+                data[1] -= out1;
+                data[3] ^= out3;
+            } else {
+                data[3] -= out3;
+                data[1] ^= out1;
+            }
+        }
+    }
+
+    private static void backMixing(int[] data, int[] key) {
+        for (int i = 0; i < 8; i++) {
+            if (i == 2 || i == 6) {
+                data[0] -= data[3];
+            } else if (i == 3 || i == 7) {
+                data[0] -= data[1];
+            }
+
+            data[1] ^= S2[Helper.getByte(data[0], 0)];
+            data[2] -= S1[Helper.getByte(data[0], 3)];
+            data[3] -= S2[Helper.getByte(data[0], 2)];
+            data[3] ^= S1[Helper.getByte(data[0], 1)];
+            data = Helper.rotateArray(data, new int[]{0, 3, 2, 1});
+        }
+        for (int i = 0; i < 4; i++) {
+            data[i] -= key[36 - i];
+        }
+    }
+
+    //Кажется у чела код неверный, ибо здесь не совпало с вики(хотя и там и там есть доля логики)...
+    // перехожу на вики-версию
+    private static void decodeBackMixing(int[] data, int[] key) {
+        for (int i = 7; i >= 0; i--) {
+            data = Helper.rotateArray(data, new int[]{2, 1, 0, 3});
+
+            if (i == 0 || i == 4) {
+                data[0] -= data[3];
+            } else if (i == 1 || i == 5) {
+                data[0] -= data[1];
+            }
+            data[0] = Helper.leftCyclicShift(data[0], 24);
+
+            data[3] ^= S2[Helper.getByte(data[0], 4)];
+            data[2] -= S1[Helper.getByte(data[0], 3)];
+            data[1] -= S2[Helper.getByte(data[0], 2)];
+            data[1] ^= S1[Helper.getByte(data[0], 1)];
+            data = Helper.rotateArray(data, new int[]{0, 3, 2, 1});
+        }
+        for (int i = 0; i < 4; i++) {
+            data[i] -= key[i];
+        }
+    }
+
+    private static int[] EFunction(int value, int key1, int key2) {
+        int M = value + key1;
+        int R = Helper.leftCyclicShift(value, 9) * key2;
+        int i = Helper.getSomeBits(M, 9);
+        int L;
+        if (i < 256) {
+            L = S1[i];
+        } else {
+            L = S2[i - 256];
+        }
+        M = Helper.leftCyclicShift(M, Helper.getSomeBits(R, 5));
+        L ^= R;
+        R = Helper.leftCyclicShift(R, 5);
+        L ^= R;
+        L = Helper.leftCyclicShift(L, Helper.getSomeBits(R, 5));
+        return new int[]{L, M, R};
+    }
+
+    public static void main(String[] args) {
+//        mixingStep(new int[0]);
+    }
 
     public static int[] B = {0xa4a8d57b, 0x5b5d193b, 0xc8a8309b, 0x73f9a978};
     public static int[] S1 = {
