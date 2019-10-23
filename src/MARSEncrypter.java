@@ -30,12 +30,12 @@ public class MARSEncrypter {
             data[i] += key[36 + i];
         }
         for (int i = 7; i >= 0; i--) {
-            data = Helper.rotateArray(data, new int[]{2, 1, 0, 3});
+            data = Helper.rotateArray(data, new int[]{3, 0, 1, 2});
             data[0] = Helper.rightCyclicShift(data[0], 24);
 
-            data[3] ^= S1[Helper.getByte(data[3], 2)];
-            data[2] += S2[Helper.getByte(data[2], 3)];
-            data[1] += S1[Helper.getByte(data[1], 4)];
+            data[3] ^= S1[Helper.getByte(data[0], 1)];
+            data[2] += S2[Helper.getByte(data[0], 2)];
+            data[1] += S1[Helper.getByte(data[0], 3)];
             data[1] ^= S2[Helper.getByte(data[0], 0)];
 
             if (i == 2 || i == 6) {
@@ -59,16 +59,16 @@ public class MARSEncrypter {
                 data[1] += out1;
                 data[3] ^= out3;
             } else {
-                data[3] += out3;
-                data[1] ^= out1;
+                data[3] += out1;
+                data[1] ^= out3;
             }
-            data = Helper.rotateArray(data, new int[]{0, 3, 2, 1});
+            data = Helper.rotateArray(data, new int[]{3, 0, 1, 2});
         }
     }
 
     private static void decodecryptographicCore(int[] data, int[] key) {
         for (int i = 15; i >= 0; i--) {
-            data = Helper.rotateArray(data, new int[]{2, 1, 0, 3});
+            data = Helper.rotateArray(data, new int[]{1, 2, 3, 0});
             data[0] = Helper.rightCyclicShift(data[0], 13);
 
             int[] a = EFunction(data[0], key[2 * i + 4], key[2 * i + 5]);
@@ -81,8 +81,8 @@ public class MARSEncrypter {
                 data[1] -= out1;
                 data[3] ^= out3;
             } else {
-                data[3] -= out3;
-                data[1] ^= out1;
+                data[3] -= out1;
+                data[1] ^= out3;
             }
         }
     }
@@ -97,9 +97,10 @@ public class MARSEncrypter {
 
             data[1] ^= S2[Helper.getByte(data[0], 0)];
             data[2] -= S1[Helper.getByte(data[0], 3)];
-            data[3] -= S2[Helper.getByte(data[0], 2)];
-            data[3] ^= S1[Helper.getByte(data[0], 1)];
-            data = Helper.rotateArray(data, new int[]{0, 3, 2, 1});
+            data[3] ^= S2[Helper.getByte(data[0], 2)];
+            data[3] -= S1[Helper.getByte(data[0], 1)];
+            data[0] = Helper.leftCyclicShift(data[0], 24);
+            data = Helper.rotateArray(data, new int[]{3, 0, 1, 2});
         }
         for (int i = 0; i < 4; i++) {
             data[i] -= key[36 - i];
@@ -110,7 +111,7 @@ public class MARSEncrypter {
     // перехожу на вики-версию
     private static void decodeBackMixing(int[] data, int[] key) {
         for (int i = 7; i >= 0; i--) {
-            data = Helper.rotateArray(data, new int[]{2, 1, 0, 3});
+            data = Helper.rotateArray(data, new int[]{1, 2, 3, 0});
 
             if (i == 0 || i == 4) {
                 data[0] -= data[3];
@@ -123,7 +124,6 @@ public class MARSEncrypter {
             data[2] -= S1[Helper.getByte(data[0], 3)];
             data[1] -= S2[Helper.getByte(data[0], 2)];
             data[1] ^= S1[Helper.getByte(data[0], 1)];
-            data = Helper.rotateArray(data, new int[]{0, 3, 2, 1});
         }
         for (int i = 0; i < 4; i++) {
             data[i] -= key[i];
@@ -140,14 +140,22 @@ public class MARSEncrypter {
         } else {
             L = S2[i - 256];
         }
-        M = Helper.leftCyclicShift(M, Helper.getSomeBits(R, 5));
+        R = Helper.leftCyclicShift(R, 5);
+        int r = Helper.getSomeBits(R, 5);
+        M = Helper.leftCyclicShift(M, r);
         L ^= R;
         R = Helper.leftCyclicShift(R, 5);
         L ^= R;
-        L = Helper.leftCyclicShift(L, Helper.getSomeBits(R, 5));
+        r = Helper.getSomeBits(R, 5);
+        L = Helper.leftCyclicShift(L, r);
         return new int[]{L, M, R};
     }
 
+
+    int[] keyExpansion(int[] key) {
+        //TODO
+        return null;
+    }
     public static void main(String[] args) {
 //        mixingStep(new int[0]);
     }

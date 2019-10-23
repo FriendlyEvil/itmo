@@ -12,7 +12,7 @@ public class Helper {
     }
 
     public static int getSomeBits(int value, int count) {
-        return (value << count) & ((1 << count) - 1);
+        return (value) & ((1 << count) - 1);
     }
 
     public static int[] rotateArray(int[] array, int[] newPosition) {
