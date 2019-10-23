@@ -1,8 +1,43 @@
+import java.util.Arrays;
+
 public class MARSEncrypter {
 
-    //TODO check key operation
-    //TODO нихуя не понял зачем все обращаются только к 3-м значениям хотя их 4, но да хуй с ним
-    //TODO там всего два вида поворота, можно просто сделать 2 мелода с 1 аргументом
+    private static void directMixing(int[] data) {
+        for (int i = 0; i < 8; i++) {
+            data[1] ^= S1[Helper.getByte(data[0], 0)];
+            data[1] += S2[Helper.getByte(data[0], 1)];
+            data[2] += S1[Helper.getByte(data[0], 2)];
+            data[3] ^= S2[Helper.getByte(data[0], 3)];
+
+            data[0] = Helper.rightCyclicShift(data[0], 24);
+
+            if (i == 0 || i == 4) {
+                data[0] += data[3];
+            }
+            if (i == 1 || i == 5) {
+                data[0] += data[1];
+            }
+            data = Helper.rotateArray(data, new int[]{3, 0, 1, 2});
+        }
+    }
+
+    private static void backMixing(int[] data) {
+        for (int i = 0; i < 8; i++) {
+            if (i == 2 || i == 6) {
+                data[0] -= data[3];
+            } else if (i == 3 || i == 7) {
+                data[0] -= data[1];
+            }
+
+            data[1] ^= S2[Helper.getByte(data[0], 0)];
+            data[2] -= S1[Helper.getByte(data[0], 3)];
+            data[3] ^= S2[Helper.getByte(data[0], 2)];
+            data[3] -= S1[Helper.getByte(data[0], 1)];
+            data[0] = Helper.leftCyclicShift(data[0], 24);
+            data = Helper.rotateArray(data, new int[]{3, 0, 1, 2});
+        }
+    }
+
     private static void directMixing(int[] data, int[] key) {
         for (int i = 0; i < 4; i++) {
             data[i] += key[i];
@@ -107,6 +142,23 @@ public class MARSEncrypter {
         }
     }
 
+    int[] code(int[] val, int[] k) {
+        int[] key = keyExpansion(k);
+        int[] a = Arrays.copyOf(val, val.length);
+        a[0] += key[0];
+        a[1] += key[1];
+        a[2] += key[2];
+        a[3] += key[3];
+        directMixing(a);
+        cryptographicCore(a, key);
+        backMixing(a);
+        a[0] -= key[36];
+        a[1] -= key[37];
+        a[2] -= key[38];
+        a[3] -= key[39];
+        return a;
+    }
+
     //Кажется у чела код неверный, ибо здесь не совпало с вики(хотя и там и там есть доля логики)...
     // перехожу на вики-версию
     private static void decodeBackMixing(int[] data, int[] key) {
@@ -151,11 +203,53 @@ public class MARSEncrypter {
         return new int[]{L, M, R};
     }
 
-
     int[] keyExpansion(int[] key) {
-        //TODO
-        return null;
+        int[] K = new int[40];
+        int n = key.length;
+        int[] T = new int[40];
+        for (int i = 0; i < n; i++) {
+            T[i] = key[i];
+        }
+        T[n] = n;
+        for (int i = n + 1; i <= 14; i++) {
+            T[n] = 0;
+        }
+        for (int j = 0; j < 4; j++) {
+            for (int i = 0; i < 15; i++) {
+                int temp = T[(i + 8) % 15] ^ T[(i + 13) % 15];
+                temp = Helper.leftCyclicShift(temp, 3);
+                temp ^= 4 * i + j;
+                T[i] ^= temp;
+            }
+            for (int k = 0; k < 4; k++) {
+                for (int i = 0; i < 15; i++) {
+                    int temp = Helper.getSomeBits(T[(i + 14) % 15], 9);
+                    if (temp < 256)
+                        temp = S1[temp];
+                    else
+                        temp = S2[temp % 256];
+                    int temp1 = T[i] + temp;
+                    T[i] = Helper.leftCyclicShift(temp1, 9);
+                }
+            }
+            for (int i = 0; i < 10; i++) {
+                K[j * 10 + i] = T[4 * i % 15];
+            }
+        }
+        int i = 5;
+        while (i <= 35) {
+
+            int jj = K[i] & 3;
+            int w = K[i] | 3;
+            int M = Helper.mask(w);
+            int p = B[jj];
+            p = Helper.leftCyclicShift(p, Helper.getSomeBits(K[i - 1], 5));
+            K[i] = w ^ (p & M);
+            i += 2;
+        }
+        return K;
     }
+
     public static void main(String[] args) {
 //        mixingStep(new int[0]);
     }
