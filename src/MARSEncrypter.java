@@ -9,18 +9,19 @@ public class MARSEncrypter {
         }
         for (int i = 0; i < 8; i++) {
             data[1] ^= S1[Helper.getByte(data[0], 0)];
-            data[1] += S2[Helper.getByte(data[1], 1)];
-            data[2] += S1[Helper.getByte(data[2], 2)];
-            data[3] ^= S2[Helper.getByte(data[3], 3)];
+            data[1] += S2[Helper.getByte(data[0], 1)];
+            data[2] += S1[Helper.getByte(data[0], 2)];
+            data[3] ^= S2[Helper.getByte(data[0], 3)];
 
             data[0] = Helper.rightCyclicShift(data[0], 24);
 
             if (i == 0 || i == 4) {
                 data[0] += data[3];
-            } else if (i == 1 || i == 5) {
+            }
+            if (i == 1 || i == 5) {
                 data[0] += data[1];
             }
-            data = Helper.rotateArray(data, new int[]{0, 3, 2, 1});
+            data = Helper.rotateArray(data, new int[]{3, 0, 1, 2});
         }
     }
 
