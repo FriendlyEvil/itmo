@@ -23,6 +23,27 @@ public class MARSEncrypter {
         return a;
     }
 
+    private static int[] EFunction(int value, int key1, int key2) {
+        int M = value + key1;
+        int R = Helper.leftCyclicShift(value, 13) * key2;
+        int i = Helper.getSomeBits(M, 9);
+        int L;
+        if (i < 256) {
+            L = S1[i];
+        } else {
+            L = S2[i - 256];
+        }
+        R = Helper.leftCyclicShift(R, 5);
+        int r = Helper.getSomeBits(R, 5);
+        M = Helper.leftCyclicShift(M, r);
+        L ^= R;
+        R = Helper.leftCyclicShift(R, 5);
+        L ^= R;
+        r = Helper.getSomeBits(R, 5);
+        L = Helper.leftCyclicShift(L, r);
+        return new int[]{L, M, R};
+    }
+
 
     private static int[] directMixing(int[] data, int[] key) {
         for (int i = 0; i < 4; i++) {
@@ -47,6 +68,48 @@ public class MARSEncrypter {
         return data;
     }
 
+    private static int[] cryptographicCore(int[] data, int[] key) {
+        for (int i = 0; i < 16; i++) {
+            int[] a = EFunction(data[0], key[2 * i + 4], key[2 * i + 5]);
+            int out1 = a[0];
+            int out2 = a[1];
+            int out3 = a[2];
+            data[0] = Helper.leftCyclicShift(data[0], 13);
+
+            data[2] += out2;
+            if (i < 8) {
+                data[1] += out1;
+                data[3] ^= out3;
+            } else {
+                data[3] += out1;
+                data[1] ^= out3;
+            }
+            data = Helper.rotateArray(data, per);
+        }
+        return data;
+    }
+
+    private static int[] backMixing(int[] data, int[] key) {
+        for (int i = 0; i < 8; i++) {
+            if (i == 2 || i == 6) {
+                data[0] -= data[3];
+            } else if (i == 3 || i == 7) {
+                data[0] -= data[1];
+            }
+            data[1] ^= S2[Helper.getByte(data[0], 0)];
+            data[2] -= S1[Helper.getByte(data[0], 3)];
+            data[3] ^= S2[Helper.getByte(data[0], 2)];
+            data[3] -= S1[Helper.getByte(data[0], 1)];
+            data[0] = Helper.leftCyclicShift(data[0], 24);
+            data = Helper.rotateArray(data, per);
+        }
+        for (int i = 0; i < 4; i++) {
+            data[i] -= key[36 + i];
+        }
+
+        return data;
+    }
+
     private static int[] decodeDirectMixing(int[] data, int[] key) {
         for (int i = 0; i < 4; i++) {
             data[i] += key[36 + i];
@@ -65,48 +128,6 @@ public class MARSEncrypter {
             } else if (i == 3 || i == 7) {
                 data[0] += data[1];
             }
-        }
-        return data;
-    }
-
-    private static int[] EFunction(int value, int key1, int key2) {
-        int M = value + key1;
-        int R = Helper.leftCyclicShift(value, 13) * key2;
-        int i = Helper.getSomeBits(M, 9);
-        int L;
-        if (i < 256) {
-            L = S1[i];
-        } else {
-            L = S2[i - 256];
-        }
-        R = Helper.leftCyclicShift(R, 5);
-        int r = Helper.getSomeBits(R, 5);
-        M = Helper.leftCyclicShift(M, r);
-        L ^= R;
-        R = Helper.leftCyclicShift(R, 5);
-        L ^= R;
-        r = Helper.getSomeBits(R, 5);
-        L = Helper.leftCyclicShift(L, r);
-        return new int[]{L, M, R};
-    }
-
-    private static int[] cryptographicCore(int[] data, int[] key) {
-        for (int i = 0; i < 16; i++) {
-            int[] a = EFunction(data[0], key[2 * i + 4], key[2 * i + 5]);
-            int out1 = a[0];
-            int out2 = a[1];
-            int out3 = a[2];
-            data[0] = Helper.leftCyclicShift(data[0], 13);
-
-            data[2] += out2;
-            if (i < 8) {
-                data[1] += out1;
-                data[3] ^= out3;
-            } else {
-                data[3] += out1;
-                data[1] ^= out3;
-            }
-            data = Helper.rotateArray(data, per);
         }
         return data;
     }
@@ -133,26 +154,6 @@ public class MARSEncrypter {
         return data;
     }
 
-    private static int[] backMixing(int[] data, int[] key) {
-        for (int i = 0; i < 8; i++) {
-            if (i == 2 || i == 6) {
-                data[0] -= data[3];
-            } else if (i == 3 || i == 7) {
-                data[0] -= data[1];
-            }
-            data[1] ^= S2[Helper.getByte(data[0], 0)];
-            data[2] -= S1[Helper.getByte(data[0], 3)];
-            data[3] ^= S2[Helper.getByte(data[0], 2)];
-            data[3] -= S1[Helper.getByte(data[0], 1)];
-            data[0] = Helper.leftCyclicShift(data[0], 24);
-            data = Helper.rotateArray(data, per);
-        }
-        for (int i = 0; i < 4; i++) {
-            data[i] -= key[36 + i];
-        }
-
-        return data;
-    }
 
     private static int[] decodeBackMixing(int[] data, int[] key) {
         for (int i = 7; i >= 0; i--) {
@@ -165,10 +166,10 @@ public class MARSEncrypter {
             }
             data[0] = Helper.leftCyclicShift(data[0], 24);
 
-            data[3] ^= S2[Helper.getByte(data[0], 4)];
-            data[2] -= S1[Helper.getByte(data[0], 3)];
-            data[1] -= S2[Helper.getByte(data[0], 2)];
-            data[1] ^= S1[Helper.getByte(data[0], 1)];
+            data[3] ^= S2[Helper.getByte(data[0], 3)];
+            data[2] -= S1[Helper.getByte(data[0], 2)];
+            data[1] -= S2[Helper.getByte(data[0], 1)];
+            data[1] ^= S1[Helper.getByte(data[0], 0)];
         }
         for (int i = 0; i < 4; i++) {
             data[i] -= key[i];
