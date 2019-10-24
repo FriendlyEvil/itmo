@@ -7,6 +7,7 @@ public class MARS {
     }
 
     public int[] decode(int[] mas, int[] key) {
+        MARSEncrypter.decode(mas, key);
         return input;
     }
 }

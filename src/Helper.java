@@ -24,7 +24,6 @@ public class Helper {
     }
 
     public static int mask(int w) {
-
         int M = 0;
         int ones = (1 << 10) - 1;
         int d = 1;
@@ -43,16 +42,5 @@ public class Helper {
             ++d;
         }
         return M;
-    }
-
-    public static void main(String[] args) {
-
-        int integer1 = Integer.valueOf("10100000000000011111111111110001", 2);
-//        int integer1 = (int) Integer.valueOf("1111111111111111111111", 2);
-//        Integer integer1 = Math.toIntExact(Long.valueOf("1101_0000_0000_0000_1111_1111_1111_1000", 2));
-
-//        Integer integer1 = Integer.valueOf("00011111111111110000000000001011", 2);
-//        System.out.println(Integer.toBinaryString(mask(integer1)));
-        System.out.println(Integer.toBinaryString(integer1));
     }
 }
