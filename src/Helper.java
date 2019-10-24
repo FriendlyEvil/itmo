@@ -32,7 +32,7 @@ public class Helper {
             int zerosOrOnes = (ones << d) & w;
             if (zerosOrOnes == 0 || zerosOrOnes == (ones << d)) {
                 ++d;
-                var dd = zerosOrOnes > 0;
+                boolean dd = zerosOrOnes > 0;
                 while (d < 32 && ((1 << d) > 0) == dd) {
                     M |= 1 << d;
                     ++d;

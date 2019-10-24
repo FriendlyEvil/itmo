@@ -72,9 +72,9 @@ public class MARSEncrypter {
             data = Helper.rotateArray(data, new int[]{3, 0, 1, 2});
             data[0] = Helper.rightCyclicShift(data[0], 24);
 
-            data[3] ^= S1[Helper.getByte(data[0], 1)];
-            data[2] += S2[Helper.getByte(data[0], 2)];
-            data[1] += S1[Helper.getByte(data[0], 3)];
+            data[3] ^= S1[Helper.getByte(data[0], 3)];
+            data[2] -= S2[Helper.getByte(data[0], 2)];
+            data[1] -= S1[Helper.getByte(data[0], 1)];
             data[1] ^= S2[Helper.getByte(data[0], 0)];
 
             if (i == 2 || i == 6) {
@@ -105,7 +105,7 @@ public class MARSEncrypter {
         }
     }
 
-    int[] code(int[] val, int[] k) {
+    public static int[] code(int[] val, int[] k) {
         int[] key = keyExpansion(k);
         int[] a = Arrays.copyOf(val, val.length);
         directMixing(a, key);
@@ -114,7 +114,7 @@ public class MARSEncrypter {
         return a;
     }
 
-    int[] decode(int[] val, int[] k) {
+    public static int[] decode(int[] val, int[] k) {
         int[] key = keyExpansion(k);
         int[] a = Arrays.copyOf(val, val.length);
         decodeDirectMixing(a, key);
@@ -144,10 +144,32 @@ public class MARSEncrypter {
         }
     }
 
+//    private static void decodeBackMixing(int[] data, int[] key) {
+//        for (int i = 7; i >= 0; i--) {
+//            data = Helper.rotateArray(data, new int[]{1, 2, 3, 0});
+//
+//            data[0] = Helper.leftCyclicShift(data[0], 24);
+//
+//            data[3] ^= S1[Helper.getByte(data[0], 1)];
+//            data[3] += S2[Helper.getByte(data[0], 2)];
+//            data[2] += S1[Helper.getByte(data[0], 3)];
+//            data[1] ^= S2[Helper.getByte(data[0], 0)];
+//
+//            if (i == 2 || i == 6) {
+//                data[0] += data[3];
+//            } else if (i == 3 || i == 7) {
+//                data[0] += data[1];
+//            }
+//        }
+//        for (int i = 0; i < 4; i++) {
+//            data[i] -= key[i];
+//        }
+//    }
+
 
     private static int[] EFunction(int value, int key1, int key2) {
         int M = value + key1;
-        int R = Helper.leftCyclicShift(value, 9) * key2;
+        int R = Helper.leftCyclicShift(value, 13) * key2;
         int i = Helper.getSomeBits(M, 9);
         int L;
         if (i < 256) {
@@ -166,7 +188,7 @@ public class MARSEncrypter {
         return new int[]{L, M, R};
     }
 
-    int[] keyExpansion(int[] key) {
+    private static int[] keyExpansion(int[] key) {
         int[] K = new int[40];
         int n = key.length;
         int[] T = new int[40];
@@ -175,7 +197,7 @@ public class MARSEncrypter {
         }
         T[n] = n;
         for (int i = n + 1; i <= 14; i++) {
-            T[n] = 0;
+            T[i] = 0;
         }
         for (int j = 0; j < 4; j++) {
             for (int i = 0; i < 15; i++) {
