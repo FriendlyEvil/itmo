@@ -17,7 +17,7 @@ public class Helper {
 
     public static int[] rotateArray(int[] array, int[] newPosition) {
         int[] ans = new int[array.length];
-        for (int i = 0; i < array.length; i++) {
+        for (int i = 0; i < newPosition.length; i++) {
             ans[i] = array[newPosition[i]];
         }
         return ans;

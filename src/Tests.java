@@ -4,7 +4,6 @@ import org.junit.Test;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Arrays;
 import java.util.Random;
 
 public class Tests {
@@ -15,8 +14,6 @@ public class Tests {
         MARS mars = new MARS();
         int[] code = mars.code(mas, key);
         int[] decode = mars.decode(code, key);
-        Arrays.stream(code).forEach(System.out::println);
-        Arrays.stream(decode).forEach(System.out::println);
         Assert.assertArrayEquals(decode, mas);
     }
 
@@ -51,7 +48,8 @@ public class Tests {
             }
             longs[i / 8] = value;
         }
-        int[] ints = new int[longs.length * 2];
+        int n = longs.length * 2;
+        int[] ints = new int[n];
         for (int i = 0; i < longs.length; i++) {
             ints[2 * i] = (int) (longs[i] >>> 32);
             ints[2 * i] = (int) (longs[i] & ((1L << 32) - 1));
@@ -63,6 +61,7 @@ public class Tests {
         try {
             int[] key = generateKey();
             int[] text = byteToInt(getFile(filename), false);
+            System.out.println(filename + " " + text.length);
             test(text, key);
         } catch (IOException e) {
             throw new AssertionError("File \"" + filename + "\" not found");
@@ -126,7 +125,7 @@ public class Tests {
 
     @Test
     public void smallEnglishText() {
-        testFile("test/SmallEnglishtest.txt");
+        testFile("test/SmallEnglishText.txt");
     }
 
     @Test
@@ -134,10 +133,10 @@ public class Tests {
         testFile("test/MiddleEnglishText.txt");
     }
 
-    @Test
-    public void bigEnglishText() {
-        testFile("test/BigEnglishText.txt");
-    }
+//    @Test
+//    public void bigEnglishText() {
+//        testFile("test/BigEnglishText.txt");
+//    }
 
     @Test
     public void smallRussianText() {
@@ -149,10 +148,10 @@ public class Tests {
         testFile("test/MiddleRussianText.txt");
     }
 
-    @Test
-    public void bigRussianText() {
-        testFile("test/BigRussianText.txt");
-    }
+//    @Test
+//    public void bigRussianText() {
+//        testFile("test/BigRussianText.txt");
+//    }
 
     @Test
     public void chineseText() {
