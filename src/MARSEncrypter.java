@@ -4,6 +4,26 @@ public class MARSEncrypter {
     static int[] per = new int[]{1, 2, 3, 0};
     static int[] decodePer = new int[]{3, 0, 1, 2};
 
+
+    public static int[] code(int[] val, int[] k) {
+        int[] key = keyExpansion(k);
+        int[] a = Arrays.copyOf(val, val.length);
+        directMixing(a, key);
+        cryptographicCore(a, key);
+        backMixing(a, key);
+        return a;
+    }
+
+    public static int[] decode(int[] val, int[] k) {
+        int[] key = keyExpansion(k);
+        int[] a = Arrays.copyOf(val, val.length);
+        decodeDirectMixing(a, key);
+        decodeСryptographicCore(a, key);
+        decodeBackMixing(a, key);
+        return a;
+    }
+
+
     private static void directMixing(int[] data, int[] key) {
         for (int i = 0; i < 4; i++) {
             data[i] += key[i];
@@ -147,24 +167,6 @@ public class MARSEncrypter {
         for (int i = 0; i < 4; i++) {
             data[i] -= key[i];
         }
-    }
-
-    public static int[] code(int[] val, int[] k) {
-        int[] key = keyExpansion(k);
-        int[] a = Arrays.copyOf(val, val.length);
-        directMixing(a, key);
-        cryptographicCore(a, key);
-        backMixing(a, key);
-        return a;
-    }
-
-    public static int[] decode(int[] val, int[] k) {
-        int[] key = keyExpansion(k);
-        int[] a = Arrays.copyOf(val, val.length);
-        decodeDirectMixing(a, key);
-        decodeСryptographicCore(a, key);
-        decodeBackMixing(a, key);
-        return a;
     }
 
 
