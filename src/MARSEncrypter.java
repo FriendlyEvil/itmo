@@ -8,23 +8,23 @@ public class MARSEncrypter {
     public static int[] code(int[] val, int[] k) {
         int[] key = keyExpansion(k);
         int[] a = Arrays.copyOf(val, val.length);
-        directMixing(a, key);
-        cryptographicCore(a, key);
-        backMixing(a, key);
+        a = directMixing(a, key);
+        a = cryptographicCore(a, key);
+        a = backMixing(a, key);
         return a;
     }
 
     public static int[] decode(int[] val, int[] k) {
         int[] key = keyExpansion(k);
         int[] a = Arrays.copyOf(val, val.length);
-        decodeDirectMixing(a, key);
-        decodeСryptographicCore(a, key);
-        decodeBackMixing(a, key);
+        a = decodeDirectMixing(a, key);
+        a = decodeСryptographicCore(a, key);
+        a = decodeBackMixing(a, key);
         return a;
     }
 
 
-    private static void directMixing(int[] data, int[] key) {
+    private static int[] directMixing(int[] data, int[] key) {
         for (int i = 0; i < 4; i++) {
             data[i] += key[i];
         }
@@ -44,9 +44,10 @@ public class MARSEncrypter {
             }
             data = Helper.rotateArray(data, per);
         }
+        return data;
     }
 
-    private static void decodeDirectMixing(int[] data, int[] key) {
+    private static int[] decodeDirectMixing(int[] data, int[] key) {
         for (int i = 0; i < 4; i++) {
             data[i] += key[36 + i];
         }
@@ -65,6 +66,7 @@ public class MARSEncrypter {
                 data[0] += data[1];
             }
         }
+        return data;
     }
 
     private static int[] EFunction(int value, int key1, int key2) {
@@ -88,7 +90,7 @@ public class MARSEncrypter {
         return new int[]{L, M, R};
     }
 
-    private static void cryptographicCore(int[] data, int[] key) {
+    private static int[] cryptographicCore(int[] data, int[] key) {
         for (int i = 0; i < 16; i++) {
             int[] a = EFunction(data[0], key[2 * i + 4], key[2 * i + 5]);
             int out1 = a[0];
@@ -106,9 +108,10 @@ public class MARSEncrypter {
             }
             data = Helper.rotateArray(data, per);
         }
+        return data;
     }
 
-    private static void decodeСryptographicCore(int[] data, int[] key) {
+    private static int[] decodeСryptographicCore(int[] data, int[] key) {
         for (int i = 15; i >= 0; i--) {
             data = Helper.rotateArray(data, decodePer);
             data[0] = Helper.rightCyclicShift(data[0], 13);
@@ -127,9 +130,10 @@ public class MARSEncrypter {
                 data[1] ^= out3;
             }
         }
+        return data;
     }
 
-    private static void backMixing(int[] data, int[] key) {
+    private static int[] backMixing(int[] data, int[] key) {
         for (int i = 0; i < 8; i++) {
             if (i == 2 || i == 6) {
                 data[0] -= data[3];
@@ -146,9 +150,11 @@ public class MARSEncrypter {
         for (int i = 0; i < 4; i++) {
             data[i] -= key[36 + i];
         }
+
+        return data;
     }
 
-    private static void decodeBackMixing(int[] data, int[] key) {
+    private static int[] decodeBackMixing(int[] data, int[] key) {
         for (int i = 7; i >= 0; i--) {
             data = Helper.rotateArray(data, new int[]{1, 2, 3, 0});
 
@@ -167,6 +173,8 @@ public class MARSEncrypter {
         for (int i = 0; i < 4; i++) {
             data[i] -= key[i];
         }
+
+        return data;
     }
 
 
