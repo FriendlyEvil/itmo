@@ -121,9 +121,11 @@ public class Tests {
 
     @Test
     public void randomArrayAndKey() {
-        int[] mas = generateArray();
-        int[] key = generateKey();
-        test(mas, key);
+        for (int i = 0; i < 100000; i++) {
+            int[] mas = generateArray();
+            int[] key = generateKey();
+            test(mas, key);
+        }
     }
 
     @Test
