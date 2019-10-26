@@ -1,7 +1,7 @@
 public class DES {
     public static byte[] encryptBytes(byte[] text, long key) {
         long[] message = Helper.byteToLongs(text, true);
-        for (int i = 0; i < message.length; i++) {
+        for (int i = 0; i < message.length - 1; i++) {
             message[i] = DESAlgorithm.encrypt(message[i], key);
         }
         return Helper.longToBytes(message, false);
@@ -9,7 +9,7 @@ public class DES {
 
     public static byte[] decryptBytes(byte[] text, long key) {
         long[] message = Helper.byteToLongs(text, false);
-        for (int i = 0; i < message.length; i++) {
+        for (int i = 0; i < message.length - 1; i++) {
             message[i] = DESAlgorithm.decrypt(message[i], key);
         }
         return Helper.longToBytes(message, true);

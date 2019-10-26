@@ -67,7 +67,6 @@ public class DESAlgorithm {
         R = extensionFunction(R);
         R ^= k;
         R = sBoxFunction(R);
-        R = Helper.permutation(R, p);
         return R;
     }
 
