@@ -98,8 +98,8 @@ public class MARSEncrypter {
             }
             data[1] ^= S2[Helper.getByte(data[0], 0)];
             data[2] -= S1[Helper.getByte(data[0], 3)];
-            data[3] ^= S2[Helper.getByte(data[0], 2)];
-            data[3] -= S1[Helper.getByte(data[0], 1)];
+            data[3] -= S2[Helper.getByte(data[0], 2)];
+            data[3] ^= S1[Helper.getByte(data[0], 1)];
             data[0] = Helper.leftCyclicShift(data[0], 24);
             data = Helper.rotateArray(data, per);
         }
@@ -118,9 +118,9 @@ public class MARSEncrypter {
             data = Helper.rotateArray(data, decodePer);
             data[0] = Helper.rightCyclicShift(data[0], 24);
 
-            data[3] ^= S1[Helper.getByte(data[0], 3)];
-            data[2] -= S2[Helper.getByte(data[0], 2)];
-            data[1] -= S1[Helper.getByte(data[0], 1)];
+            data[3] ^= S1[Helper.getByte(data[0], 1)];
+            data[3] += S2[Helper.getByte(data[0], 2)];
+            data[2] += S1[Helper.getByte(data[0], 3)];
             data[1] ^= S2[Helper.getByte(data[0], 0)];
 
             if (i == 2 || i == 6) {
@@ -157,7 +157,7 @@ public class MARSEncrypter {
 
     private static int[] decodeBackMixing(int[] data, int[] key) {
         for (int i = 7; i >= 0; i--) {
-            data = Helper.rotateArray(data, new int[]{1, 2, 3, 0});
+            data = Helper.rotateArray(data, new int[]{3, 0, 1, 2});
 
             if (i == 0 || i == 4) {
                 data[0] -= data[3];
@@ -182,9 +182,9 @@ public class MARSEncrypter {
     private static int[] keyExpansion(int[] key) {
         int[] K = new int[40];
         int n = key.length;
-        int[] T = new int[40];
+        int[] T = new int[15];
         for (int i = 0; i < n; i++) {
-            T[i] = key[i];
+            T[n - 1 - i] = key[i];
         }
         T[n] = n;
         for (int i = n + 1; i <= 14; i++) {
@@ -212,16 +212,13 @@ public class MARSEncrypter {
                 K[j * 10 + i] = T[4 * i % 15];
             }
         }
-        int i = 5;
-        while (i <= 35) {
-
+        for (int i = 5; i < 36; i += 2) {
             int jj = K[i] & 3;
             int w = K[i] | 3;
-            int M = Helper.mask(w);
+            int mask = Helper.mask(w);
             int p = B[jj];
             p = Helper.leftCyclicShift(p, Helper.getSomeBits(K[i - 1], 5));
-            K[i] = w ^ (p & M);
-            i += 2;
+            K[i] = w ^ (p & mask);
         }
         return K;
     }

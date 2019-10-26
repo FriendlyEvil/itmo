@@ -1,3 +1,6 @@
+import java.util.ArrayList;
+import java.util.List;
+
 public class Helper {
     public static int leftCyclicShift(int number, int shift) {
         return (number << shift) | (number >>> (32 - shift));
@@ -8,7 +11,7 @@ public class Helper {
     }
 
     public static int getByte(int number, int byteNumber) {
-        return (number << (8 * byteNumber)) & ((1 << 8) - 1);
+        return (number >> (8 * byteNumber)) & ((1 << 8) - 1);
     }
 
     public static int getSomeBits(int value, int count) {
@@ -24,23 +27,30 @@ public class Helper {
     }
 
     public static int mask(int w) {
-        int M = 0;
-        int ones = (1 << 10) - 1;
-        int d = 1;
-        while (d < 31 - 10) {
-            int zerosOrOnes = (ones << d) & w;
-            if (zerosOrOnes == 0 || zerosOrOnes == (ones << d)) {
-                ++d;
-                boolean dd = zerosOrOnes > 0;
-                while (d < 32 && ((1 << d) > 0) == dd) {
-                    M |= 1 << d;
-                    ++d;
-                }
-                --d;
-                M ^= 1 << d;
+        List<Integer> bit_reset = new ArrayList<>();
+        int last_bit = (w >> 31) & 1;
+        int num_last_bit = 1;
+        for (int pos = 30; pos >= 0; --pos) {
+            int c = (w >> pos) & 1;
+            if (c != last_bit && num_last_bit >= 10) {
+                bit_reset.add(pos + num_last_bit);
+                bit_reset.add(pos + 1);
             }
-            ++d;
+            if (c != last_bit) {
+                last_bit = c;
+                num_last_bit = 1;
+            } else {
+                ++num_last_bit;
+            }
         }
-        return M;
+        int mask = 0;
+        for (int i = 0; i < bit_reset.size(); i += 2) {
+            int r = bit_reset.get(i);
+            int l = bit_reset.get(i + 1);
+            for (int pos = l + 1; pos < r; ++pos) {
+                mask |= 1 << pos;
+            }
+        }
+        return mask;
     }
 }

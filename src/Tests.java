@@ -10,10 +10,22 @@ public class Tests {
     Random random = new Random();
     private static final int SIZE = 100;
 
+    public static String printInt(int a) {
+        String s = Integer.toBinaryString(a);
+        String white = "00000000000000000000000000000000"; //32 of '0'
+        return (white.substring(0, 32 - s.length()) + s);
+    }
+
+    private static void printArray(int[] ar) {
+        for (int i = 0; i < ar.length; i++) {
+            System.out.print(printInt(ar[i]));
+        }
+        System.out.println();
+    }
+
     private void test(int[] mas, int[] key) {
-        MARS mars = new MARS();
-        int[] code = mars.code(mas, key);
-        int[] decode = mars.decode(code, key);
+        int[] code = MARSEncrypter.code(mas, key);
+        int[] decode = MARSEncrypter.decode(code, key);
         Assert.assertArrayEquals(decode, mas);
     }
 
