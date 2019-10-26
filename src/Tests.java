@@ -7,25 +7,12 @@ import java.nio.file.Paths;
 import java.util.Random;
 
 public class Tests {
-    Random random = new Random();
+    private static final Random random = new Random();
     private static final int SIZE = 100;
 
-    public static String printInt(int a) {
-        String s = Integer.toBinaryString(a);
-        String white = "00000000000000000000000000000000"; //32 of '0'
-        return (white.substring(0, 32 - s.length()) + s);
-    }
-
-    private static void printArray(int[] ar) {
-        for (int i = 0; i < ar.length; i++) {
-            System.out.print(printInt(ar[i]));
-        }
-        System.out.println();
-    }
-
     private void test(int[] mas, int[] key) {
-        int[] code = MARSEncrypter.code(mas, key);
-        int[] decode = MARSEncrypter.decode(code, key);
+        int[] code = MARS.code(mas, key);
+        int[] decode = MARS.decode(code, key);
         Assert.assertArrayEquals(decode, mas);
     }
 
@@ -147,11 +134,6 @@ public class Tests {
         testFile("test/MiddleEnglishText.txt");
     }
 
-//    @Test
-//    public void bigEnglishText() {
-//        testFile("test/BigEnglishText.txt");
-//    }
-
     @Test
     public void smallRussianText() {
         testFile("test/SmallRussianText.txt");
@@ -161,11 +143,6 @@ public class Tests {
     public void middleRussianText() {
         testFile("test/MiddleRussianText.txt");
     }
-
-//    @Test
-//    public void bigRussianText() {
-//        testFile("test/BigRussianText.txt");
-//    }
 
     @Test
     public void chineseText() {
