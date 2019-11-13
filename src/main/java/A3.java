@@ -1,4 +1,58 @@
+import lombok.AllArgsConstructor;
+import lombok.Value;
+
 public class A3 {
+
+    public static A3Res encode(byte[] X) {
+        byte[] bits = new byte[128];
+        byte[] kc = new byte[64];
+        byte[] sres = new byte[32];
+        int s, t, x, y;
+        for (int round = 0; round < 8; round++) {
+            for (int i = 0; i < 5; i++) {
+                for (int j = 0; j < pow2(i); j++) {
+                    for (int k = 0; k < pow2(4 - i); k++) {
+                        s = k + j * pow2(5 - i);
+                        t = s + pow2(4 - i);
+                        x = (X[s] + 2 * X[t]) % pow2(9 - i);
+                        y = (2 * X[s] + X[t]) % pow2(9 - i);
+                        X[s] = (byte) table[i][x];
+                        X[t] = (byte) table[i][y];
+                    }
+                }
+            }
+            if (round != 7) {
+                for (int i = 0; i < 128; i++) {//хуй его знает так или не так, а на вики параша какая то
+                    if ((X[i >> 2] & (1 << (3 - (i & 3)))) != 0)
+                        bits[i] = 1;
+                }
+
+                for (int i = 0; i < 128; i++) {
+                    X[(i >> 3) + 16] |= bits[(i * 17) & 127] << (7 - (i & 7));
+                }
+
+
+            }
+        }
+        for (int i = 0; i < 32; i++) {
+            sres[i] = bits[96 + i];
+        }
+
+        for (int i = 0; i < 96; i++) {
+            kc[i] = sres[i];
+        }
+        return new A3Res(sres, kc);
+    }
+
+    static int pow2(int i) {
+        return 1 << i;
+    }
+
+    @Value
+    public static class A3Res {
+        byte[] SRES;
+        byte[] kc;
+    }
 
 
     static final int[] table_0 = {
@@ -74,38 +128,5 @@ public class A3 {
             10, 3, 4, 9, 6, 0, 3, 2, 5, 6, 8, 9, 11, 13, 15, 12
     };
     static final int[][] table = {table_0, table_1, table_2, table_3, table_4};
-
-    byte[] encode(byte[] X) {
-        byte[] bits = new byte[128];
-        int s, t, x, y;
-        for (int round = 0; round < 7; round++) {
-            for (int i = 0; i < 5; i++) {
-                for (int j = 0; j < pow2(i); j++) {
-                    for (int k = 0; k < pow2(4 - i); k++) {
-                        s = k + j * pow2(5 - i);
-                        t = s + pow2(4 - i);
-                        x = (X[s] + 2 * X[t]) % pow2(9 - i);
-                        y = (2 * X[s] + X[t]) % pow2(9 - i);
-                        X[s] = (byte) table[i][x];
-                        X[t] = (byte) table[i][y];
-                    }
-                }
-            }
-            for (int i = 0; i < 128; i++) {//хуй его знает так или не так, а на вики параша какая то
-                if ((X[i >> 2] & (1 << (3 - (i & 3)))) != 0)
-                    bits[i] = 1;
-            }
-            //битовая магия хуй пойми как рабоатет я эти два цикла спиздил отсюда
-            // http://git.osmocom.org/libosmocore/tree/src/gsm/comp128.c
-            for (int i = 0; i < 128; i++) {
-                X[(i >> 3) + 16] |= bits[(i * 17) & 127] << (7 - (i & 7));
-            }
-        }
-        return bits;
-    }
-
-    int pow2(int i) {
-        return 1 << i;
-    }
 
 }
