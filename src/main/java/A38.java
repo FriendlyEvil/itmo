@@ -6,8 +6,8 @@ public class A38 {
 
     public static A3Res encode(byte[] ki, byte[] rand) {
         byte[] bits = new byte[128];
-        byte[] kc = new byte[64];
-        byte[] sres = new byte[32];
+        byte[] kc = new byte[8];
+        byte[] sres = new byte[4];
         int[] X = new int[32];
         for (int i = 0; i < 16; i++) {
             X[i] = ki[i];
@@ -30,26 +30,27 @@ public class A38 {
                     }
                 }
             }
+            for (int j = 0; j < 32; j++)
+                for (int k = 0; k < 4; k++)
+                    bits[4 * j + k] = (byte) ((X[j] >> (3 - k)) & 1);
             if (round != 7) {
-                Arrays.fill(bits, (byte) 0);
-                for (int i = 0; i < 128; i++) {
-                    if ((X[i >> 2] & (1 << (3 - (i & 3)))) != 0)
-                        bits[i] = 1;
-                }
                 Arrays.fill(X, 16, 32, 0);
                 for (int i = 0; i < 128; i++) {
                     X[(i >> 3) + 16] |= bits[(i * 17) & 127] << (7 - (i & 7));
                 }
             }
         }
-        for (int i = 0; i < 32; i++) {
-            sres[i] = bits[96 + i];
+        for (int i = 0; i < 4; i++) {
+            sres[i] = (byte) ((X[2 * i] << 4) | X[2 * i + 1]);
         }
 
-        for (int i = 0; i < 64; i++) {
-            kc[i] = bits[i];
-        }
-        return new A3Res(sres, kc);
+        for (int i = 0; i < 6; i++)
+            kc[i] = (byte) ((X[2 * i + 18] << 6) | (X[2 * i + 18 + 1] << 2)
+                    | (X[2 * i + 18 + 2] >> 2));
+        kc[6] = (byte) ((X[2 * 6 + 18] << 6) | (X[2 * 6 + 18 + 1] << 2));
+        kc[7] = 0;
+
+        return new A3Res(sres, bytesToBits(kc));
     }
 
     static int pow2(int i) {
@@ -62,14 +63,24 @@ public class A38 {
         byte[] kc;
     }
 
+    public static byte[] bytesToBits(byte[] bytes) {
+        byte[] bits = new byte[bytes.length * 8];
+        for (int i = 0; i < bytes.length; i++) {
+            for (int j = 0; j < 8; j++) {
+                bits[i * 8 + j] = (byte) ((bytes[i] >> j) & 1);
+            }
+        }
+        return bits;
+    }
 
     public static byte[] bitsToBytes(byte[] bits) {
         byte[] bytes = new byte[bits.length / 8];
         for (int i = 0; i < bytes.length; i++) {
-            for (int j = 0; j < 8; j++) {
+            for (int j = 7; j >= 0; j--) {
                 bytes[i] <<= 1;
                 bytes[i] |= bits[i * 8 + j] & 1;
             }
+            System.out.println();
         }
         return bytes;
     }
