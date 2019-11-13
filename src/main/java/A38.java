@@ -1,14 +1,23 @@
-import lombok.AllArgsConstructor;
 import lombok.Value;
 
-public class A3 {
+import java.util.Arrays;
 
-    public static A3Res encode(byte[] X) {
+public class A38 {
+
+    public static A3Res encode(byte[] ki, byte[] rand) {
         byte[] bits = new byte[128];
         byte[] kc = new byte[64];
         byte[] sres = new byte[32];
+        int[] X = new int[32];
+        for (int i = 0; i < 16; i++) {
+            X[i] = ki[i];
+            X[16 + i] = rand[i];
+        }
         int s, t, x, y;
         for (int round = 0; round < 8; round++) {
+            for (int i = 0; i < 16; i++) {
+                X[i] = ki[i];
+            }
             for (int i = 0; i < 5; i++) {
                 for (int j = 0; j < pow2(i); j++) {
                     for (int k = 0; k < pow2(4 - i); k++) {
@@ -16,30 +25,29 @@ public class A3 {
                         t = s + pow2(4 - i);
                         x = (X[s] + 2 * X[t]) % pow2(9 - i);
                         y = (2 * X[s] + X[t]) % pow2(9 - i);
-                        X[s] = (byte) table[i][x];
-                        X[t] = (byte) table[i][y];
+                        X[s] = table[i][(x + table[i].length) % table[i].length];
+                        X[t] = table[i][(y + table[i].length) % table[i].length];
                     }
                 }
             }
             if (round != 7) {
-                for (int i = 0; i < 128; i++) {//хуй его знает так или не так, а на вики параша какая то
+                Arrays.fill(bits, (byte) 0);
+                for (int i = 0; i < 128; i++) {
                     if ((X[i >> 2] & (1 << (3 - (i & 3)))) != 0)
                         bits[i] = 1;
                 }
-
+                Arrays.fill(X, 16, 32, 0);
                 for (int i = 0; i < 128; i++) {
                     X[(i >> 3) + 16] |= bits[(i * 17) & 127] << (7 - (i & 7));
                 }
-
-
             }
         }
         for (int i = 0; i < 32; i++) {
             sres[i] = bits[96 + i];
         }
 
-        for (int i = 0; i < 96; i++) {
-            kc[i] = sres[i];
+        for (int i = 0; i < 64; i++) {
+            kc[i] = bits[i];
         }
         return new A3Res(sres, kc);
     }
@@ -54,6 +62,17 @@ public class A3 {
         byte[] kc;
     }
 
+
+    public static byte[] bitsToBytes(byte[] bits) {
+        byte[] bytes = new byte[bits.length / 8];
+        for (int i = 0; i < bytes.length; i++) {
+            for (int j = 0; j < 8; j++) {
+                bytes[i] <<= 1;
+                bytes[i] |= bits[i * 8 + j] & 1;
+            }
+        }
+        return bytes;
+    }
 
     static final int[] table_0 = {
             102, 177, 186, 162, 2, 156, 112, 75, 55, 25, 8, 12, 251, 193, 246, 188,
