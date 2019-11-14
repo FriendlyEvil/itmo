@@ -1,5 +1,3 @@
-import java.util.Arrays;
-
 public class A5 {
     private static int first = (1 << 18) + (1 << 17) + (1 << 16) + (1 << 13);
     private static int second = (1 << 21) + (1 << 20);
@@ -9,21 +7,7 @@ public class A5 {
     private static int secondLen = 22;
     private static int thirdLen = 23;
 
-
-    public static void main(String[] args) {
-        byte[] key = new byte[]{0x12, 0x23, 0x45, 0x67, -0x9, -0x2B, -0x4D, -0x6F};
-        key = A38.bytesToBits(key);
-        byte[] frame = new byte[]{0x00, 0x01, 0x34};
-        frame = A38.bytesToBits(frame);
-        byte[] ans1 = new byte[114];
-        byte[] ans2 = new byte[114];
-        a5(key, frame, ans1, ans2);
-
-        System.out.println(Arrays.toString(A38.bitsToBytes(ans1)));
-        System.out.println(Arrays.toString(A38.bitsToBytes(ans2)));
-    }
-
-    public static void a5(byte[] key, byte[] frame, byte[] dec, byte[] enc) {
+    public static void a5(byte[] key, byte[] frame, byte[] input, byte[] output) {
         int[] r = new int[]{0, 0, 0};
 
         for (int i = 0; i < 64; i++) {
@@ -43,17 +27,17 @@ public class A5 {
         }
 
         for (int i = 0; i < 100; i++) {
-            clockFunction(r);
+            clock(r);
         }
 
 
         for (int i = 0; i < 114; i++) {
-            clockFunction(r);
-            dec[i] = getOutput(r);
+            clock(r);
+            input[i] = getOutput(r);
         }
         for (int i = 0; i < 114; i++) {
-            clockFunction(r);
-            enc[i] = getOutput(r);
+            clock(r);
+            output[i] = getOutput(r);
         }
     }
 
@@ -61,21 +45,21 @@ public class A5 {
         return (byte) ((r[0] >> (firstLen - 1)) ^ (r[1] >> (secondLen - 1)) ^ (r[2] >> (thirdLen - 1)));
     }
 
-    private static int getFristBit(int r, int mask) {
+    private static int getFirstBit(int r, int mask) {
         int res = 0;
         for (int i = 0; i < 32; i++) {
             if (((mask >> i) & 1) == 1) {
-                res ^= (r >> i);
+                res ^= (r >> i) & 1;
             }
         }
         return res & 1;
     }
 
-    private static int rotate(int r, int len, int polynom) {
-        return ((r << 1) & ((1 << len) - 1)) | getFristBit(r, polynom);
+    static int rotate(int r, int len, int mask) {
+        return ((r << 1) & ((1 << len) - 1)) | getFirstBit(r, mask);
     }
 
-    private static void clockFunction(int[] r) {
+    private static void clock(int[] r) {
         int[] clBits = getClockingBits(r);
         int majority = (clBits[0] & clBits[1]) | (clBits[0] & clBits[2]) | (clBits[1] & clBits[2]);
 
