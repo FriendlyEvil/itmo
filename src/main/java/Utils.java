@@ -5,7 +5,7 @@ public class Utils {
         byte[] bits = new byte[bytes.length * 8];
         for (int i = 0; i < bytes.length; i++) {
             for (int j = 0; j < 8; j++) {
-                bits[i * 8 + j] = (byte) ((bytes[i] >> j) & 1);
+                bits[i * 8 + j] = (byte) ((bytes[i] >>> j) & 1);
             }
         }
         return bits;

@@ -12,7 +12,7 @@ public class A5 {
 
         for (int i = 0; i < 64; i++) {
             int keyBit = key[i];
-            clockAll(r);
+            shiftAll(r);
             r[0] ^= keyBit;
             r[1] ^= keyBit;
             r[2] ^= keyBit;
@@ -20,7 +20,7 @@ public class A5 {
 
         for (int i = 0; i < 22; i++) {
             int bt = frame[i];
-            clockAll(r);
+            shiftAll(r);
             r[1] ^= bt;
             r[0] ^= bt;
             r[2] ^= bt;
@@ -74,7 +74,7 @@ public class A5 {
         }
     }
 
-    private static void clockAll(int[] r) {
+    private static void shiftAll(int[] r) {
         r[0] = rotate(r[0], firstLen, first);
         r[1] = rotate(r[1], secondLen, second);
         r[2] = rotate(r[2], thirdLen, third);
