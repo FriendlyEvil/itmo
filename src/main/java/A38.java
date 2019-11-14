@@ -4,7 +4,7 @@ import java.util.Arrays;
 
 public class A38 {
 
-    public static A3Res encode(byte[] ki, byte[] rand) {
+    public static A38Res encode(byte[] ki, byte[] rand) {
         byte[] bits = new byte[128];
         byte[] kc = new byte[8];
         byte[] sres = new byte[4];
@@ -50,7 +50,7 @@ public class A38 {
         kc[6] = (byte) ((X[2 * 6 + 18] << 6) | (X[2 * 6 + 18 + 1] << 2));
         kc[7] = 0;
 
-        return new A3Res(sres, Utils.bytesToBits(kc));
+        return new A38Res(sres, bytesToBits(kc));
     }
 
     static int pow2(int i) {
@@ -58,9 +58,30 @@ public class A38 {
     }
 
     @Value
-    public static class A3Res {
+    public static class A38Res {
         byte[] SRES;
         byte[] kc;
+    }
+
+    public static byte[] bytesToBits(byte[] bytes) {
+        byte[] bits = new byte[bytes.length * 8];
+        for (int i = 0; i < bytes.length; i++) {
+            for (int j = 0; j < 8; j++) {
+                bits[i * 8 + j] = (byte) ((bytes[i] >> j) & 1);
+            }
+        }
+        return bits;
+    }
+
+    public static byte[] bitsToBytes(byte[] bits) {
+        byte[] bytes = new byte[bits.length / 8];
+        for (int i = 0; i < bytes.length; i++) {
+            for (int j = 7; j >= 0; j--) {
+                bytes[i] <<= 1;
+                bytes[i] |= bits[i * 8 + j] & 1;
+            }
+        }
+        return bytes;
     }
 
     static final int[] table_0 = {
