@@ -9,15 +9,15 @@ public class A38Test {
     private static final char[] HEX_ARRAY = "0123456789ABCDEF".toCharArray();
     private static Random random = new Random(0);
 
-    public static void main(String[] args) {
-        System.out.println("Type Ki: ");
-        byte[] ki = read16ByteArray();
-        System.out.println("SRES" + Arrays.toString(ki));
-        byte[] rand = randombytes(16);
-        A38.A38Res res = A38.encode(ki, rand);
-
-        System.out.print("SRES" + Arrays.toString(res.getSRES()));
-    }
+//    public static void main(String[] args) {
+//        System.out.println("Type Ki: ");
+//        byte[] ki = read16ByteArray();
+//        System.out.println("SRES" + Arrays.toString(ki));
+//        byte[] rand = randombytes(16);
+//        A38.A38Res res = A38.encode(ki, rand);
+//
+//        System.out.print("SRES" + Arrays.toString(res.getSRES()));
+//    }
 
     private static void printByteArray(byte[] ar) {
         for (byte b : ar) {
@@ -58,7 +58,7 @@ public class A38Test {
         byte[] bytes = new byte[16];
         Arrays.fill(bytes, (byte) 0);
         byte[] sres = A38.encode(bytes, bytes).getSRES();
-        byte[] kc = A38.bitsToBytes(A38.encode(bytes, bytes).getKc());
+        byte[] kc = Utils.bitsToBytes(A38.encode(bytes, bytes).getKc());
         Assert.assertArrayEquals(new byte[]{9, -27, 93, -92}, sres);
         Assert.assertArrayEquals(new byte[]{23, 71, 87, 120, 61, -60, 4, 0}, kc);
     }
@@ -70,7 +70,7 @@ public class A38Test {
 
         A38.A38Res encode = A38.encode(key, rand);
         byte[] sres = encode.getSRES();
-        byte[] kc = A38.bitsToBytes(encode.getKc());
+        byte[] kc = Utils.bitsToBytes(encode.getKc());
         Assert.assertArrayEquals(new byte[]{-107, -39, -14, 9}, sres);
         Assert.assertArrayEquals(new byte[]{-118, -116, -10, 126, 98, 45, 28, 0}, kc);
     }
