@@ -1,4 +1,3 @@
-import lombok.AllArgsConstructor;
 import lombok.Value;
 
 import java.math.BigInteger;
@@ -18,6 +17,7 @@ public class RSA {
 
     private final Pair openKey; //open key (e, n)
     private final Pair privateKey; //closed key (d, n)
+    private final MontgomeryMultiplication multiplicator;
 
     public RSA() {
         BigInteger p = genRandomPrimeNum();
@@ -32,6 +32,7 @@ public class RSA {
 
         openKey = new Pair(e, n);
         privateKey = new Pair(d, n);
+        multiplicator = new MontgomeryMultiplication(n);
 
         System.out.println("Open key = {\n" + TAB + "e = " + openKey.first + "\n" + TAB + "n = " + openKey.getSecond() + "\n}");
         System.out.println("Private key = {\n" + TAB + "d = " + privateKey.first + "\n" + TAB + "n = " + privateKey.getSecond() + "\n}");
@@ -43,14 +44,15 @@ public class RSA {
         BigInteger n = openKey.getSecond();
         BigInteger pow = getPowForPartMessage(openKey);
 
+        MontgomeryMultiplication multiplicator = new MontgomeryMultiplication(openKey.second);
         while (m.compareTo(n) > 0) {
             BigInteger nextMessagePart = m.mod(pow);
 //            ans.add(nextMessagePart.modPow(openKey.first, openKey.second));
-            ans.add(MontgomeryMultiplication.modPow(nextMessagePart, openKey.first, openKey.second));
+            ans.add(multiplicator.modPow(nextMessagePart, openKey.first, openKey.second));
             m = m.divide(pow);
         }
 //        ans.add(m.modPow(openKey.first, openKey.second));
-        ans.add(MontgomeryMultiplication.modPow(m, openKey.first, openKey.second));
+        ans.add(multiplicator.modPow(m, openKey.first, openKey.second));
         return ans;
     }
 
@@ -60,7 +62,7 @@ public class RSA {
         BigInteger ans = BigInteger.ZERO;
         for (int i = m.size() - 1; i >= 0; i--) {
 //            BigInteger tempPart = m.get(i).modPow(privateKey.first, privateKey.second);
-            BigInteger tempPart = MontgomeryMultiplication.modPow(m.get(i), privateKey.first, privateKey.second);
+            BigInteger tempPart = multiplicator.modPow(m.get(i), privateKey.first, privateKey.second);
             ans = ans.multiply(pow).add(tempPart);
         }
 
