@@ -1,3 +1,6 @@
+import lombok.AllArgsConstructor;
+import lombok.Value;
+
 import java.math.BigInteger;
 import java.security.SecureRandom;
 
@@ -8,7 +11,12 @@ public class RSA {
     private static final SecureRandom random = new SecureRandom();
     private static final int BITS = 512;
 
-    public static void main(String[] args) {
+    private static final String TAB = "    ";
+
+    private final Pair openKey; //open key (e, n)
+    private final Pair privateKey; //closed key (d, n)
+
+    public RSA() {
         BigInteger p = genRandomPrimeNum();
         BigInteger q = genRandomPrimeNum();
         BigInteger n = p.multiply(q);
@@ -16,20 +24,22 @@ public class RSA {
         BigInteger e = chooseE(phi_n);
         BigInteger d = e.modInverse(phi_n);
 
-        //open key (e, n)
-        //closed key (d, n)
+        System.out.println("First prime number = " + p);
+        System.out.println("Second prime number = " + q);
+
+        openKey = new Pair(e, n);
+        privateKey = new Pair(d, n);
+
+        System.out.println("Open key = {\n" + TAB + "e = "+ openKey.first + "\n" + TAB + "n = " + openKey.getSecond() +  "\n}");
+        System.out.println("Private key = {\n" + TAB + "d = "+ privateKey.first + "\n" + TAB + "n = " + privateKey.getSecond() +  "\n}");
     }
 
-
-    public static BigInteger encode(BigInteger m) {
-        //TODO
-        return null;
+    public static BigInteger encode(BigInteger m, Pair openKey) {
+        return m.modPow(openKey.first, openKey.second);
     }
 
-
-    public static BigInteger decode(BigInteger m) {
-        //TODO
-        return null;
+    public BigInteger decode(BigInteger m) {
+        return m.modPow(privateKey.first, privateKey.second);
     }
 
     private static BigInteger chooseE(BigInteger phi_n) {
@@ -55,5 +65,15 @@ public class RSA {
         //TODO
         /** returns {@link BITS}-bits prime number*/
         return BigInteger.probablePrime(BITS, random);
+    }
+
+    public Pair getOpenKey() {
+        return openKey;
+    }
+
+    @Value
+    public class Pair {
+        BigInteger first;
+        BigInteger second;
     }
 }
