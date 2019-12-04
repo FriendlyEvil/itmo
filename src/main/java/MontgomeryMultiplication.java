@@ -3,13 +3,12 @@ import java.math.BigInteger;
 import static java.math.BigInteger.ONE;
 
 public class MontgomeryMultiplication {
-    BigInteger r;
-    BigInteger r_;
-    BigInteger n_sh;
+    private final BigInteger r;
+    private final BigInteger n_sh;
 
     MontgomeryMultiplication(BigInteger n) {
         r = BigInteger.valueOf(1).shiftLeft(n.bitLength() + 1);
-        r_ = r.modInverse(n);
+        BigInteger r_ = r.modInverse(n);
         n_sh = r.multiply(r_).subtract(ONE).divide(n);
     }
 

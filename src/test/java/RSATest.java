@@ -16,14 +16,17 @@ public class RSATest {
     public void before() {
         server = new RSA();
         openKey = server.getOpenKey();
+
     }
 
     private void textTest(String message) {
         System.out.println("Test with message = \"" + message + '"');
         BigInteger mess = new BigInteger(message.getBytes());
+        System.out.println("Message in number type = " + mess);
 
         List<BigInteger> encodeMessage = RSA.encode(mess, openKey);
         BigInteger decodeMessage = server.decode(encodeMessage);
+
 
         Assert.assertEquals(new String(decodeMessage.toByteArray()), message);
     }

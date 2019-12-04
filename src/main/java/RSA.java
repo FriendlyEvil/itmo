@@ -53,19 +53,17 @@ public class RSA {
         MontgomeryMultiplication multiplicator = new MontgomeryMultiplication(openKey.second);
         while (m.compareTo(n) > 0) {
             BigInteger nextMessagePart = m.mod(pow);
-//            ans.add(nextMessagePart.modPow(openKey.first, openKey.second));
             ans.add(nextMessagePart);
             m = m.divide(pow);
         }
         for (int i = 0; i < ans.size(); i++) {
-            int ii = i;
+            int j = i;
             executorService.submit(() -> {
-                ans.set(ii, multiplicator.modPow(ans.get(ii), openKey.first, openKey.second));
+                ans.set(j, multiplicator.modPow(ans.get(j), openKey.first, openKey.second));
             });
         }
         executorService.shutdown();
         executorService.awaitTermination(10000, TimeUnit.DAYS);
-//        ans.add(m.modPow(openKey.first, openKey.second));
         ans.add(multiplicator.modPow(m, openKey.first, openKey.second));
         return ans;
     }
@@ -77,9 +75,9 @@ public class RSA {
 
         BigInteger ans = BigInteger.ZERO;
         for (int i = m.size() - 1; i >= 0; i--) {
-            int ii = i;
+            int j = i;
             executorService.submit(() -> {
-                m.set(ii, multiplicator.modPow(m.get(ii), privateKey.first, privateKey.second));
+                m.set(j, multiplicator.modPow(m.get(j), privateKey.first, privateKey.second));
             });
         }
         executorService.shutdown();
@@ -117,8 +115,6 @@ public class RSA {
     }
 
     private static BigInteger genRandomPrimeNum() {
-        //TODO
-        /** returns {@link BITS}-bits prime number*/
         return BigInteger.probablePrime(BITS, random);
     }
 
@@ -127,7 +123,7 @@ public class RSA {
     }
 
     @Value
-    public class Pair {
+    public static class Pair {
         BigInteger first;
         BigInteger second;
     }
