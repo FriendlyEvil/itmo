@@ -16,16 +16,23 @@ import static java.math.BigInteger.TWO;
 public class RSA {
     private static final SecureRandom random = new SecureRandom();
     private static final int BITS = 512;
-
+    BigInteger p;
+    BigInteger q;
+    BigInteger p_inv;
+    BigInteger q_inv;
     private static final String TAB = "    ";
 
     private final Pair openKey; //open key (e, n)
     private final Pair privateKey; //closed key (d, n)
-    private final MontgomeryMultiplication multiplicator;
+    private final MontgomeryMultiplication multiplicatorP;
+    private final MontgomeryMultiplication multiplicatorQ;
 
     public RSA() {
-        BigInteger p = genRandomPrimeNum();
-        BigInteger q = genRandomPrimeNum();
+        p = genRandomPrimeNum();
+        q = genRandomPrimeNum();
+
+        p_inv = q.modInverse(p);
+        q_inv = p.modInverse(q);
         BigInteger n = p.multiply(q);
         BigInteger phi_n = p.subtract(ONE).multiply(q.subtract(ONE));
         BigInteger e = chooseE(phi_n);
@@ -36,7 +43,8 @@ public class RSA {
 
         openKey = new Pair(e, n);
         privateKey = new Pair(d, n);
-        multiplicator = new MontgomeryMultiplication(n);
+        multiplicatorP = new MontgomeryMultiplication(p);
+        multiplicatorQ = new MontgomeryMultiplication(q);
 
         System.out.println("Open key = {\n" + TAB + "e = " + openKey.first + "\n" + TAB + "n = " + openKey.getSecond() + "\n}");
         System.out.println("Private key = {\n" + TAB + "d = " + privateKey.first + "\n" + TAB + "n = " + privateKey.getSecond() + "\n}");
@@ -78,7 +86,12 @@ public class RSA {
         for (int i = m.size() - 1; i >= 0; i--) {
             int j = i;
             executorService.submit(() -> {
-                m.set(j, multiplicator.modPow(m.get(j), privateKey.first, privateKey.second));
+                BigInteger rP = multiplicatorP.modPow(m.get(j), privateKey.first, p);
+                BigInteger rQ = multiplicatorQ.modPow(m.get(j), privateKey.first, q);
+                BigInteger x1 = rP.multiply(q).multiply(p_inv);
+                BigInteger x2 = rQ.multiply(p).multiply(q_inv);
+
+                m.set(j, x1.add(x2).mod(privateKey.second));
             });
         }
         executorService.shutdown();
