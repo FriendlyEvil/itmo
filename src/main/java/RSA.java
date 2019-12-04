@@ -3,8 +3,11 @@ import lombok.Value;
 
 import java.math.BigInteger;
 import java.security.SecureRandom;
+import java.util.ArrayList;
+import java.util.List;
 
 import static java.math.BigInteger.ONE;
+import static java.math.BigInteger.TWO;
 
 
 public class RSA {
@@ -30,16 +33,42 @@ public class RSA {
         openKey = new Pair(e, n);
         privateKey = new Pair(d, n);
 
-        System.out.println("Open key = {\n" + TAB + "e = "+ openKey.first + "\n" + TAB + "n = " + openKey.getSecond() +  "\n}");
-        System.out.println("Private key = {\n" + TAB + "d = "+ privateKey.first + "\n" + TAB + "n = " + privateKey.getSecond() +  "\n}");
+        System.out.println("Open key = {\n" + TAB + "e = " + openKey.first + "\n" + TAB + "n = " + openKey.getSecond() + "\n}");
+        System.out.println("Private key = {\n" + TAB + "d = " + privateKey.first + "\n" + TAB + "n = " + privateKey.getSecond() + "\n}");
     }
 
-    public static BigInteger encode(BigInteger m, Pair openKey) {
-        return m.modPow(openKey.first, openKey.second);
+    public static List<BigInteger> encode(BigInteger m, Pair openKey) {
+        List<BigInteger> ans = new ArrayList<>();
+
+        BigInteger n = openKey.getSecond();
+        BigInteger pow = getPowForPartMessage(openKey);
+
+        while (m.compareTo(n) > 0) {
+            BigInteger nextMessagePart = m.mod(pow);
+            ans.add(nextMessagePart.modPow(openKey.first, openKey.second));
+            m = m.divide(pow);
+        }
+        ans.add(m.modPow(openKey.first, openKey.second));
+
+        return ans;
     }
 
-    public BigInteger decode(BigInteger m) {
-        return m.modPow(privateKey.first, privateKey.second);
+    public BigInteger decode(List<BigInteger> m) {
+        BigInteger pow = getPowForPartMessage(openKey);
+
+        BigInteger ans = BigInteger.ZERO;
+        for (int i = m.size() - 1; i >= 0; i--) {
+            BigInteger tempPart = m.get(i).modPow(privateKey.first, privateKey.second);
+            ans = ans.multiply(pow).add(tempPart);
+        }
+
+        return ans;
+    }
+
+    private static BigInteger getPowForPartMessage(Pair pair) {
+        BigInteger n = pair.getSecond();
+        int len = n.bitLength() - 5;
+        return TWO.pow(len);
     }
 
     private static BigInteger chooseE(BigInteger phi_n) {
