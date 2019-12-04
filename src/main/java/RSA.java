@@ -51,10 +51,11 @@ public class RSA {
         ExecutorService executorService = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
 
         MontgomeryMultiplication multiplicator = new MontgomeryMultiplication(openKey.second);
+        BigInteger ones = ONE.shiftLeft(pow.bitLength() - 1).subtract(ONE);
         while (m.compareTo(n) > 0) {
-            BigInteger nextMessagePart = m.mod(pow);
+            BigInteger nextMessagePart = m.and(ones);
             ans.add(nextMessagePart);
-            m = m.divide(pow);
+            m = m.shiftRight(pow.bitLength() - 1);
         }
         for (int i = 0; i < ans.size(); i++) {
             int j = i;
@@ -64,6 +65,7 @@ public class RSA {
         }
         executorService.shutdown();
         executorService.awaitTermination(10000, TimeUnit.DAYS);
+//        ans.add(m.modPow(openKey.first, openKey.second));
         ans.add(multiplicator.modPow(m, openKey.first, openKey.second));
         return ans;
     }
@@ -115,6 +117,8 @@ public class RSA {
     }
 
     private static BigInteger genRandomPrimeNum() {
+        //TODO
+        /** returns {@link BITS}-bits prime number*/
         return BigInteger.probablePrime(BITS, random);
     }
 
