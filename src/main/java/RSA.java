@@ -45,11 +45,12 @@ public class RSA {
 
         while (m.compareTo(n) > 0) {
             BigInteger nextMessagePart = m.mod(pow);
-            ans.add(nextMessagePart.modPow(openKey.first, openKey.second));
+//            ans.add(nextMessagePart.modPow(openKey.first, openKey.second));
+            ans.add(MontgomeryMultiplication.modPow(nextMessagePart, openKey.first, openKey.second));
             m = m.divide(pow);
         }
-        ans.add(m.modPow(openKey.first, openKey.second));
-
+//        ans.add(m.modPow(openKey.first, openKey.second));
+        ans.add(MontgomeryMultiplication.modPow(m, openKey.first, openKey.second));
         return ans;
     }
 
@@ -58,7 +59,8 @@ public class RSA {
 
         BigInteger ans = BigInteger.ZERO;
         for (int i = m.size() - 1; i >= 0; i--) {
-            BigInteger tempPart = m.get(i).modPow(privateKey.first, privateKey.second);
+//            BigInteger tempPart = m.get(i).modPow(privateKey.first, privateKey.second);
+            BigInteger tempPart = MontgomeryMultiplication.modPow(m.get(i), privateKey.first, privateKey.second);
             ans = ans.multiply(pow).add(tempPart);
         }
 
