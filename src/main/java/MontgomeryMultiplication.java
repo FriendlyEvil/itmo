@@ -11,13 +11,14 @@ public class MontgomeryMultiplication {
         r = BigInteger.valueOf(1).shiftLeft(n.bitLength() + 1);
         BigInteger r_ = r.modInverse(n);
         n_sh = r.multiply(r_).subtract(ONE).divide(n);
+        oneBits = ONE.shiftLeft(r.bitLength()).subtract(ONE);
     }
 
     private BigInteger monPro(BigInteger a, BigInteger b, BigInteger n) {
         BigInteger t = a.multiply(b);
         BigInteger u = (t.add(t.multiply(n_sh).and(oneBits).multiply(n))).shiftRight(r.bitLength() - 1);
         while (u.compareTo(n) >= 0) {
-            u = u.mod(n);
+            u = u.subtract(n);
         }
         return u;
     }

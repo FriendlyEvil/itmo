@@ -65,7 +65,6 @@ public class RSA {
         }
         executorService.shutdown();
         executorService.awaitTermination(10000, TimeUnit.DAYS);
-//        ans.add(m.modPow(openKey.first, openKey.second));
         ans.add(multiplicator.modPow(m, openKey.first, openKey.second));
         return ans;
     }
@@ -85,7 +84,7 @@ public class RSA {
         executorService.shutdown();
         executorService.awaitTermination(10000, TimeUnit.DAYS);
         for (int i = m.size() - 1; i >= 0; i--) {
-            ans = ans.multiply(pow).add(m.get(i));
+            ans = ans.shiftLeft(pow.bitLength() - 1).add(m.get(i));
         }
 
         return ans;
@@ -94,7 +93,7 @@ public class RSA {
     private static BigInteger getPowForPartMessage(Pair pair) {
         BigInteger n = pair.getSecond();
         int len = n.bitLength() - 5;
-        return TWO.pow(len);
+        return ONE.shiftLeft(len);
     }
 
     private static BigInteger chooseE(BigInteger phi_n) {
@@ -117,8 +116,6 @@ public class RSA {
     }
 
     private static BigInteger genRandomPrimeNum() {
-        //TODO
-        /** returns {@link BITS}-bits prime number*/
         return BigInteger.probablePrime(BITS, random);
     }
 
