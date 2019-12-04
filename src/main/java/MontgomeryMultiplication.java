@@ -27,25 +27,34 @@ public class MontgomeryMultiplication {
     }
 
     static BigInteger monPro(BigInteger a, BigInteger b, BigInteger n) {
-        BigInteger r = BigInteger.valueOf(1).shiftLeft(n.bitLength() + 1);
-        BigInteger[] r_inv = new BigInteger[1];
-        BigInteger[] n_sh = new BigInteger[1];
+//        BigInteger[] r_inv = new BigInteger[1];
+//        BigInteger[] n_sh = new BigInteger[1];
 //        BigIntEuclidean calculate = BigIntEuclidean.calculate(r, n);
 
-        Tuple gcd = gcd(r, n, r_inv, n_sh);
+//        Tuple gcd = gcd(r, n, r_inv, n_sh);
 //        r_inv[0] = calculate.x;
 //        n_sh[0] = calculate.y;
-        n_sh[0] = n_sh[0].multiply(BigInteger.valueOf(-1));
+//        n_sh[0] = n_sh[0].multiply(BigInteger.valueOf(-1));
         BigInteger t = a.multiply(b);
-        BigInteger u = (t.add(t.multiply(n_sh[0]).mod(r).multiply(n))).divide(r);
+        BigInteger u = (t.add(t.multiply(n_sh).and(ONE.shiftLeft(n.bitLength() + 1).subtract(ONE)).multiply(n))).shiftRight(n.bitLength() + 1);
         while (u.compareTo(n) >= 0) {
             u = u.mod(n);
         }
         return u;
+//        return a.multiply(b).multiply(r_).mod(n);
     }
 
+    static BigInteger r_ = null;
+    static BigInteger n_sh = null;
+
     static BigInteger modPow(BigInteger a, BigInteger e, BigInteger n) {
+        if (r_ == null) {
+            r_ = BigInteger.valueOf(1).shiftLeft(n.bitLength() + 1).modInverse(n);
+        }
         BigInteger r = BigInteger.valueOf(1).shiftLeft(n.bitLength() + 1);
+        if (n_sh == null) {
+            n_sh = r.multiply(r_).subtract(ONE).divide(n);
+        }
         a = a.multiply(r).mod(n);
         BigInteger x = r.mod(n);
         for (int i = e.bitLength() - 1; i >= 0; i--) {
