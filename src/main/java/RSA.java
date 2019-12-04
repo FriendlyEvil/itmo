@@ -1,9 +1,13 @@
+import lombok.SneakyThrows;
 import lombok.Value;
 
 import java.math.BigInteger;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import static java.math.BigInteger.ONE;
 import static java.math.BigInteger.TWO;
@@ -38,32 +42,50 @@ public class RSA {
         System.out.println("Private key = {\n" + TAB + "d = " + privateKey.first + "\n" + TAB + "n = " + privateKey.getSecond() + "\n}");
     }
 
+    @SneakyThrows
     public static List<BigInteger> encode(BigInteger m, Pair openKey) {
         List<BigInteger> ans = new ArrayList<>();
 
         BigInteger n = openKey.getSecond();
         BigInteger pow = getPowForPartMessage(openKey);
+        ExecutorService executorService = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
 
         MontgomeryMultiplication multiplicator = new MontgomeryMultiplication(openKey.second);
         while (m.compareTo(n) > 0) {
             BigInteger nextMessagePart = m.mod(pow);
 //            ans.add(nextMessagePart.modPow(openKey.first, openKey.second));
-            ans.add(multiplicator.modPow(nextMessagePart, openKey.first, openKey.second));
+            ans.add(nextMessagePart);
             m = m.divide(pow);
         }
+        for (int i = 0; i < ans.size(); i++) {
+            int ii = i;
+            executorService.submit(() -> {
+                ans.set(ii, multiplicator.modPow(ans.get(ii), openKey.first, openKey.second));
+            });
+        }
+        executorService.shutdown();
+        executorService.awaitTermination(10000, TimeUnit.DAYS);
 //        ans.add(m.modPow(openKey.first, openKey.second));
         ans.add(multiplicator.modPow(m, openKey.first, openKey.second));
         return ans;
     }
 
+    @SneakyThrows
     public BigInteger decode(List<BigInteger> m) {
         BigInteger pow = getPowForPartMessage(openKey);
+        ExecutorService executorService = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
 
         BigInteger ans = BigInteger.ZERO;
         for (int i = m.size() - 1; i >= 0; i--) {
-//            BigInteger tempPart = m.get(i).modPow(privateKey.first, privateKey.second);
-            BigInteger tempPart = multiplicator.modPow(m.get(i), privateKey.first, privateKey.second);
-            ans = ans.multiply(pow).add(tempPart);
+            int ii = i;
+            executorService.submit(() -> {
+                m.set(ii, multiplicator.modPow(m.get(ii), privateKey.first, privateKey.second));
+            });
+        }
+        executorService.shutdown();
+        executorService.awaitTermination(10000, TimeUnit.DAYS);
+        for (int i = m.size() - 1; i >= 0; i--) {
+            ans = ans.multiply(pow).add(m.get(i));
         }
 
         return ans;
