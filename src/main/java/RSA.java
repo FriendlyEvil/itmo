@@ -90,7 +90,6 @@ public class RSA {
                 BigInteger rQ = multiplicatorQ.modPow(m.get(j), privateKey.first, q);
                 BigInteger x1 = rP.multiply(q).multiply(p_inv);
                 BigInteger x2 = rQ.multiply(p).multiply(q_inv);
-
                 m.set(j, x1.add(x2).mod(privateKey.second));
             });
         }
@@ -105,7 +104,7 @@ public class RSA {
 
     private static BigInteger getPowForPartMessage(Pair pair) {
         BigInteger n = pair.getSecond();
-        int len = n.bitLength() - 5;
+        int len = n.bitLength() - 1;
         return ONE.shiftLeft(len);
     }
 
