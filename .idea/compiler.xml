@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="MT_3Lab" />
+      </profile>
+    </annotationProcessing>
+  </component>
+  <component name="HaskellBuildOptions">
+    <ghcPath>/usr/bin/ghc</ghcPath>
+    <cabalPath>/usr/bin/cabal</cabalPath>
+    <stackPath>/usr/bin/stack</stackPath>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="MT_3Lab" options="--add-exports=jdk.internal.opt/jdk.internal.joptsimple.internal=ALL-UNNAMED" />
+    </option>
+  </component>
+</project>
