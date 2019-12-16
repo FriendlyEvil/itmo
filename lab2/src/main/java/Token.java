@@ -1,0 +1,3 @@
+public enum Token {
+    LEFT_BRACKET, RIGHT_BRACKET, END, PLUS, MINUS, MULTIPLY, NUMBER
+}
