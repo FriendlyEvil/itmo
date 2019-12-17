@@ -85,9 +85,6 @@ public class Parser {
             case NUMBER:
             case LEFT_BRACKET:
                 return new Tree("E", T(), E1());
-//            case RIGHT_BRACKET:
-//            case END:
-//                return new Tree("E");
             default:
                 throw new ParseException("message", lex.curPos());
         }
