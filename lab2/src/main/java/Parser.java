@@ -6,84 +6,88 @@ public class Parser {
     Tree parse(InputStream is) throws ParseException {
         lex = new LexicalAnalyzer(is);
         lex.nextToken();
-        return Expr();
+        return E();
     }
 
-    Tree Mul() throws ParseException {
+    Tree M() throws ParseException {
         switch (lex.curToken()) {
             case MINUS:
-            case PLUS:
                 lex.nextToken();
-                return new Tree("M", Mul());
+                return new Tree("M", new Tree("-"), M());
             case NUMBER:
                 lex.nextToken();
-                return new Tree("M");
+                return new Tree("M", new Tree("n"));
             case LEFT_BRACKET:
                 lex.nextToken();
-                Tree res = Expr();
+                Tree res = E();
                 if (lex.curToken() != Token.RIGHT_BRACKET) {
                     throw new ParseException("", lex.curPos());
                 }
-                return new Tree("M", res);
+                lex.nextToken();
+                return new Tree("M", new Tree("("), res, new Tree(")"));
             default:
                 throw new ParseException("message", lex.curPos());
         }
+    }
+
+    Tree T1() throws ParseException {
+        String temp;
+        switch (lex.curToken()) {
+            case MULTIPLY:
+                temp = "*";
+                break;
+            case MINUS:
+            case PLUS:
+            case RIGHT_BRACKET:
+            case END:
+                return new Tree("T1");
+            default:
+                throw new ParseException("message", lex.curPos());
+        }
+        lex.nextToken();
+        return new Tree("T1", new Tree(temp), M(), T1());
     }
 
     Tree T() throws ParseException {
         switch (lex.curToken()) {
-            case MULTIPLY:
-                lex.nextToken();
-                return new Tree("T", Mul(), T());
             case MINUS:
-            case PLUS:
-            case RIGHT_BRACKET:
-            case END:
-                return new Tree("T");
+            case NUMBER:
+            case LEFT_BRACKET:
+                return new Tree("T", M(), T1());
             default:
                 throw new ParseException("message", lex.curPos());
         }
     }
 
-    Tree Term() throws ParseException {
+    Tree E1() throws ParseException {
+        String temp;
         switch (lex.curToken()) {
             case PLUS:
+                temp = "+";
+                break;
             case MINUS:
-            case NUMBER:
-            case LEFT_BRACKET:
-                lex.nextToken();
-                return new Tree("R", Mul(), T());
+                temp = "-";
+                break;
+
             case RIGHT_BRACKET:
             case END:
-                return new Tree("R");
+                return new Tree("E1");
             default:
                 throw new ParseException("message", lex.curPos());
         }
+        lex.nextToken();
+        return new Tree("E1", new Tree(temp), T(), E1());
     }
 
     Tree E() throws ParseException {
         switch (lex.curToken()) {
-            case PLUS:
-            case MINUS:
-                return new Tree("E", Term(), E());
-            case RIGHT_BRACKET:
-            case END:
-                return new Tree("E");
-            default:
-                throw new ParseException("message", lex.curPos());
-        }
-    }
-
-    Tree Expr() throws ParseException {
-        switch (lex.curToken()) {
-            case PLUS:
             case MINUS:
             case NUMBER:
             case LEFT_BRACKET:
-                return new Tree("X", Term(), E());
-            case RIGHT_BRACKET:
-            case END:
-                return new Tree("X");
+                return new Tree("E", T(), E1());
+//            case RIGHT_BRACKET:
+//            case END:
+//                return new Tree("E");
             default:
                 throw new ParseException("message", lex.curPos());
         }

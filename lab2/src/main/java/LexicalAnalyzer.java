@@ -1,11 +1,13 @@
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Set;
 
 public class LexicalAnalyzer {
     private InputStream is;
     private int curChar;
     private int curPos;
-    private Token curToken;
+    private Token curToken = Token.START;
+    private static final Set<Token> operations = Set.of(Token.MINUS, Token.PLUS, Token.MULTIPLY, Token.START);
 
     public LexicalAnalyzer(InputStream is) throws ParseException {
         this.is = is;
@@ -30,11 +32,7 @@ public class LexicalAnalyzer {
         while (isBlank(curChar)) {
             nextChar();
         }
-        if (Character.isDigit(curChar)) {
-            do {
-                nextChar();
-                curToken = Token.NUMBER;
-            } while (Character.isDigit(curChar));
+        if (parseNumber()) {
             return;
         }
         switch (curChar) {
@@ -52,6 +50,11 @@ public class LexicalAnalyzer {
                 break;
             case '-':
                 nextChar();
+                if (operations.contains(curToken)) {
+                    if (parseNumber()) {
+                        return;
+                    }
+                }
                 curToken = Token.MINUS;
                 break;
             case '*':
@@ -64,6 +67,17 @@ public class LexicalAnalyzer {
             default:
                 throw new ParseException("Illegal character " + (char) curChar, curPos);
         }
+    }
+
+    private boolean parseNumber() throws ParseException {
+        if (Character.isDigit(curChar)) {
+            do {
+                nextChar();
+                curToken = Token.NUMBER;
+            } while (Character.isDigit(curChar));
+            return true;
+        }
+        return false;
     }
 
     public Token curToken() {

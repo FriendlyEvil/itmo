@@ -1,32 +1,32 @@
-Expr -> Expr + Term
-Expr -> Expr - Term
-Expr -> Term
-Term -> Term * Mul
-Term -> Mul
-Mul -> -Mul
-Mul -> n
-Mul -> (Expr)
+E -> E + T
+E -> E - T
+E -> T
+T -> T * M
+T -> M
+M -> -M
+M -> n
+M -> (E)
 
 
 Устраним левую рекурсию:
 
-Expr -> Term E
-E -> + Term E
-E -> - Term E
-E -> e
+E -> T E'
+E' -> + T E'
+E' -> - T E'
+E' -> e
 
-Term -> Mul T
+T -> M T'
 
-T -> * Mul T
-T -> e
+T' -> * M T'
+T' -> e
 
-Mul -> -Mul
-Mul -> n
-Mul -> (Expr)
+M -> -M
+M -> n
+M -> (E)
 
 Not terminal    | FIRST     | FOLLOW
-Expr  (X)       | ( - + n   | $ )
-E               | e + -     | $ )
-Term  (R)       | ( - + n   | $ ) + -
-T               |   e *     | $ ) + -
-Mul   (M)       | ( - + n   | $ ) + - *
+E               | ( - n     | $ )
+E'              | + - e     | $ )
+T               | ( - n     | $ ) + -
+T'              |  * e      | $ ) + -
+M               | ( - n     | $ ) + - *

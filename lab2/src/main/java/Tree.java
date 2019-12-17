@@ -1,4 +1,5 @@
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class Tree {
@@ -12,10 +13,15 @@ public class Tree {
 
     public Tree(String node) {
         this.node = node;
+        children = Collections.emptyList();
     }
 
     public void show() {
         Printer.printNode(getBinaryTree());
+    }
+
+    public void show2() {
+        Printer2.show(this);
     }
 
     private Printer.Node<Tree> getBinaryTree() {
@@ -33,6 +39,20 @@ public class Tree {
 
     @Override
     public String toString() {
-        return node;
+        switch (node) {
+            case "n":
+                return "2";
+            case "+":
+            case "-":
+            case "*":
+            case "(":
+            case ")":
+                return node;
+        }
+        StringBuilder builder = new StringBuilder();
+        for (Tree child : children) {
+            builder.append(child.toString());
+        }
+        return builder.toString();
     }
 }
