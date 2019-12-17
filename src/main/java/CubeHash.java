@@ -25,7 +25,8 @@ public class CubeHash {
         }
 
         for (int i = 0; i < 15; i++) {
-            Utils.rightCyclicShift()
+            int num = hash[i];
+            Utils.leftCyclicShift(num, 7);
         }
 
         return input;
