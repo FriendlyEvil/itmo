@@ -1,12 +1,16 @@
 public final class Utils {
     private static final char[] HEX_ARRAY = "0123456789ABCDEF".toLowerCase().toCharArray();
 
-    public static int leftCyclicShift(int number, int shift) {
-        return (number << shift) | (number >>> (32 - shift));
+    public static void leftCyclicShift(int[] arr, int pos, int shift) {
+        int number = arr[pos];
+        number = (number << shift) | (number >>> (32 - shift));
+        arr[pos] = number;
     }
 
-    public static int rightCyclicShift(int number, int shift) {
-        return (number >>> shift) | (number << (32 - shift));
+    public static void rightCyclicShift(int[] arr, int pos, int shift) {
+        int number = arr[pos];
+        number = (number >>> shift) | (number << (32 - shift));
+        arr[pos] = number;
     }
 
     public static void swap(int[] arr, int first, int second) {
