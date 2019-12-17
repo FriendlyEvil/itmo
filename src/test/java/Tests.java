@@ -7,7 +7,7 @@ public class Tests {
 
     @Before
     public void before() {
-        cubeHash = new CubeHash();
+        cubeHash = new CubeHash(16, 32, 512, 32, new int[32]);
     }
 
     @Test
