@@ -23,4 +23,12 @@ public class Tests {
         Assert.assertEquals("01ee7f4eb0e0ebfdb8bf77460f64993faf13afce01b55b0d3d2a63690d25010f7127109455a7c143ef12254183e762b15575e0fcc49c79a0471a970ba8a66638",
                 Utils.intToHex(hash));
     }
+
+    public static void main(String[] args) {
+//        byte[] bytes = {127, -128};
+//        int[] ints = Utils.byteToInt(bytes);
+//        int[] a = {2139095040};
+//        byte[] bytes = Utils.intToBytes(a);
+//        System.out.println("!");
+    }
 }

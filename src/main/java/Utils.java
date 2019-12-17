@@ -30,7 +30,30 @@ public final class Utils {
     }
 
     public static int[] byteToInt(byte[] bytes) {
-        return new int[0];
+        int size = (bytes.length + 3) / 4;
+        int[] ints = new int[size];
+
+        for (int i = 0; i < bytes.length; i += 4) {
+            int value = 0;
+            for (int j = 0; j < 4; j++) {
+                value <<= 8;
+                value ^= (0xFFFF & getByte(bytes, i + j));
+            }
+            ints[i / 4] = value;
+        }
+        return ints;
+    }
+
+
+    private static int getByte(byte[] ar, int ind) {
+        if (ind >= ar.length) {
+            return 0;
+        }
+        int a = ar[ind];
+        if (a < 0) {
+            return (a & Byte.MAX_VALUE) | 0x80;
+        }
+        return a;
     }
 
     public static byte[] intToBytes(int[] longs) {
@@ -38,7 +61,7 @@ public final class Utils {
         byte[] bytes = new byte[end];
         for (int i = 0; i < longs.length; i++) {
             for (int j = 3; j >= 0 && (i * 4 + 3 - j < end); j--) {
-                bytes[i * 4 + 3 - j] = (byte) ((longs[i] >> (4 * j)) & 0xFF);
+                bytes[i * 4 + 3 - j] = (byte) ((longs[i] >> (8 * j)) & 0xFF);
             }
         }
         return bytes;

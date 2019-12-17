@@ -15,8 +15,19 @@ public class CubeHash {
     private int b; //block size in bytes
     private int h; //hash size in bits
     private int f; //final rounds count
+    private int[] hash;
 
     public int[] hash(int[] input) {
+        for (int i = 0; i < 15; i++) {
+            int first = i;
+            int second = i | 16;
+            Utils.add(hash, first, second);
+        }
+
+        for (int i = 0; i < 15; i++) {
+            Utils.rightCyclicShift()
+        }
+
         return input;
     }
 
