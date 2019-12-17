@@ -1,5 +1,5 @@
 public final class Utils {
-    private static final char[] HEX_ARRAY = "0123456789ABCDEF".toCharArray();
+    private static final char[] HEX_ARRAY = "0123456789ABCDEF".toLowerCase().toCharArray();
 
     public static int leftCyclicShift(int number, int shift) {
         return (number << shift) | (number >>> (32 - shift));
@@ -27,6 +27,10 @@ public final class Utils {
 
     public static String intToHex(int[] arr) {
         return bytesToHex(intToBytes(arr));
+    }
+
+    public static int[] byteToInt(byte[] bytes) {
+        return new int[0];
     }
 
     public static byte[] intToBytes(int[] longs) {
