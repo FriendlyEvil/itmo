@@ -1,4 +1,4 @@
-// Generated from /home/friendlyevil/IdeaProjects/MT_3Lab/src/main/java/antlr/PrefixExpression.g4 by ANTLR 4.7.2
+// Generated from /home/friendlyevil/IdeaProjects/MT_3Lab/lab3/src/main/java/antlr/PrefixExpression.g4 by ANTLR 4.7.2
 package antlr;
 import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.CharStream;
