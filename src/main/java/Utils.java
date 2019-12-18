@@ -24,9 +24,14 @@ public final class Utils {
         arr[second] += arr[first]; //module 2^32
     }
 
-    public static void xor(int[] arr, int first, int second) {
+    public static void xorItems(int[] arr, int first, int second) {
 //        arr[first] ^= arr[second];
         arr[second] ^= arr[first];
+    }
+
+    public static void xor(int[] arr, int ind, int value) {
+//        arr[first] ^= arr[second];
+        arr[ind] ^= value;
     }
 
     public static String intToHex(int[] arr) {
