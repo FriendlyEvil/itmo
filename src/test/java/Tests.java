@@ -13,11 +13,12 @@ public class Tests {
 
     @Test
     public void checkInit() {
+        CubeHash cubeHash = new CubeHash(8, b, 512);
         int[] hash = cubeHash.getHashDebug();
-        Assert.assertEquals("5df39869c73009fb108994600f1626e6f37c07360c0d8bb53d19cf57b8e74133" +
-                        "5b8034a3eff9892014c4ff315038ef2a391812fe52a440e9a293527d12ca4570" +
-                        "6e0958933470bf814aa4909adb3ec39384e9c314d0db874af21d45bcacb31252" +
-                        "1ce5ab6a3bf6f05de88abbdd0fcfd3fafb8225d546242eada52540095c3da221",
+        Assert.assertEquals("6998f35dfb0930c760948910e626160f36077cf3b58b0d0c57cf193d3341e7b8" +
+                        "a334805b2089f9ef31ffc4142aef3850fe121839e940a4527d5293a27045ca12" +
+                        "9358096e81bf70349a90a44a93c33edb14c3e9844a87dbd0bc451df25212b3ac" +
+                        "6aabe51c5df0f63bddbb8ae8fad3cf0fd52582fbad2e2446094025a521a23d5c",
                 Utils.intToHex(hash));
     }
 

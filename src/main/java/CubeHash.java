@@ -19,7 +19,6 @@ public class CubeHash {
         hash[1] = b;
         hash[2] = r;
         initState();
-
     }
 
     private int[] hash;
