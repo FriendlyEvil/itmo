@@ -40,5 +40,6 @@ public class Tests {
 //        int[] a = {2139095040};
 //        byte[] bytes = Utils.intToBytes(a);
 //        System.out.println("!");
+        Utils.apeendToLenght(new int[] {1, 2}, 4);
     }
 }

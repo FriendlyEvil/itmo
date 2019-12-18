@@ -1,3 +1,5 @@
+import java.util.Arrays;
+
 public final class Utils {
     private static final char[] HEX_ARRAY = "0123456789ABCDEF".toLowerCase().toCharArray();
 
@@ -84,5 +86,9 @@ public final class Utils {
             hexChars[j * 2 + 1] = HEX_ARRAY[v & 0x0F];
         }
         return new String(hexChars);
+    }
+
+    public static int[] apeendToLenght(byte[] arr, int len) {
+        return Arrays.copyOf(byteToInt(arr), len);
     }
 }
