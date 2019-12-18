@@ -14,9 +14,9 @@ public class CubeHash {
         this.r = r;
         this.b = b;
         this.h = h;
-    hash = new int[32];
-    hash[0] = h / 8;
-    hash[1] = r;
+        hash = new int[32];
+        hash[0] = h / 8;
+        hash[1] = r;
         hash[2] = b;
         initState();
 
