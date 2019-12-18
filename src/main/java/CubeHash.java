@@ -11,7 +11,6 @@ public class CubeHash {
     private int f; //finalization rounds
     private int[] hash;
 
-
     public CubeHash(int r, int b, int h) {
         this.r = r;
         this.b = b;
@@ -22,10 +21,19 @@ public class CubeHash {
         hash[0] = h / 8;
         hash[1] = b;
         hash[2] = r;
-        initState();
+        rounds(initRounds);
     }
 
-    public void initState() {
+    public CubeHash(int initRounds, int r, int b, int h, int f) {
+        this.initRounds = initRounds;
+        this.r = r;
+        this.b = b;
+        this.h = h;
+        this.f = f;
+        hash = new int[32];
+        hash[0] = h / 8;
+        hash[1] = b;
+        hash[2] = r;
         rounds(initRounds);
     }
 
@@ -34,32 +42,21 @@ public class CubeHash {
     }
 
     public int[] getHash() {
-        for (int i = 0; i < 32; i++) {
-            int[] hhh = Arrays.copyOf(hash, hash.length);
-            Utils.xor(hhh, 31, 1);
-            rounds(f);
-            System.out.println();
-            System.out.println(Utils.intToHex(Arrays.copyOfRange(hhh, 0, h / 8 / 4)));
-        }
+        Utils.xor(hash, 31, 1);
+        rounds(f);
         return Arrays.copyOfRange(hash, 0, h / 8 / 4);
     }
 
-    public void updateHash(int[] input) {
-//        input = Arrays.copyOf(input, 8);
-//        input[1] = 1 << 31;
-        for (int i = 0; i < b; i++) {
-            hash[i] ^= input[i];
-        }
-        rounds(r);
-    }
-
     public void updateHash(byte[] input) {
-//        input = Arrays.copyOf(input, 8);
-//        input[1] = 1 << 31;
-        for (int i = 0; i < b * 8; i++) {
-            hash[1] ^= input[i];
+        int ext_len = b * (input.length / b + 1);
+        input = Arrays.copyOf(input, ext_len);
+        input[input.length - 1] = (byte) 1;
+        for (int k = 0; k < input.length; k += b) {
+            for (int i = 0; i < b; i++) {
+                hash[i / 4] ^= input[k + i] << (i % 4 * 8);
+            }
+            rounds(r);
         }
-        rounds(r);
     }
 
     private void rounds(int it) {
@@ -69,17 +66,14 @@ public class CubeHash {
                 int second = i | 16;
                 Utils.add(hash, first, second);
             }
-
             for (int i = 0; i < 16; i++) {
                 Utils.leftCyclicShift(hash, i, 7);
             }
-
             for (int i = 0; i < 8; i++) {
                 int first = i;
                 int second = i | 8;
                 Utils.swap(hash, first, second);
             }
-
             for (int i = 0; i < 16; i++) {
                 int first = i | 16;
                 int second = i;
@@ -111,6 +105,7 @@ public class CubeHash {
                     Utils.swap(hash, first, second);
                 }
             }
+
             for (int i = 0; i < 16; i++) {
                 int first = i | 16;
                 int second = i;
