@@ -1,42 +1,47 @@
 import lombok.Data;
 
+import java.util.Arrays;
+
 @Data
 public class CubeHash {
+    private int initRounds = 16; //hash size in bits
+    private int r; //rounds per message block
+    private int b; //bytes per message block
+    private int h; //hash size in bits
+    private int f = 32; //finalization rounds
+
     public CubeHash(int r, int b, int h) {
         this.r = r;
         this.b = b;
         this.h = h;
-        hash = new int[32];
-        hash[0] = h / 8;
-        hash[1] = r;
-        hash[2] = b;
-        initState();
+    hash = new int[32];
+    hash[0] = h / 8;
+    hash[1] = r;
+    hash[2] = b;
+    initState();
 
     }
-
-    private int r; //rounds count
-    private int b; //block size in bytes
-    private int h; //hash size in bits
-    private int f = 32; //hash size in bits
-    private int iterations = 10; //hash size in bits
 
     private int[] hash;
 
     public void initState() {
-        makeIteration(iterations);
+        rounds(initRounds);
     }
 
     public int[] getHash() {
         Utils.xor(hash, 31, 1);
-        makeIteration(f);
-        return hash;
+        rounds(f);
+        return Arrays.copyOfRange(hash, 0, h/8);
     }
 
-    public void hash(int[] input) {
-        makeIteration(1);
+    public void updateHash(int[] input) {
+        for (int i = 0; i < b; i++) {
+            hash[i] ^= input[i];
+        }
+        rounds(r);
     }
 
-    private void makeIteration(int it) {
+    private void rounds(int it) {
         for (int k = 0; k < it; k++) {
             for (int i = 0; i < 16; i++) {
                 int first = i;
