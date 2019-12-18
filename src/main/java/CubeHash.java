@@ -90,8 +90,8 @@ public class CubeHash {
 
             for (int i = 0; i < 4; i++) {
                 for (int j = 0; j < 2; j++) {
-                    int first = (j << 3) | j;
-                    int second = (j << 3) | 8 | j;
+                    int first = (j << 3) | i;
+                    int second = (j << 3) | 8 | i;
                     Utils.swap(hash, first, second);
                 }
             }
