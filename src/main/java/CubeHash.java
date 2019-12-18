@@ -4,7 +4,7 @@ import java.util.Arrays;
 
 @Data
 public class CubeHash {
-    private int initRounds = 80; //hash size in bits
+    private int initRounds = 80; //initial rounds
     private int r; //rounds per message block
     private int b; //bytes per message block
     private int h; //hash size in bits
@@ -16,8 +16,8 @@ public class CubeHash {
         this.h = h;
         hash = new int[32];
         hash[0] = h / 8;
-        hash[1] = r;
-        hash[2] = b;
+        hash[1] = b;
+        hash[2] = r;
         initState();
 
     }
@@ -50,7 +50,7 @@ public class CubeHash {
         for (int k = 0; k < it; k++) {
             for (int i = 0; i < 16; i++) {
                 int first = i;
-                int second = i | 16;
+                int second = i | 16;//10000
                 Utils.add(hash, first, second);
             }
 
@@ -91,11 +91,10 @@ public class CubeHash {
             for (int i = 0; i < 4; i++) {
                 for (int j = 0; j < 2; j++) {
                     int first = (j << 3) | i;
-                    int second = (j << 3) | 8 | i;
+                    int second = (j << 3) | 4 | i;
                     Utils.swap(hash, first, second);
                 }
             }
-
             for (int i = 0; i < 16; i++) {
                 int first = i | 16;
                 int second = i;
