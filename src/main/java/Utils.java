@@ -22,17 +22,14 @@ public final class Utils {
     }
 
     public static void add(int[] arr, int first, int second) {
-//        arr[first] += arr[second]; //module 2^32
-        arr[second] += arr[first]; //module 2^32
+        arr[second] += arr[first];
     }
 
     public static void xorItems(int[] arr, int first, int second) {
-//        arr[first] ^= arr[second];
         arr[second] ^= arr[first];
     }
 
     public static void xor(int[] arr, int ind, int value) {
-//        arr[first] ^= arr[second];
         arr[ind] ^= value;
     }
 
