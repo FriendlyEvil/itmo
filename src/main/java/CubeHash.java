@@ -4,11 +4,11 @@ import java.util.Arrays;
 
 @Data
 public class CubeHash {
-    private int initRounds = 16; //hash size in bits
+    private int initRounds = 80; //hash size in bits
     private int r; //rounds per message block
     private int b; //bytes per message block
     private int h; //hash size in bits
-    private int f = 32; //finalization rounds
+    private int f = 80; //finalization rounds
 
     public CubeHash(int r, int b, int h) {
         this.r = r;
@@ -17,8 +17,8 @@ public class CubeHash {
     hash = new int[32];
     hash[0] = h / 8;
     hash[1] = r;
-    hash[2] = b;
-    initState();
+        hash[2] = b;
+        initState();
 
     }
 
@@ -28,10 +28,15 @@ public class CubeHash {
         rounds(initRounds);
     }
 
+    public int[] getHashDebug() {
+        return hash;
+    }
+
     public int[] getHash() {
         Utils.xor(hash, 31, 1);
         rounds(f);
-        return Arrays.copyOfRange(hash, 0, h/8);
+//        return Arrays.copyOfRange(hash, 0, h/8);
+        return Arrays.copyOfRange(hash, 0, h / 8 / 4);
     }
 
     public void updateHash(int[] input) {

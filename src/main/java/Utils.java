@@ -88,7 +88,7 @@ public final class Utils {
         return new String(hexChars);
     }
 
-    public static int[] apeendToLenght(byte[] arr, int len) {
+    public static int[] appendToLength(byte[] arr, int len) {
         return Arrays.copyOf(byteToInt(arr), len);
     }
 }
