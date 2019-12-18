@@ -37,7 +37,7 @@ public class CubeHash {
     }
 
     private void makeIteration(int it) {
-        for (int j = 0; j < it; j++) {
+        for (int k = 0; k < it; k++) {
             for (int i = 0; i < 16; i++) {
                 int first = i;
                 int second = i | 16;
