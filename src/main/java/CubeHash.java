@@ -34,8 +34,13 @@ public class CubeHash {
     }
 
     public int[] getHash() {
-        Utils.xor(hash, 31, 1);
-        rounds(f);
+        for (int i = 0; i < 32; i++) {
+            int[] hhh = Arrays.copyOf(hash, hash.length);
+            Utils.xor(hhh, 31, 1);
+            rounds(f);
+            System.out.println();
+            System.out.println(Utils.intToHex(Arrays.copyOfRange(hhh, 0, h / 8 / 4)));
+        }
         return Arrays.copyOfRange(hash, 0, h / 8 / 4);
     }
 
@@ -44,6 +49,15 @@ public class CubeHash {
 //        input[1] = 1 << 31;
         for (int i = 0; i < b; i++) {
             hash[i] ^= input[i];
+        }
+        rounds(r);
+    }
+
+    public void updateHash(byte[] input) {
+//        input = Arrays.copyOf(input, 8);
+//        input[1] = 1 << 31;
+        for (int i = 0; i < b * 8; i++) {
+            hash[1] ^= input[i];
         }
         rounds(r);
     }

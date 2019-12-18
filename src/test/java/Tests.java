@@ -32,9 +32,9 @@ public class Tests {
     @Test
     public void emptyTest() {
         b = 1;
-        cubeHash = new CubeHash(8, b, 256);
+        cubeHash = new CubeHash(8, b, 512);
 //        cubeHash.updateHash(Utils.appendToLength("".getBytes(), b));
-        cubeHash.updateHash(new int[0]);
+        cubeHash.updateHash(new byte[]{-128, 0, 0, 0, 0, 0, 0, 0});
         int[] hash = cubeHash.getHash();
         Assert.assertEquals("38d1e8a22d7baac6fd5262d83de89cacf784a02caa866335299987722aeabc59",
                 Utils.intToHex(hash));
