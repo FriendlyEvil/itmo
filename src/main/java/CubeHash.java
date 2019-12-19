@@ -24,19 +24,6 @@ public class CubeHash {
         rounds(initRounds);
     }
 
-    public CubeHash(int initRounds, int r, int b, int h, int f) {
-        this.initRounds = initRounds;
-        this.r = r;
-        this.b = b;
-        this.h = h;
-        this.f = f;
-        hash = new int[32];
-        hash[0] = h / 8;
-        hash[1] = b;
-        hash[2] = r;
-        rounds(initRounds);
-    }
-
     public int[] getHashDebug() {
         return hash;
     }

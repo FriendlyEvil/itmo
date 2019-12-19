@@ -33,11 +33,20 @@ public class Tests {
     }
 
     @Test
-    public void fox() {
+    public void fox1() {
         CubeHash cubeHash = new CubeHash(8, 8, 512);
         cubeHash.updateHash("The quick brown fox jumps over the lazy dog".getBytes());
         int[] hash = cubeHash.getHash();
         Assert.assertEquals("a86a3f7e733e01ee444f214028867cfbde7d1e17156ec5915137f8339a92a69306a2723042603c297db41b3dbd985d970f50ebc7d9dc7f23f56772c2b2f44a04",
+                Utils.intToHex(hash));
+    }
+
+    @Test
+    public void fox2() {
+        CubeHash cubeHash = new CubeHash(8, 16, 256);
+        cubeHash.updateHash("The quick brown fox jumps over the lazy dog".getBytes());
+        int[] hash = cubeHash.getHash();
+        Assert.assertEquals("2a1277560be1120d4fa831236ce3e4af890ed8cd465fa5e7093d79b426bb6b91",
                 Utils.intToHex(hash));
     }
 }
