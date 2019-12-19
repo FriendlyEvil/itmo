@@ -49,11 +49,12 @@ public class CubeHash {
 
     public void updateHash(byte[] input) {
         int ext_len = b * (input.length / b + 1);
+        int old_len  = input.length;
         input = Arrays.copyOf(input, ext_len);
-        input[input.length - 1] = (byte) 1;
+        input[old_len] = (byte) ((byte) 1 << 7);
         for (int k = 0; k < input.length; k += b) {
             for (int i = 0; i < b; i++) {
-                hash[i / 4] ^= input[k + i] << (i % 4 * 8);
+                hash[i / 4] ^= (input[k + i] << ((i % 4) * 8));
             }
             rounds(r);
         }

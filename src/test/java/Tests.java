@@ -16,10 +16,10 @@ public class Tests {
 
     @Test
     public void helloTest() {
-        CubeHash cubeHash = new CubeHash(8, 8, 512);
+        CubeHash cubeHash = new CubeHash(16, 32, 512);
         cubeHash.updateHash("Hello".getBytes());
         int[] hash = cubeHash.getHash();
-        Assert.assertEquals("e092f3c74ec866f2314bc04b8220a419ec0bf26f8b615ba2c901d7c91c45843d6748a341a7c1f49c8c1da285467f6448107f1f91902ecf540f354cad80a37621",
+        Assert.assertEquals("9a9c33ce64676e2910053b643d29bef57da7dfe2295ce3baaf6bddfcc41f1fccb2ef3dd37f13240ac8ef366354f026956dffc4df0109753d45ee515485fe193b",
                 Utils.intToHex(hash));
     }
 
@@ -28,7 +28,7 @@ public class Tests {
         CubeHash cubeHash = new CubeHash(8, 8, 512);
         cubeHash.updateHash("hello".getBytes());
         int[] hash = cubeHash.getHash();
-        Assert.assertEquals("b5b8a3b1c5a52fc9e4db2bc5e9d84f4aeff9444027a785d4134215b68e6c0066cd8e95e6c6d02c07ef25ba2791011932e2d7a8404e557421b0b991b21077b9e6",
+        Assert.assertEquals("ded3ed55e33be19b29b4c5e626a0da7aa6e5f721d31975e04c34b85888cf2c1b50002c8d34e08b44f86170c9f83b0c28b31b22762ae705cca3c37b8cabedcbe6",
                 Utils.intToHex(hash));
     }
 
@@ -37,7 +37,7 @@ public class Tests {
         CubeHash cubeHash = new CubeHash(8, 8, 512);
         cubeHash.updateHash("The quick brown fox jumps over the lazy dog".getBytes());
         int[] hash = cubeHash.getHash();
-        Assert.assertEquals("d77233bc808f2cfe54d56fc95ee051a496c8752f9642e80286ddb5ff6615cbdde2ab1a4fd0a1ffabcea0922415f458a5f5ef02a540f04acddbc9794d301813a4",
+        Assert.assertEquals("a86a3f7e733e01ee444f214028867cfbde7d1e17156ec5915137f8339a92a69306a2723042603c297db41b3dbd985d970f50ebc7d9dc7f23f56772c2b2f44a04",
                 Utils.intToHex(hash));
     }
 }
