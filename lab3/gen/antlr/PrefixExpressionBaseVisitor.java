@@ -1,4 +1,4 @@
-// Generated from /home/friendlyevil/IdeaProjects/MT_3Lab/src/main/java/antlr/PrefixExpression.g4 by ANTLR 4.7.2
+// Generated from /home/friendlyevil/IdeaProjects/MT_3Lab/lab3/src/main/java/antlr/PrefixExpression.g4 by ANTLR 4.7.2
 package antlr;
 import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
 
@@ -24,7 +24,7 @@ public class PrefixExpressionBaseVisitor<T> extends AbstractParseTreeVisitor<T> 
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitS_expression(PrefixExpressionParser.S_expressionContext ctx) { return visitChildren(ctx); }
+	@Override public T visitExpression(PrefixExpressionParser.ExpressionContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -38,7 +38,21 @@ public class PrefixExpressionBaseVisitor<T> extends AbstractParseTreeVisitor<T> 
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitExpression(PrefixExpressionParser.ExpressionContext ctx) { return visitChildren(ctx); }
+	@Override public T visitOne_expression(PrefixExpressionParser.One_expressionContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitDo_whil(PrefixExpressionParser.Do_whilContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitWhil(PrefixExpressionParser.WhilContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -80,14 +94,14 @@ public class PrefixExpressionBaseVisitor<T> extends AbstractParseTreeVisitor<T> 
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitArithmetic(PrefixExpressionParser.ArithmeticContext ctx) { return visitChildren(ctx); }
+	@Override public T visitLogic(PrefixExpressionParser.LogicContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitArithmetic_operation(PrefixExpressionParser.Arithmetic_operationContext ctx) { return visitChildren(ctx); }
+	@Override public T visitCompare_operation(PrefixExpressionParser.Compare_operationContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -101,12 +115,12 @@ public class PrefixExpressionBaseVisitor<T> extends AbstractParseTreeVisitor<T> 
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitLogic(PrefixExpressionParser.LogicContext ctx) { return visitChildren(ctx); }
+	@Override public T visitArithmetic(PrefixExpressionParser.ArithmeticContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitCompare_operation(PrefixExpressionParser.Compare_operationContext ctx) { return visitChildren(ctx); }
+	@Override public T visitArithmetic_operation(PrefixExpressionParser.Arithmetic_operationContext ctx) { return visitChildren(ctx); }
 }

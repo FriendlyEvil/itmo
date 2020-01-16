@@ -1,4 +1,4 @@
-// Generated from /home/friendlyevil/IdeaProjects/MT_3Lab/src/main/java/antlr/PrefixExpression.g4 by ANTLR 4.7.2
+// Generated from /home/friendlyevil/IdeaProjects/MT_3Lab/lab3/src/main/java/antlr/PrefixExpression.g4 by ANTLR 4.7.2
 package antlr;
 import org.antlr.v4.runtime.tree.ParseTreeVisitor;
 
@@ -17,11 +17,11 @@ public interface PrefixExpressionVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitExpr(PrefixExpressionParser.ExprContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link PrefixExpressionParser#s_expression}.
+	 * Visit a parse tree produced by {@link PrefixExpressionParser#expression}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitS_expression(PrefixExpressionParser.S_expressionContext ctx);
+	T visitExpression(PrefixExpressionParser.ExpressionContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link PrefixExpressionParser#big_expression}.
 	 * @param ctx the parse tree
@@ -29,11 +29,23 @@ public interface PrefixExpressionVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitBig_expression(PrefixExpressionParser.Big_expressionContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link PrefixExpressionParser#expression}.
+	 * Visit a parse tree produced by {@link PrefixExpressionParser#one_expression}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitExpression(PrefixExpressionParser.ExpressionContext ctx);
+	T visitOne_expression(PrefixExpressionParser.One_expressionContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link PrefixExpressionParser#do_whil}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitDo_whil(PrefixExpressionParser.Do_whilContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link PrefixExpressionParser#whil}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitWhil(PrefixExpressionParser.WhilContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link PrefixExpressionParser#if_rule}.
 	 * @param ctx the parse tree
@@ -65,24 +77,6 @@ public interface PrefixExpressionVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitRight_variable(PrefixExpressionParser.Right_variableContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link PrefixExpressionParser#arithmetic}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitArithmetic(PrefixExpressionParser.ArithmeticContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link PrefixExpressionParser#arithmetic_operation}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitArithmetic_operation(PrefixExpressionParser.Arithmetic_operationContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link PrefixExpressionParser#logic_operation}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitLogic_operation(PrefixExpressionParser.Logic_operationContext ctx);
-	/**
 	 * Visit a parse tree produced by {@link PrefixExpressionParser#logic}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -94,4 +88,22 @@ public interface PrefixExpressionVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitCompare_operation(PrefixExpressionParser.Compare_operationContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link PrefixExpressionParser#logic_operation}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitLogic_operation(PrefixExpressionParser.Logic_operationContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link PrefixExpressionParser#arithmetic}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitArithmetic(PrefixExpressionParser.ArithmeticContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link PrefixExpressionParser#arithmetic_operation}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitArithmetic_operation(PrefixExpressionParser.Arithmetic_operationContext ctx);
 }

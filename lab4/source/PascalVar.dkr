@@ -1,0 +1,15 @@
+@header{
+import doman.generated.pascal.*;
+}
+
+s returns[List<Vars>]: var {$$ = $0};
+var returns[List<Vars>]: VAR vars {$$ = $1};
+vars returns[List<Vars>]: variables vars {$$ = $1; $$.add($0)} | variables {$$ = new ArrayList<>(); $$.add($0)};
+variables returns[Vars]: names COLON NAME SEMICOLON {$$ = new Vars($0, $2)};
+names returns[List<String>]: NAME COMMA names {$$ = $2; $$.add($0)} | NAME {$$ = new ArrayList<>(); $$.add($0)};
+
+VAR: "var";
+COLON: ":";
+SEMICOLON: ";";
+COMMA: ",";
+NAME: "[a-z]+";

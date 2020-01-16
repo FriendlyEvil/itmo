@@ -1,0 +1,18 @@
+@header{
+import doman.generated.logic.*;
+}
+
+s returns[Logic]: or {$$ = $0};
+or returns[Logic]: or OR xor {$$ = new Or($0, $2)} | xor {$$ = $0};
+xor returns[Logic]: xor XOR and {$$ = new Xor($0, $2)} | and {$$ = $0};
+and returns[Logic]: and AND var {$$ = new And($0, $2)} | var {$$ = $0};
+var returns[Logic]: VAR {$$ = new Var($0)} | LP or RP {$$ = $1} | NOT var {$$ = new Not($1)};
+
+
+AND: "and";
+OR: "or";
+XOR: "xor";
+NOT: "not";
+LP: "\\(";
+RP: "\\)";
+VAR: "[a-z]";

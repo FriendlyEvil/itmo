@@ -7,7 +7,7 @@ public class LexicalAnalyzer {
     private int curChar;
     private int curPos;
     private Token curToken = Token.START;
-    private static final Set<Token> operations = Set.of(Token.MINUS, Token.PLUS, Token.MULTIPLY, Token.START, Token.LEFT_BRACKET);
+    private static final Set<Token> operations = Set.of(Token.MINUS, Token.PLUS, Token.MULTIPLY, Token.START, Token.LEFT_BRACKET, Token.AND);
 
     public LexicalAnalyzer(InputStream is) throws ParseException {
         this.is = is;
@@ -60,6 +60,10 @@ public class LexicalAnalyzer {
             case '*':
                 nextChar();
                 curToken = Token.MULTIPLY;
+                break;
+            case '&':
+                nextChar();
+                curToken = Token.AND;
                 break;
             case -1:
                 curToken = Token.END;

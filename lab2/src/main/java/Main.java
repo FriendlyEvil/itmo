@@ -1,8 +1,11 @@
 import java.io.ByteArrayInputStream;
+import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        String str = "-(2+2)*(3*(7-4)+2)";
+        Scanner scanner = new Scanner(System.in);
+        String str = "2&3 + 2 * 3 & 3 * 1";
+//        str = scanner.nextLine();
         try {
             Tree tree = new Parser().parse(new ByteArrayInputStream(str.getBytes()));
             tree.show2();

@@ -1,38 +1,21 @@
-import antlr.*;
-import org.antlr.v4.runtime.*;
+import generators.MainGenerator;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Main {
 
-    public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
+    public static void main(String[] args) throws IOException {
+        String str = String.join("\n", Files.readAllLines(Path.of("source/Calculator.dkr")));
+        new MainGenerator().generate(str, "Calculator", "calculator");
 
-        String str =
-                "@header {a}" +
-                "s returns[String a]: n {a} {a}; " +
-                "n returns[String a]: v A e {a} | e {a} {a}; " +
-                "e returns[String a]: v {a} {a}; " +
-
-                "v returns[String a]: B {a} | C e {a} {a}; " +
-
-                "A: '=';" +
-                "B: 'x';" +
-                "C: '*';";
-        System.out.println(str);
-
-        CharStream inputStream = CharStreams.fromString(str);
-        GrammerLexer lexer = new GrammerLexer(inputStream);
-        TokenStream tokenStream = new CommonTokenStream(lexer);
-        GrammerParser parser = new GrammerParser(tokenStream);
-        ParserInput grammer = parser.grammer().val;
-        SyntaxAnalyzer syntaxAnalyzer = new SyntaxAnalyzer();
-
-
-        syntaxAnalyzer.createItemsSet(grammer.getRuless(), grammer.getStart());
-        System.out.println("!");
+//        String str = String.join("\n", Files.readAllLines(Path.of("source/PascalVar.dkr")));
+//        new MainGenerator().generate(str, "PascalVar", "pascal");
+//        str = String.join("\n", Files.readAllLines(Path.of("source/Logic.dkr")));
+//        new MainGenerator().generate(str, "Logic", "logic");
+        System.out.println("Сode generated");
     }
-
-
-
 }

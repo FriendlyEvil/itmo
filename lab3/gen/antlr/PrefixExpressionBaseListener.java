@@ -1,4 +1,4 @@
-// Generated from /home/friendlyevil/IdeaProjects/MT_3Lab/src/main/java/antlr/PrefixExpression.g4 by ANTLR 4.7.2
+// Generated from /home/friendlyevil/IdeaProjects/MT_3Lab/lab3/src/main/java/antlr/PrefixExpression.g4 by ANTLR 4.7.2
 package antlr;
 
 import org.antlr.v4.runtime.ParserRuleContext;
@@ -28,13 +28,13 @@ public class PrefixExpressionBaseListener implements PrefixExpressionListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterS_expression(PrefixExpressionParser.S_expressionContext ctx) { }
+	@Override public void enterExpression(PrefixExpressionParser.ExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitS_expression(PrefixExpressionParser.S_expressionContext ctx) { }
+	@Override public void exitExpression(PrefixExpressionParser.ExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -52,13 +52,37 @@ public class PrefixExpressionBaseListener implements PrefixExpressionListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterExpression(PrefixExpressionParser.ExpressionContext ctx) { }
+	@Override public void enterOne_expression(PrefixExpressionParser.One_expressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitExpression(PrefixExpressionParser.ExpressionContext ctx) { }
+	@Override public void exitOne_expression(PrefixExpressionParser.One_expressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterDo_whil(PrefixExpressionParser.Do_whilContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitDo_whil(PrefixExpressionParser.Do_whilContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterWhil(PrefixExpressionParser.WhilContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitWhil(PrefixExpressionParser.WhilContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -124,42 +148,6 @@ public class PrefixExpressionBaseListener implements PrefixExpressionListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterArithmetic(PrefixExpressionParser.ArithmeticContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitArithmetic(PrefixExpressionParser.ArithmeticContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterArithmetic_operation(PrefixExpressionParser.Arithmetic_operationContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitArithmetic_operation(PrefixExpressionParser.Arithmetic_operationContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterLogic_operation(PrefixExpressionParser.Logic_operationContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitLogic_operation(PrefixExpressionParser.Logic_operationContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterLogic(PrefixExpressionParser.LogicContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -179,6 +167,42 @@ public class PrefixExpressionBaseListener implements PrefixExpressionListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitCompare_operation(PrefixExpressionParser.Compare_operationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterLogic_operation(PrefixExpressionParser.Logic_operationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitLogic_operation(PrefixExpressionParser.Logic_operationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterArithmetic(PrefixExpressionParser.ArithmeticContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitArithmetic(PrefixExpressionParser.ArithmeticContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterArithmetic_operation(PrefixExpressionParser.Arithmetic_operationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitArithmetic_operation(PrefixExpressionParser.Arithmetic_operationContext ctx) { }
 
 	/**
 	 * {@inheritDoc}

@@ -7,7 +7,4 @@ import lombok.Getter;
 public class ReturnType {
     @Getter
     private String type;
-    @Getter
-    private String name;
-
 }

@@ -3,7 +3,6 @@ import com.mxgraph.swing.mxGraphComponent;
 import com.mxgraph.view.mxGraph;
 
 import javax.swing.*;
-import java.awt.*;
 
 public class Printer2 extends JFrame {
     private static int WIDTH = 30;

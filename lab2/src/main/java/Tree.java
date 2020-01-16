@@ -47,6 +47,7 @@ public class Tree {
             case "*":
             case "(":
             case ")":
+            case "&":
                 return node;
         }
         StringBuilder builder = new StringBuilder();

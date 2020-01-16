@@ -13,7 +13,13 @@ big_expression[int tab] returns[String val]: ex=one_expression[tab] {$val = $ex.
 one_expression[int tab] returns[String val]: ex=if_rule[tab] {$val = $ex.val + "\n";}
                               | pr=print[tab] {$val = $pr.val + "\n";}
                               | def=define[tab] {$val = $def.val + "\n";}
+                              | wh=whil[tab] {$val = $wh.val;}
+                              | d=do_whil[tab] {$val = $d.val + "\n";}
                               ;
+
+do_whil[int tab] returns[String val]: DO l=logic ex=expression[tab+1] {$val = String.format("%sdo\n%swhile %s:", "    ".repeat($tab), $ex.val, $l.val);};
+
+whil[int tab] returns[String val]: WHILE l=logic ex=expression[tab+1] {$val = String.format("%swhile %s:\n%s", "    ".repeat($tab), $l.val, $ex.val);};
 
 if_rule[int tab] returns[String val]: IF l=logic ex=expression[tab+1] el=else_rule[tab] {$val = String.format("%sif %s:\n%s%s", "    ".repeat($tab), $l.val, $ex.val, $el.val);};
 
@@ -33,7 +39,7 @@ logic returns[String val]: op=compare_operation left=arithmetic right=arithmetic
                            | NOT value=logic {$val = String.format("not %s", $value.val);}
                            | TRUE {$val = "True";}
                            | FALSE {$val = "False";}
-                           | op_l=logic_operation left_l=logic right_l=logic {$val = String.format("(%s %s %s)", $left_l.val, $op1.op_l, $right1.val_l);};
+                           | op_l=logic_operation left_l=logic right_l=logic {$val = String.format("(%s %s %s)", $left_l.val, $op_l.op, $right_l.val);};
 
 compare_operation returns[String op]: EQUALS {$op = "==";}
                           | NOT_EQUAL {$op = "!=";}
@@ -84,6 +90,8 @@ TRUE: 'true';
 FALSE: 'false';
 
 IF: 'if';
+WHILE: 'while';
+DO: 'do';
 
 PRINT: 'print';
 

@@ -6,7 +6,7 @@ public class Parser {
     Tree parse(InputStream is) throws ParseException {
         lex = new LexicalAnalyzer(is);
         lex.nextToken();
-        return E();
+        return K();
     }
 
     Tree M() throws ParseException {
@@ -26,7 +26,7 @@ public class Parser {
                 lex.nextToken();
                 return new Tree("M", new Tree("("), res, new Tree(")"));
             default:
-                throw new ParseException("message", lex.curPos());
+                throw new ParseException("Expected: - n (", lex.curPos());
         }
     }
 
@@ -40,9 +40,10 @@ public class Parser {
             case PLUS:
             case RIGHT_BRACKET:
             case END:
+            case AND:
                 return new Tree("T1");
             default:
-                throw new ParseException("message", lex.curPos());
+                throw new ParseException("Expected: * - + n ) &", lex.curPos());
         }
         lex.nextToken();
         return new Tree("T1", new Tree(temp), M(), T1());
@@ -55,7 +56,7 @@ public class Parser {
             case LEFT_BRACKET:
                 return new Tree("T", M(), T1());
             default:
-                throw new ParseException("message", lex.curPos());
+                throw new ParseException("Expected: - n (", lex.curPos());
         }
     }
 
@@ -71,9 +72,10 @@ public class Parser {
 
             case RIGHT_BRACKET:
             case END:
+            case AND:
                 return new Tree("E1");
             default:
-                throw new ParseException("message", lex.curPos());
+                throw new ParseException("Expected: - + n ) &", lex.curPos());
         }
         lex.nextToken();
         return new Tree("E1", new Tree(temp), T(), E1());
@@ -86,7 +88,34 @@ public class Parser {
             case LEFT_BRACKET:
                 return new Tree("E", T(), E1());
             default:
-                throw new ParseException("message", lex.curPos());
+                throw new ParseException("Expected: - n (", lex.curPos());
+        }
+    }
+
+    Tree K1() throws ParseException {
+        String temp;
+        switch (lex.curToken()) {
+            case AND:
+                temp = "&";
+                break;
+            case RIGHT_BRACKET:
+            case END:
+                return new Tree("K1");
+            default:
+                throw new ParseException("Expected: ) &", lex.curPos());
+        }
+        lex.nextToken();
+        return new Tree("K1", new Tree(temp), E(), K1());
+    }
+
+    Tree K() throws ParseException {
+        switch (lex.curToken()) {
+            case MINUS:
+            case NUMBER:
+            case LEFT_BRACKET:
+                return new Tree("K", E(), K1());
+            default:
+                throw new ParseException("Expected: - n (", lex.curPos());
         }
     }
 }
