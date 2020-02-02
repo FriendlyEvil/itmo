@@ -1,0 +1,557 @@
+\documentclass[paper=a4, fontsize=14pt]{report}
+
+\usepackage[russian]{babel}
+\usepackage{scrextend}
+\usepackage[utf8x]{inputenc}
+\usepackage[T1,T2A]{fontenc}
+\usepackage[left=1.5cm,right=1.5cm,top=1.5cm,bottom=1.5cm,bindingoffset=0cm]{geometry}
+\usepackage[pdftex]{graphicx}
+\usepackage{amsmath}
+\usepackage{mathtools}
+\usepackage{ulem}
+\usepackage{mathrsfs}
+\usepackage{amsfonts}
+\usepackage{dsfont}
+\usepackage{amssymb}
+\usepackage{cmap}
+\usepackage{hyperref}
+\usepackage{tikz}
+
+\DeclareMathOperator*{\esssup}{ess\, sup}
+
+\parindent=0cm
+\linespread{1.2}
+\author{}
+
+\title{Первый коллоквиум, семестр 4}
+
+\begin{document}
+\maketitle
+\tableofcontents
+\newpage
+
+\chapter{Определения}
+
+\section{Произведение мер}
+$<X, \mathds{A}, \mu>$, $<Y, \mathds{B}, \nu>$ - пространства с мерой.\\
+$\mu$, $\nu$ - $\sigma$-конечные меры.\\
+$\mathds{A} \times \mathds{B} = \{A\times B \subset X \times Y : A \in \mathds{A}, B \in \mathds{B} \}$ \\
+$m_0 : \mathds{A} \times \mathds{B} \rightarrow \overline{\mathds{R}}$\\ $m_0(A \times B) = \mu A \cdot \nu B$
+
+$m$ - называется произведением мер $\mu$ и $\nu$, если $m$ - мера, которая ялвяется Лебеговским продолжением $m_0$ с полукольца $\mathds{A} \times \mathds{B}$ на некоторую $\sigma$-алгебру $\mathds{A} \otimes \mathds{B}$.\\
+$m = \mu \times \nu$ - обозначение. \\
+$<X \times Y, \mathds{A} \otimes \mathds{B}, \mu \times \nu>$ - произведение пространств с мерой.
+
+\section{Сферические координаты в $ R^3 $ и в $ R^m $, их Якобианы}
+$x_1 = r \cdot \cos \phi_1$
+\hfill
+$1 \leq i \leq m-2: \phi_i \in [0,\pi]$
+
+$x_2 = r \cdot \sin \phi_1 \cdot \cos \phi_2$
+\hfill
+$i=m-1: \phi_i \in [0,2\pi]$
+
+$x_3 = r \cdot \sin \phi_1 \cdot \sin \phi_2 \cdot \cos \phi_3$
+\hfill
+$r \geq 0$
+
+$\vdots$\\
+$x_{m-2} = r \cdot \sin \phi_1 \cdot \sin \phi_2 \cdots \sin \phi_{m-3} \cdot \cos \phi_{m-2}$
+
+$x_{m-1} = r \cdot \sin \phi_1 \cdot \sin \phi_2 \cdots \sin \phi_{m-2} \cdot \cos \phi_{m-1}$
+
+$x_{m} = r \cdot \sin \phi_1 \cdot \sin \phi_2 \cdots \sin \phi_{m-2} \cdot \sin \phi_{m-1}$\\
+
+$\mathcal{J} = r^{m-1} \cdot (\sin \phi_1)^{m-2} \cdot (\sin \phi_2)^{m-3} \cdots (\sin \phi_{m-2})^{1} \cdot (\sin \phi_{m-1})^{0}$
+
+Что тут происходит идейно. Сначала мы проецируем наш $m$-мерный вектор на нормаль к $(m-1)$-мерной гиперплоскости. Потом рассматриваем проекцию на эту гиперплоскость и в ней рекурсивно повторяем процедуру, пока не дойдём до нашего любимого $\mathds{R}^2$. Уже в нём рассматривем обычные полярные координаты (отсюда и другие ограничения на размер угла).
+
+\section{Образ меры при отображении}
+$<X, \mathds{A}, \mu>$~--- пространство с мерой, $<Y, \mathds{B}, \_>$~--- пространство с $\sigma$-алгеброй.
+
+$\Phi: X \to Y$, $\Phi^{-1}(\mathds{B}) \subset \mathds{A}$ (прообраз любого множества из $\mathds{B}$ лежит в $\mathds{A}$).
+
+Пусть для $\forall E \in \mathds{B}$ $\nu(E) = \mu(\Phi^{-1}(E))$.
+
+$\nu$ является мерой на $Y$ и называется образом меры $\mu$ при отображении $\Phi$.
+
+\section{Взвешенный образ меры}
+$<X, \mathds{A}, \mu>$~--- пространство с мерой, $<Y, \mathds{B}, \_>$~--- пространство с $\sigma$-алгеброй.
+
+$\Phi: X \to Y$, $\Phi^{-1}(\mathds{B}) \subset \mathds{A}$ (прообраз любого множества из $\mathds{B}$ лежит в $\mathds{A}$).
+
+$\omega: X \to \overline{\mathds{R}}$, $\omega \geq 0$~--- измеримая.
+
+Пусть для $E \in \mathds{B}$ $\nu(E) = \int\limits_{\Phi^{-1}(E)} \omega~d\mu$.
+
+$\nu$ является мерой на $Y$ и называется взвешенным образом меры $\mu$.
+
+При $\omega \equiv 1$ взвешенный образ меры является обычным образом меры.
+
+\section{Плотность одной меры по отношению к другой}
+$<X, \mathds{A}, \mu>$~--- пространство с мерой.
+
+$\omega: X \to \overline{\mathds{R}}$, $\omega \geq 0$~--- измеримая.
+
+$\nu(E) = \int_E \omega(x)~d\mu$. $\nu$~--- мера на $X$.
+
+$\omega$ называется плотностью $\nu$ относительно $\mu$.
+
+\section{Заряд, множество положительности}
+\subsection{Заряд}
+$<X, \mathds{A}, \_>$~--- пространство с $\sigma$-алгеброй.
+
+$\phi: \mathds{A} \to \mathds{R}$ (конечная, не обязательно неотрицательная).
+
+$\phi$ счётно аддитивна.
+
+Тогда $\phi$~--- заряд.
+
+\subsection{Множество положительности}
+$A \subset X$~--- множество положительности, если
+$\forall B \subset A$, $B$ измеримо: $\phi(B) \geq 0$.
+
+\section{Интегральные неравенства Гельдера и Минковского}
+$<X, \mathds{A}, \mu>$; $f, g : E \subset X \rightarrow \mathds{C}$ ($E$ - изм.)~--- заданы п.в, измеримы.\\
+\subsection{Неравенство Гельдера}
+$p, q > 1 : \frac{1}{p} + \frac{1}{q} = 1$.
+\emph{Тогда:}
+${\displaystyle \int\limits_E |fg|d\mu \leq \left(\int\limits_E |f|^p d\mu\right)^\frac{1}{p} \cdot \left(\int\limits_E |g|^q d\mu)\right)^\frac{1}{q}}$
+\subsection{Неравенство Минковского}
+$1 \leq p < +\infty$.
+\emph{Тогда:}
+${\displaystyle \left(\int\limits_E |f + g|^p d\mu \right)^\frac{1}{p}
+    \leq \left(\int\limits_E |f|^p d\mu\right)^\frac{1}{p}
+    + \left(\int\limits_E |g|^p d\mu\right)^\frac{1}{p}}$
+
+\section{Интеграл комплекснозначной функции}
+$(X, \mathds{A}, \mu)$ - пространство с мерой. $E \in \mathds{A}$
+
+$f: E \rightarrow \mathds{C}$
+
+$f$ измерима (суммируема), если $Im(f)$ и $Re(f)$ измеримы (суммируема)
+
+$\int_E f =\int_E Re(f) + i \cdot \int_E Im(f) $ 
+
+\section{Пространство $L_p(E,\mu),\ 1 \leq p < +\infty$}
+$<X, \mathds{A}, \mu>$, $E \in \mathds{A}$.\\
+$L_p'(E, \mu) = \{ f : \text{п.в.}\ E \rightarrow \mathbb{C},\ \text{изм.},\ \int\limits_E |f|^p d\mu < +\infty \}$\\
+Это линейное пространство (по нер-ву Минковского и линейности пространства измеримых функций).\\
+У этого пространства есть дефект~--- если определить норму как $||f|| = \left(\int\limits_E |f|^p\right)^\frac{1}{p}$, то будет сразу много нулей пространства (ненулевые функции, которые п.в. равны $0$, будут иметь норму $0$).
+Поэтому перейдем к фактор-множеству функций по отношению эквивалентности:\\
+$f \sim g$, если $f = g$ п.в.\\
+$ L_p(E, \mu) := L_p'(E, \mu) / \sim$ - лин. норм. пр-во с нормой $||f|| = \left(\int\limits_E |f|^p\right)^\frac{1}{p}$.\\
+
+\emph{NB1}: Его элементы --- классы эквивалентности обычных функций. Будем называть их тоже функциями. Они не умеют вычислять значение в точке (т.к. можно всегда подменить значение на любое другое и получить представителя все того же класса эквивалентности), но зато их можно интегрировать!\\
+
+\emph{NB2}: также иногда будем обозначать $||f||_p$ за норму $f$ в пространстве $L_p$.
+
+\section{Пространство $L_{\infty}(E,\mu)$}
+$L_\infty(E, \mu) =\{f : \text{п.в.}\ E \rightarrow \mathbb{C},\ \esssup\limits_E |f| < +\infty \}$\\
+\emph{NB1}: $||f||_\infty = \esssup\limits_E |f|$.\\
+
+\emph{NB2}: Новый вид нер-ва Гельдера : $||f \cdot g||_1 \leq ||f||_p \cdot ||g||_q$ (причем можно брать $p = +\infty, q = 1$ или наоборот).
+
+\section{Существенный супремум}
+$<X, \mathds{A}, \mu>$, $E \subset X$~--- изм., $f : \text{п.в.}\ E \rightarrow \overline{\mathbb{R}}$.\\
+
+\emph{Тогда}: $\esssup\limits_{x \in E} f(x) = \inf \{A \in R : f(x) \leq A\ \text{при п.в. $x$}\}$.
+
+В этом определении $A$ - существенная верхняя граница.
+
+\emph{Свойства}:
+\begin{enumerate}
+    \item
+    $\esssup\limits_E f \leq \sup\limits_E f$
+
+    \item
+    $f(x) \leq \esssup\limits_E f$ при п.в. $x \in E$.
+
+    \item
+    $\int\limits_E |fg|d\mu \leq \esssup\limits_E |g| \cdot \int\limits_E |f|d\mu$.
+\end{enumerate}
+
+\section{Условие $ L_{loc} $}
+
+Ты проиграл
+
+\section{Несобственный интеграл Лебега в $ R $}
+
+Ты проиграл
+
+\section{Фундаментальная последовательность, полное пространство}
+\subsection{Фундаментальная последовательность}
+$\{a_n\}$ - фунд. посл. в метрическом пр-ве $(X, \rho)$, если $\forall \epsilon > 0 \exists N: \forall n, k > N: \rho(a_n, a_k) < \epsilon$
+
+\subsection{Полное пространство}
+$X$ - полное пространство, если любая фундаментальная последовательность в нём сходится.
+
+\section{Плотное множество}
+Множество $A$ плотно во множестве $B$, если $\forall b \in B \ \forall \epsilon > 0$ верно, что $U_\epsilon(b) \cap A \neq \emptyset$.
+
+\chapter{Теоремы}
+
+\section{Теорема Леви}
+$(X,\mathds{A},\mu),\ f_n \geqslant 0$ - изм.
+
+$f_1(x) \leqslant ...\leqslant f_n(x) \leqslant f_{n+1}(x) \leqslant ...$ при почти всех $x$
+
+$f(x) = \lim\limits_{n \rightarrow \infty}f_n(x)$ при почти всех $x$ (считаем, что при остальных $x: f \equiv 0$)
+\\
+
+\emph{Тогда:} $\lim\limits_{n \rightarrow \infty} \int\limits_{X}f_n(x)d\mu = \int\limits_{X}f(x)d\mu$
+
+\section{Линейность интеграла Лебега}
+$f, g $ измеримые, 
+Тогда $\int\limits_{\mathds{E}} (f + g) = \int\limits_{\mathds{E}} f + \int\limits_{\mathds{E}} g$
+
+\section{Теорема об интегрировании положительных рядов}
+$u_n(x) \geq 0$ \textit{почти всюду} на $\mathds{E}$, тогда
+$\int\limits_{\mathds{E}} (\sum\limits_{n=1}^{+\infty}u_n(x))d\mu(x) =
+\sum\limits_{n=1}^{+\infty} \int\limits_{\mathds{E}} u_n(x)d\mu(x)$
+
+\section{Абсолютная непрерывность интеграла}
+$<X, \mathds{A}, \mu>$ - пространство с мерой\\
+$f : X \to \overline{\mathds{R}}$ - суммируема\\\\
+Тогда $\forall \epsilon > 0 ~ \exists \delta > 0 : ~ \forall E - \text{измеримое} ~ \mu E < \delta ~ |\int\limits_{E}f d\mu| < \epsilon$
+
+\section{Теорема Лебега о мажорированной сходимости для случая сходимости по мере.}
+\begin{flushleft}
+
+$<X, \mathds{A}, \mu>$ -- пространство с мерой,
+
+$f_n, f$ -- измеримы,
+
+$f_n\stackrel{\mu}{\Rightarrow}f$ (сходится по мере),
+
+$\exists g : X \rightarrow \overline{\mathds{R}}$ такая, что:
+\begin{itemize}
+\item
+$\forall n$,  для <<почти всеx>> $x$ ~ $|f_n(x)| \leq g(x)$ ($g$ называется мажорантой)
+\item
+$g$ - суммируемая
+\end{itemize}
+
+\emph{\textbf{Тогда:}}
+\begin{itemize}
+    \item $f_n, f$ -- суммируемы
+    \item $\int\limits_{X} |f_n - f| d\mu \rightarrow 0$
+    \item $\int\limits_{X} f_n \rightarrow \int\limits_{X} f$ (<<уж тем более>>)
+\end{itemize}
+\end{flushleft}
+
+\section{Теорема Лебега о мажорированной сходимости для случая сходимости почти везде.}
+$<X, \mathds{A}, \mu>$ -- пространство с мерой,
+
+$f_n, f$ -- измеримы,
+
+$f_n \rightarrow f$ \textbf{почти везде},
+
+$\exists g : X \rightarrow \overline{\mathds{R}}$ такая, что:
+\begin{itemize}
+\item
+$\forall n$,  для <<почти всеx>> $x ~ |f_n(x)| \leq g(x)$ ($g$ называется мажорантой)
+\item
+$g$ - суммируемая
+\end{itemize}
+
+\emph{\textbf{Тогда:}}
+\begin{itemize}
+    \item $f_n, f$~--- суммируемы
+    \item $\int\limits_{X} |f_n - f| d\mu \rightarrow 0$
+    \item $\int\limits_{X} f_n \rightarrow \int\limits_{X} f$ (<<уж тем более>>)
+\end{itemize}
+
+\section{Теорема Фату. Следствия.}
+$<X, \mathds{A}, \mu>$ -- пространство с мерой
+
+$f_n, f$ -- измеримы,
+
+$f_n \geq 0$
+
+$f_n \rightarrow f$ <<почти везде>>
+
+$\exists C > 0 ~ \forall n ~ \int\limits_{X} f_n d\mu \leq C$
+
+\textbf{\emph{Тогда:}}
+$\int\limits_{X}f \leq C$
+
+\subsection{Следствие 1}
+
+$ f_n, f \geq 0$ -- измер.
+
+$ f_n \stackrel{\mu}{\Rightarrow} f$
+
+$ Пусть \exists C ~ \forall n  \int\limits_{X} f_n \leq C $
+
+\emph{Тогда:}
+$ \int\limits_{X}  f \leq C $
+
+\subsection{Следствие 2}
+
+$ f_n \geq 0 $ -- измер.
+
+\emph{Тогда:}
+$ \int\limits_{X} \varliminf f_n  \leq \varliminf \int\limits_{X} f_n $
+
+\section{Теорема о вычислении интеграла по взвешенному образу меры}
+	\subsection{Лемма}
+		Пусть у нас есть $<X, \mathbb{A}, \mu>$ и $<Y, \mathbb{B}, \_>$ и $\Phi: X\rightarrow Y$
+
+		Пусть  $\Phi^{-1}(\mathbb{B}) \subset \mathbb{A}$
+
+		Пусть для $E \in \mathbb{B}$ $\nu(E):=\mu(\Phi^{-1}(E))$
+
+		\emph{Тогда:}
+
+		 $\nu$~--- мера на $(Y, \mathbb{B})$, $\nu(E) = \int\limits_{\Phi^{-1}(E)} 1 \cdot d\mu$
+
+	\subsection{Следствие}
+	Из этого следует, что если $f$~--- измеримая функция в $Y$ (относительно $\nu$), то $f\circ \Phi$ измерима относительно $\mu$.
+
+	\subsection {Teорема}
+		Есть пространства $<X, \mathbb{A}, \mu>$ и $<Y, \mathbb{B}, \nu>$.
+
+		$\Phi: X\rightarrow Y$
+        $w \geq 0$~--- измеримая, $\nu$~--- взвешенный образ $\mu$ ($w$~--- плотность)
+
+		\emph{Тогда:}\\
+		 Для $\forall f \geq 0$~--- измерима на $Y$, $f\circ \Phi$ - измерима (относительно $\mu$)
+
+		$\int_{Y}f d\nu = \int_{X} f(\Phi(x)) * \omega(x) d\mu(x)$
+
+		\emph{Замечание:} То же верно, если $f$ суммируема.
+
+\section{Критерий плотности}
+	Есть пространство $<X, \mathbb{A}, \mu>$ \\
+	$\nu$~--- еще одна мера. \\
+	$\omega \geq 0$~--- измерима на $X$.
+
+	\emph{Тогда:}
+
+	$\omega$~--- плотность $\nu$ относительно $\mu$ $\Longleftrightarrow$ Для любого $A\in\mathbb{A}:\mu A \cdot \inf_A(\omega) \leq \nu(A) \leq \mu A \cdot \sup_A(\omega)$
+
+\section{Единственность плотности}
+	$f, g \in L(x)$. \\
+	Пусть $\forall A$~--- измеримо: $\int\limits_A f = \int\limits_A g$.
+
+	\emph{Тогда: } \\
+		$f = g$ почти везде \\
+	\emph{Следствие: } \\
+		Плостность $\nu$ относительно $\mu$ определена однозначно с точностью до $\mu$-почти везде.
+
+\section{Лемма о множестве положительности}
+	Пусть есть пространство $<X, \mathbb{A}>$ и $\phi$~--- заряд.\\
+	\emph{Тогда:}\\
+		$\forall A\in \mathbb{A}\ \exists B \subset A : \phi(B) \geq \phi(A)$ и B~--- множество положительности \\
+
+\section{Теорема Радона-Никодима}
+	Пусть есть пространство $(X, \mathbb{A}, \mu)$. \\
+	$\nu$~--- мера на $\mathbb{A}$. \\
+	Обе меры конечные и $\nu \prec \mu$ (абсолютная непрерывность меры: если $\mu E = 0$, то $\nu E = 0$). \\
+	\emph{Тогда: } \\
+		$\exists! f: X \rightarrow \overline{\mathds{R}}$ (c точностью до почти везде), которая является плотностью $\nu$ относительно $\mu$ и при этом $f$ суммируема по $\mu$.
+
+\section{Лемма об образах малых кубических ячеек при диффеоморфизме}
+$\Phi: O \subset \mathds{R}^m \rightarrow \mathds{R}^m$
+
+$a \in O, \Phi \in C^1(O)$
+
+Возьмём $c > |\det \Phi'(a)| \neq 0$
+
+тогда $\exists \delta > 0: \forall$ кубической ячейки $Q, Q \subset B(a, \delta), a \in Q$ выполняется
+
+$\lambda \Phi(Q) < c \cdot \lambda Q$
+
+\section{Лемма о вариациях на тему регулярности меры Лебега}
+$f: O \subset \mathds{R}^m \rightarrow \mathds{R}$~--- непрерывна.
+
+$A \subset O$, $A$~--- измеримо.
+
+$A \subset Q$(кубическая ячейка) $\subset \overline Q \subset O$, то есть граница $A$ не лежит на границе $O$.
+
+Тогда $$\inf_{A \subset G \subset O, G - open ~ set} (\lambda G \cdot \sup_G(f)) = \lambda A \cdot \sup_A f$$
+
+\section{Теорема об образе меры Лебега при диффеоморфизме}
+$\Phi: O \subset \mathds{R}^m \rightarrow \mathds{R}^m$ - Диффеоморфизм, $\forall A \in \mathds{M}^m, A \subset O$
+
+$\lambda(\Phi(A)) = \int_A |\det \Phi' (x)| d \lambda(x)$
+
+\section{Теорема о гладкой замене переменной в интеграле Лебега}
+$\Phi: O \subset \mathds{R}^m \rightarrow \mathds{R}^m$ - диффеоморфизм
+
+$O' = \Phi(O)$~--- открытое
+
+$f$ задана на $O', f \geqslant 0$, измерима по Лебегу, тогда
+
+$\int_{O'}f(y) \cdot d \lambda(y) = \int_O f(\Phi(x)) \cdot |\det \Phi'(x)| \cdot d \lambda(x)$
+
+\section{Принцип Кавальери}
+	$(X, \alpha, \mu)$ и $(Y, \beta, \nu)$~--- пространства с мерами, причем $\mu$, $\nu$~--- $\sigma$-конечные и полные\\
+	$m = \mu \times \nu$, $C \in \alpha\otimes\beta$, тогда:\\
+	\begin{enumerate}
+		\item
+		При п.в. $x$ $C_x$ измеримо ($\nu$-измеримо), т.е. $C_x \in \beta$
+		\item
+		Функция $x \rightarrow \nu C_x$~--- измеримая (в широком смысле) на $X$\\ \\
+		NB: $\phi$~--- измерима в широком смысле, если она задана при п.в. x, и $\exists f : X \rightarrow R'$~--- измеримая и $\phi = f$ п.в. При этом $\int_X \phi = \int_X f$ (по опр.)
+		\item
+		$m C = \int_X \nu(C_x) \cdot d\mu(x)$
+	\end{enumerate}
+
+\section{Сферические координаты в $ R^m $}
+
+$x_1 = r \cdot \cos \phi_1$
+\hfill
+$1 \leq i \leq m-2: \phi_i \in [0,\pi]$
+
+$x_2 = r \cdot \sin \phi_1 \cdot \cos \phi_2$
+\hfill
+$i=m-1: \phi_i \in [0,2\pi]$
+
+$x_3 = r \cdot \sin \phi_1 \cdot \sin \phi_2 \cdot \cos \phi_3$
+\hfill
+$r \geq 0$
+
+$\vdots$\\
+$x_{m-2} = r \cdot \sin \phi_1 \cdot \sin \phi_2 \cdots \sin \phi_{m-3} \cdot \cos \phi_{m-2}$
+
+$x_{m-1} = r \cdot \sin \phi_1 \cdot \sin \phi_2 \cdots \sin \phi_{m-2} \cdot \cos \phi_{m-1}$
+
+$x_{m} = r \cdot \sin \phi_1 \cdot \sin \phi_2 \cdots \sin \phi_{m-2} \cdot \sin \phi_{m-1}$\\
+
+$\mathcal{J} = r^{m-1} \cdot (\sin \phi_1)^{m-2} \cdot (\sin \phi_2)^{m-3} \cdots (\sin \phi_{m-2})^{1} \cdot (\sin \phi_{m-1})^{0}$
+
+Что тут происходит идейно. Сначала мы проецируем наш $m$-мерный вектор на нормаль к $(m-1)$-мерной гиперплоскости. Потом рассматриваем проекцию на эту гиперплоскость и в ней рекурсивно повторяем процедуру, пока не дойдём до нашего любимого $\mathds{R}^2$. Уже в нём рассматривем обычные полярные координаты (отсюда и другие ограничения на размер угла).
+
+\section{Совпадение определенного интеграла и интеграла Лебега}
+
+Ты проиграл
+
+\section{Теорема Тонелли}
+$<\mathds{X}, \alpha, \mu>$, $<\mathds{Y}, \beta, \nu>$ - пространства с мерой\\
+$\mu$, $\nu$ - $\sigma$-конечны, полные \\
+$m = \mu \times \nu$ \\
+$f: \mathds{X} \times \mathds{Y} \rightarrow \overline{R}$, $f \geq 0$, f - измерима относительно m \\
+\emph{Тогда:}
+\begin{enumerate}
+	\item при \textit{почти всех} $x \in X$ $f_x$ - измерима на $\mathds{Y}$, \\
+	 где $f_x : \mathds{Y} \rightarrow \overline{R}$, $f_x(y) = f(x, y)$ \\
+	 (симметричное утверждение верно для y)
+	 \item Функция $x \mapsto \phi(x) = \int\limits_{\mathds{Y}}f_x d\nu = \int\limits_{\mathds{Y}}f(x, y) d\nu(y) $ - $\text{измерима}^{\text{*}}$ на $\mathds{X}$ \\
+	 (симметричное утверждение верно для y)
+	 \item $\int\limits_{\mathds{X} \times \mathds{Y}}f(x, y)dm = \int\limits_{\mathds{X}}\phi(x)d\mu = \int\limits_{\mathds{X}}(\int\limits_{\mathds{Y}} f(x, y)d\nu(y))d\mu(x) = \int\limits_{\mathds{Y}}(\int\limits_{\mathds{X}}f(x,y)d\mu(x))d\nu(y)$
+\end{enumerate}
+
+\section{Объем шара в $\mathbb R^m$}
+$B(0, R) \subset \mathbb{R}^m$ \\
+$\lambda_m(B(0, R)) = \int\limits_{B(0, R)}1d\lambda_m = \int \mathcal{J} = \\
+= \int\limits_{0}^{R}dr\int\limits_{0}^{\pi}d\phi_1\dots\int\limits_{0}^{\pi}d\phi_{m-2} \int\limits_{0}^{2\pi}d\phi_{m-1} \cdot r^{m-1}(\sin\phi_1)^{m-2} \dots (\sin\phi_{m-2}) =\rightarrow\\
+\int\limits_{0}^{\pi}(\sin\phi_k)^{m-2-(k+1)} = B({\frac{m-k}{2}}; \frac{1}{2}) = \frac{\Gamma(\frac{m-k}{2})\Gamma(\frac{1}{2})}{\Gamma(\frac{m-k}{2}+\frac{1}{2})} \\
+\rightarrow= \frac{R^m}{m} \frac{\Gamma(\frac{m-1}{2}) \Gamma(\frac{1}{2})}{\Gamma(\frac{m}{2})} \frac{\Gamma(\frac{m-2}{2})\Gamma(\frac{1}{2})}{\Gamma(\frac{m-1}{2})} \cdots \frac{\Gamma(1) \Gamma(\frac{1}{2})}{\Gamma(\frac{3}{2})} 2\pi =\\
+= \frac{\pi R^m}{\frac{m}{2}} \frac{\Gamma(\frac{1}{2})^{m-2}}{\Gamma(\frac{m}{2})} = \frac{\pi^{\frac{m}{2}}}{\Gamma(\frac{m}{2}+1)}R^m$
+
+Или просто: 
+
+$B(0, r) \subset \mathbb{R}^m$
+
+$\lambda_m(B(0, r)) = \frac{\pi^{\frac{m}{2}}}{\Gamma(\frac{m}{2}+1)}r^m$
+
+\section{Теорема Фубини}
+$(X, \alpha, \mu)$ и $(Y, \beta, \nu)$ - пространства с мерами, причем $\mu , \nu$ --- $\sigma$-конечны\\
+на $X \times Y$ есть $\alpha \otimes \beta$, причем $m(A \times B) = \mu A \cdot \nu B$ --- произведение мер --- $\sigma$-конечная мера на $\alpha \times \beta$\\
+$(X \times Y), \alpha \otimes \beta, m$ --- произведение пр-в с мерой\\
+Обозначение : $C \subset X \times Y, x \in X$ тогда 
+
+$C_x = {y : (x, y) \in C}$ --- Сечение I рода\\
+$C_y = {x : (x, y) \in C}$ --- Сечение II рода\\
+
+\section{Формула для Бета-функции}
+$B(s, t) = \int\limits_{0}^{1}x^{s-1}(1-x)^{t-1}$, где s и t > 0 - Бета-функция \\
+$\Gamma(s) = \int\limits_{0}^{+\infty}x^{s-1}e^{-x}dx$, где s > 0, тогда $B(s, t) = \frac{\Gamma(s)\Gamma(t)}{\Gamma(s+t)}$ \\
+
+\section{Предельный переход под знаком интеграла при наличии равномерной сходимости}
+$ f : \mathbb{X} \times \mathbb{Y} \rightarrow \overline{\mathbb{R}}$
+
+$ (\mathbb{X}, \mathbb{A}, \mu) $ -- простр. с мерой
+
+$ \mathbb{Y} $ -- метр. простр. (или метризуемое)
+
+$ \forall y ~ f^y(x) = f(x, y) $ -- сумм. на $ \mathbb{X} $
+
+\bigskip
+
+$ \mu X < +\infty $; $ f(x,y) \underset{y \rightarrow a}{\rightrightarrows} \phi(x) $
+
+\emph{Тогда:}
+
+\begin{itemize}
+	\item $ \phi $ -- сумм.
+	\item $ \int\limits_{X} f(x, y) d\mu (x) \underset{y \rightarrow a}{\longrightarrow} \int\limits_{X} \phi(x) d\mu(x) $
+\end{itemize}
+
+\section{Теорема Лебега о непрерывности интеграла по параметру}
+
+Ты проиграл
+
+\section{Правило Лейбница дифференцирования интеграла по параметру}
+
+$ f : \mathbb{X} \times \mathbb{Y} \rightarrow \overline{\mathbb{R}}$
+
+$ (\mathbb{X}, \mathbb{A}, \mu) $ -- простр. с мерой
+
+$ \mathbb{Y} $ -- метр. простр. (или метризуемое)
+
+$ \forall y ~ f^y(x) = f(x, y) $ -- сумм. на $ \mathbb{X} $
+
+\bigskip
+
+$ \mathbb{Y} \subset \mathbb{R} $ -- промежуток
+
+при п. в. $ x ~~ \forall y ~ \exists f_y'(x, y)$
+
+$ f_y' $ удовлетворяет усл. $ L_{loc} $ в точке $ a \in \mathbb{Y}$
+
+\emph{Тогда:}
+\begin{itemize}
+	\item $ I(y) = \int\limits_{X} f(x, y) d\mu(x) $ -- дифф. в точке $ a $
+	\item $ I'(a) = \int\limits_{X} f_y'(x, a) d\mu(x) $
+\end{itemize}
+
+\section{Теорема о вложении пространств $L^p$}
+
+$ \mu E < +\infty$, $1 \leq s < r \leq + \infty$
+
+\textbf{\emph{Тогда:}}
+
+\begin{enumerate}
+	\item $ L_r(E, \mu)  \subset \L_s(E, \mu)$
+	\item $ \forall f$~--- измеримая $: ||f||_s \leq \mu E^{1/s - 1/r} ||f||_r$
+\end{enumerate}
+
+\section{Теорема о сходимости в $L_p$ и по мере}
+$ 1 \leq p < +\infty $
+
+$ f_n \in L_p(\mathbb{X}, \mu)$
+
+\begin{enumerate}
+	\item \begin{itemize}
+		\item $ f \in L_p $
+		\item $ f_n \rightarrow f $ в $ L_p $
+	\end{itemize}
+	\textbf{Тогда:} $ f_n \stackrel{\mu}{\Rightarrow} f $ (по мере)
+
+	\item \begin{itemize}
+		\item $ f_n \stackrel{\mu}{\Rightarrow} f $ (либо если $ f_n \rightarrow f $  почти везде)
+		\item $ |f_n| \leq g $ почти везде при всех $n$; $g \in L_p$
+	\end{itemize}
+	\textbf{Тогда:} $ f_n \rightarrow f $ в $ L_p $
+\end{enumerate}
+
+\section{Полнота $L^p$}
+$ L_p(E, \mu) ~ ~ 1 \leq p < \infty $ -- полное
+
+То есть любая фундаментальная последовательность сходиться по норме $ ||f||_p $.
+
+$$(\forall \epsilon > 0 ~ \exists N ~ \forall n, k ~ ||f_n - f_k||_p < \epsilon) \Rightarrow (\exists f : ||f_n - f||_p \rightarrow 0)$$
+\end{document}
