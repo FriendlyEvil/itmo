@@ -1,0 +1,7 @@
+if (a && b && c && d) {
+    print a
+    print b
+}
+
+
+if && && && c d a b

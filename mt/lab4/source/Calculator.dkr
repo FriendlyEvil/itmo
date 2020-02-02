@@ -1,0 +1,15 @@
+s returns[Integer]: sum {$$ = $0};
+sum returns[Integer]: mul {$$ = $0} | sum ADD mul {$$ = $0 + $2} | sum SUB mul {$$ = $0 - $2};
+mul returns[Integer]: fact {$$ = $0} | mul MUL fact {$$ = $0 * $2} | mul DIV fact {$$ = $0 / $2};
+fact returns[Integer]: fact FACT {$$ = 1; for (int i = 2; i <= $0; i++) {$$ *= i;};} | num {$$ = $0};
+num returns[Integer]: NUM {$$ = Integer.parseInt($0)} | LP sum RP {$$ = $1};
+
+ADD: "\\+";
+SUB: "-";
+MUL: "\\*";
+FACT: "!";
+DIV: "/";
+LP: "\\(";
+RP: "\\)";
+NUM: "[0-9]+";
+
