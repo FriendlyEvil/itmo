@@ -11,7 +11,7 @@ start() {
 	startname=$2
 	mypac=$3
 	programname=$4
-	echo javac -d ${out} -cp ${test}/info.kgeorgiy.java.advanced.${kgpac}.jar ${pth}java/ru/ifmo/rain/krivopaltsev/${mypac}/*.java
+	javac -d ${out} -cp ${test}/info.kgeorgiy.java.advanced.${kgpac}.jar ${pth}java/ru/ifmo/rain/krivopaltsev/${mypac}/*.java
 	java -Dfile.encoding=UTF-8 -cp ${clp} -p ${clp} -m info.kgeorgiy.java.advanced.${kgpac} ${startname} ru.ifmo.rain.krivopaltsev.${mypac}.${programname}
 
 }
