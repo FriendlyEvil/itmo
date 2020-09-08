@@ -9,9 +9,9 @@
 + <a href="/с++">С++</a>
 + <a href="/crypto">Криптография</a>
 + <a href="/java-advanced-2019">Java advanced</a>
-+ <a href="/matan-tex">Матан</a>
 + <a href="/mathematical-logic">Математическая логика</a>
 + <a href="/mt">Методы трансляции</a>
 + <a href="/os">Операционные системы</a>
 + <a href="/tt">Теория типов</a>
++ <a href="/haskell">Haskell</a>
 
